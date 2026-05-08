@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "catalog": "Catalog",
+    "ordering": "Orders",
+    "fulfillment": "Fulfillment",
+    "payment": "Payment",
+    "notifications": "Notifications",
+    "reports": "Reports"
+  },
+  "catalog": {
+    "products": "Products",
+    "add-product": "Add Product",
+    "inventory": "Inventory"
+  },
+  "ordering": {
+    "requests": "Requests",
+    "create-request": "New Request",
+    "orders": "Orders"
+  },
+  "fulfillment": {
+    "vehicles": "Vehicles",
+    "drivers": "Drivers",
+    "dispatch": "Dispatch"
+  },
+  "payment": {
+    "transactions": "Transactions",
+    "process": "Process Payment"
+  },
+  "reporting": {
+    "dashboard": "Dashboard",
+    "sales": "Sales Report",
+    "consumption": "Consumption Report"
+  },
+  "home": {
+    "title": "FullTank Platform",
+    "content": "Fuel ordering and logistics management system for businesses"
+  },
+  "about": {
+    "title": "About FullTank",
+    "content": "FullTank is a comprehensive platform for fuel ordering, fleet management, and delivery tracking."
+  },
+  "page-not-found": {
+    "title": "404 - Page Not Found",
+    "content": "The page <strong>{{invalid_path}}</strong> does not exist.",
+    "go-home": "Go to Home"
+  }
+}
