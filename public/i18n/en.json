@@ -44,5 +44,71 @@
     "title": "404 - Page Not Found",
     "content": "The page <strong>{{invalid_path}}</strong> does not exist.",
     "go-home": "Go to Home"
+  },
+  "product-catalog": {
+    "title": "Product Catalog",
+    "subtitle": "Manage your fuel products",
+    "show-all": "Show All",
+    "add-button": "Add Product",
+    "edit-tooltip": "Edit Product",
+    "empty": "No products available",
+    "fields": {
+      "name": "Product Name",
+      "type": "Fuel Type",
+      "price": "Price per Liter",
+      "unit": "Unit",
+      "status": "Status"
+    }
+  },
+  "product-form": {
+    "create-title": "Create Product",
+    "create-subtitle": "Add a new fuel product to your catalog",
+    "edit-title": "Edit Product",
+    "edit-subtitle": "Update product information",
+    "cancel": "Cancel",
+    "create": "Create Product",
+    "update": "Update Product",
+    "fields": {
+      "name": "Product Name",
+      "type": "Fuel Type",
+      "description": "Description",
+      "price": "Price per Liter",
+      "unit": "Unit",
+      "active": "Active Product"
+    },
+    "placeholders": {
+      "name": "e.g., Premium Diesel",
+      "description": "Describe the product characteristics",
+      "price": "0.00"
+    }
+  },
+  "inventory-list": {
+    "title": "Inventory Management",
+    "subtitle": "Monitor your fuel stock levels",
+    "low-stock-alert": "Low Stock Alert",
+    "items-below-threshold": "items below threshold",
+    "update-tooltip": "Update Stock",
+    "empty": "No inventory items available",
+    "fields": {
+      "product": "Product",
+      "available": "Available",
+      "reserved": "Reserved",
+      "unit": "Unit",
+      "last-updated": "Last Updated"
+    }
+  },
+  "fuel-type": {
+    "diesel": "Diesel",
+    "gasoline_90": "Gasoline 90",
+    "gasoline_95": "Gasoline 95",
+    "gasoline_97": "Gasoline 97"
+  },
+  "unit": {
+    "liters": "Liters",
+    "gallons": "Gallons"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
   }
 }
