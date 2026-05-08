@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "dashboard": "Tablero",
+    "catalog": "Catálogo",
+    "ordering": "Pedidos",
+    "fulfillment": "Despacho",
+    "payment": "Pagos",
+    "notifications": "Notificaciones",
+    "reports": "Reportes"
+  },
+  "catalog": {
+    "products": "Productos",
+    "add-product": "Agregar Producto",
+    "inventory": "Inventario"
+  },
+  "ordering": {
+    "requests": "Solicitudes",
+    "create-request": "Nueva Solicitud",
+    "orders": "Órdenes"
+  },
+  "fulfillment": {
+    "vehicles": "Vehículos",
+    "drivers": "Conductores",
+    "dispatch": "Despacho"
+  },
+  "payment": {
+    "transactions": "Transacciones",
+    "process": "Procesar Pago"
+  },
+  "reporting": {
+    "dashboard": "Tablero",
+    "sales": "Reporte de Ventas",
+    "consumption": "Reporte de Consumo"
+  },
+  "home": {
+    "title": "Plataforma FullTank",
+    "content": "Sistema de pedidos de combustible y gestión logística para empresas"
+  },
+  "about": {
+    "title": "Acerca de FullTank",
+    "content": "FullTank es una plataforma integral para pedidos de combustible, gestión de flotas y seguimiento de entregas."
+  },
+  "page-not-found": {
+    "title": "404 - Página No Encontrada",
+    "content": "La página <strong>{{invalid_path}}</strong> no existe.",
+    "go-home": "Ir al Inicio"
+  }
+}
