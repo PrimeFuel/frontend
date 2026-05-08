@@ -44,5 +44,71 @@
     "title": "404 - Página No Encontrada",
     "content": "La página <strong>{{invalid_path}}</strong> no existe.",
     "go-home": "Ir al Inicio"
+  },
+  "product-catalog": {
+    "title": "Catálogo de Productos",
+    "subtitle": "Gestiona tus productos de combustible",
+    "show-all": "Mostrar Todos",
+    "add-button": "Agregar Producto",
+    "edit-tooltip": "Editar Producto",
+    "empty": "No hay productos disponibles",
+    "fields": {
+      "name": "Nombre del Producto",
+      "type": "Tipo de Combustible",
+      "price": "Precio por Litro",
+      "unit": "Unidad",
+      "status": "Estado"
+    }
+  },
+  "product-form": {
+    "create-title": "Crear Producto",
+    "create-subtitle": "Agrega un nuevo producto de combustible a tu catálogo",
+    "edit-title": "Editar Producto",
+    "edit-subtitle": "Actualiza la información del producto",
+    "cancel": "Cancelar",
+    "create": "Crear Producto",
+    "update": "Actualizar Producto",
+    "fields": {
+      "name": "Nombre del Producto",
+      "type": "Tipo de Combustible",
+      "description": "Descripción",
+      "price": "Precio por Litro",
+      "unit": "Unidad",
+      "active": "Producto Activo"
+    },
+    "placeholders": {
+      "name": "ej., Diesel Premium",
+      "description": "Describe las características del producto",
+      "price": "0.00"
+    }
+  },
+  "inventory-list": {
+    "title": "Gestión de Inventario",
+    "subtitle": "Monitorea tus niveles de stock de combustible",
+    "low-stock-alert": "Alerta de Stock Bajo",
+    "items-below-threshold": "ítems por debajo del umbral",
+    "update-tooltip": "Actualizar Stock",
+    "empty": "No hay ítems de inventario disponibles",
+    "fields": {
+      "product": "Producto",
+      "available": "Disponible",
+      "reserved": "Reservado",
+      "unit": "Unidad",
+      "last-updated": "Última Actualización"
+    }
+  },
+  "fuel-type": {
+    "diesel": "Diesel",
+    "gasoline_90": "Gasolina 90",
+    "gasoline_95": "Gasolina 95",
+    "gasoline_97": "Gasolina 97"
+  },
+  "unit": {
+    "liters": "Litros",
+    "gallons": "Galones"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
   }
 }
