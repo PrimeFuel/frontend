@@ -43,7 +43,7 @@ export class Layout {
       icon: 'inventory',
       link: '/catalog',
       children: [
-        { label: 'catalog.products', link: '/catalog/product-list' },
+        { label: 'catalog.products', link: '/catalog/inventory-list' },
         { label: 'catalog.add-product', link: '/catalog/product-form' },
         { label: 'catalog.inventory', link: '/catalog/inventory-list' },
       ],

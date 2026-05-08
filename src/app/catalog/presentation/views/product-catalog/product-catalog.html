@@ -1,0 +1,105 @@
+<div class="product-catalog-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>{{ 'product-catalog.title' | translate }}</h1>
+      <p>{{ 'product-catalog.subtitle' | translate }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button mat-button (click)="onShowAll()" [disabled]="store.isLoading()">
+        <mat-icon>list</mat-icon>
+        {{ 'product-catalog.show-all' | translate }}
+      </button>
+      <button mat-icon-button (click)="onRefresh()" [disabled]="store.isLoading()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" routerLink="../product-form">
+        <mat-icon>add</mat-icon>
+        {{ 'product-catalog.add-button' | translate }}
+      </button>
+    </div>
+  </header>
+
+  @if (store.isLoading()) {
+    <div class="loading-shade">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+
+  @if (store.error()) {
+    <div class="error-container">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ store.error() }}</p>
+    </div>
+  }
+
+  <div class="table-container mat-elevation-z2">
+    <table mat-table [dataSource]="store.productList()">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ 'product-catalog.fields.name' | translate }}</th>
+        <td mat-cell *matCellDef="let element" class="bold-text">{{ element.name }}</td>
+      </ng-container>
+
+      <!-- Type Column -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>{{ 'product-catalog.fields.type' | translate }}</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-set>
+            <mat-chip [class]="element.type.toLowerCase()">
+              {{ 'fuel-type.' + element.type.toLowerCase() | translate }}
+            </mat-chip>
+          </mat-chip-set>
+        </td>
+      </ng-container>
+
+      <!-- Price Column -->
+      <ng-container matColumnDef="pricePerLiter">
+        <th mat-header-cell *matHeaderCellDef>{{ 'product-catalog.fields.price' | translate }}</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="price-text">S/ {{ element.pricePerLiter | number:'1.2-2' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Unit Column -->
+      <ng-container matColumnDef="unit">
+        <th mat-header-cell *matHeaderCellDef>{{ 'product-catalog.fields.unit' | translate }}</th>
+        <td mat-cell *matCellDef="let element">{{ element.unit }}</td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>{{ 'product-catalog.fields.status' | translate }}</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-set>
+            <mat-chip [class]="element.isActive ? 'active' : 'inactive'">
+              {{ (element.isActive ? 'status.active' : 'status.inactive') | translate }}
+            </mat-chip>
+          </mat-chip-set>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button [routerLink]="['../product-form', element.id]" color="primary"
+                  [matTooltip]="'product-catalog.edit-tooltip' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no data -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6" style="text-align: center; padding: 2rem;">
+          {{ 'product-catalog.empty' | translate }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
