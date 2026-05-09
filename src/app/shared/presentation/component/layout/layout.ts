@@ -83,9 +83,8 @@ export class Layout {
       icon: 'analytics',
       link: '/reporting',
       children: [
-        { label: 'reporting.dashboard', link: '/reporting/dashboard' },
-        { label: 'reporting.sales', link: '/reporting/sales-report' },
-        { label: 'reporting.consumption', link: '/reporting/consumption-report' },
+        { label: 'reporting.supplier-dashboard', link: '/reporting/report-main' },
+        { label: 'reporting.client-portfolio', link: '/reporting/client-reports' },
       ],
     },
   ];

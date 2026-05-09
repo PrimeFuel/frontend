@@ -12,6 +12,8 @@ const catalogRoutes = () =>
 const fulfillmentRoutes = () =>
   import('./fulfillment/presentation/fulfillment-routes').then((m) => m.fulfillmentRoutes);
 
+const reportingRoutes = () =>
+  import('./reporting/presentation/reporting-routes').then((m) => m.reportingRoutes);
 
 /*
 // Bounded Contexts pendientes de implementación
@@ -42,7 +44,7 @@ export const routes: Routes = [
   { path: 'notification', loadChildren: notificationRoutes },
   */
 
-  */
+
   { path: 'reporting', loadChildren: reportingRoutes },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `Page Not Found - ${baseTitle}` },

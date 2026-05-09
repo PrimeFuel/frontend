@@ -13,9 +13,9 @@ const reportingRoutes: Routes = [
     path: '',
     component: Layout,
     children: [
-      { path: 'supplier-dashboard', loadComponent: supplierDashboard },
-      { path: 'client-portfolio', loadComponent: clientPortfolio },
-      { path: '', redirectTo: 'supplier-dashboard', pathMatch: 'full' },
+      { path: 'report-main', loadComponent: supplierDashboard },
+      { path: 'client-reports', loadComponent: clientPortfolio },
+      { path: '', redirectTo: 'report-main', pathMatch: 'full' },
     ],
   },
 ];

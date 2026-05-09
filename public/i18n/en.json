@@ -28,9 +28,8 @@
     "process": "Process Payment"
   },
   "reporting": {
-    "dashboard": "Dashboard",
-    "sales": "Sales Report",
-    "consumption": "Consumption Report"
+    "supplier-dashboard": "Supplier Dashboard",
+    "client-portfolio": "Client Portfolio"
   },
   "home": {
     "title": "FullTank Platform",

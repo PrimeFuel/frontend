@@ -28,9 +28,8 @@
     "process": "Procesar Pago"
   },
   "reporting": {
-    "dashboard": "Tablero",
-    "sales": "Reporte de Ventas",
-    "consumption": "Reporte de Consumo"
+    "supplier-dashboard": "Panel del Proveedor",
+    "client-portfolio": "Portafolio de Clientes"
   },
   "home": {
     "title": "Plataforma FullTank",
