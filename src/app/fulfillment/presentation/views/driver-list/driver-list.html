@@ -91,6 +91,14 @@
           >
             <mat-icon>edit</mat-icon>
           </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onDelete(element.id)"
+            [matTooltip]="'driver-list.delete-tooltip' | translate"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
         </td>
       </ng-container>
 

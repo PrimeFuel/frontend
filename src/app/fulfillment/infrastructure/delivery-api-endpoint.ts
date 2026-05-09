@@ -6,13 +6,8 @@ import { Delivery } from '../domain/model/delivery.entity';
 import { DeliveryResource, DeliveriesResponse } from './delivery-response';
 import { DeliveryAssembler } from './delivery-assembler';
 
-const fulfillmentEndpointUrl = `${environment.serverBasePath}${environment.fulfillmentDeliveriesEndpointPath}`;
+const deliveriesEndpointUrl = `${environment.serverBasePath}${environment.fulfillmentDeliveriesEndpointPath}`;
 
-/**
- * @summary Endpoint API para gestión de entregas.
- * @remarks Expone operaciones CRUD y consultas específicas de entregas.
- * @author FullTank Platform
- */
 export class DeliveryApiEndpoint extends BaseApiEndpoint<
   Delivery,
   DeliveryResource,
@@ -20,44 +15,32 @@ export class DeliveryApiEndpoint extends BaseApiEndpoint<
   DeliveryAssembler
 > {
   constructor(http: HttpClient) {
-    super(http, fulfillmentEndpointUrl, new DeliveryAssembler());
+    super(http, deliveriesEndpointUrl, new DeliveryAssembler());
   }
 
-  /**
-   * Obtiene entregas de un proveedor específico.
-   */
   getDeliveriesByProvider(providerId: string): Observable<Delivery[]> {
-    return this.http.get<DeliveriesResponse>(`${this.endpointUrl}/provider/${providerId}`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
+    return this.http.get<DeliveryResource[]>(`${this.endpointUrl}?providerId=${providerId}`).pipe(
+      map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
       catchError(this.handleError(`Failed to fetch deliveries for provider ${providerId}`)),
     );
   }
 
-  /**
-   * Obtiene una entrega por orderId.
-   */
   getDeliveryByOrder(orderId: string): Observable<Delivery> {
-    return this.http.get<DeliveryResource>(`${this.endpointUrl}/order/${orderId}`).pipe(
-      map((resource) => this.assembler.toEntityFromResource(resource)),
+    return this.http.get<DeliveryResource[]>(`${this.endpointUrl}?orderId=${orderId}`).pipe(
+      map((response) => this.assembler.toEntityFromResource(response[0])),
       catchError(this.handleError(`Failed to fetch delivery for order ${orderId}`)),
     );
   }
 
-  /**
-   * Asigna recursos a una orden (crea delivery).
-   */
   assignResources(request: any): Observable<Delivery> {
-    return this.http.post<DeliveryResource>(`${this.endpointUrl}/assign`, request).pipe(
+    return this.http.post<DeliveryResource>(this.endpointUrl, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError('Failed to assign resources')),
     );
   }
 
-  /**
-   * Ejecuta el despacho de una entrega.
-   */
   executeDispatch(deliveryId: string, request: any): Observable<Delivery> {
-    return this.http.put<DeliveryResource>(`${this.endpointUrl}/${deliveryId}/dispatch`, request).pipe(
+    return this.http.patch<DeliveryResource>(`${this.endpointUrl}/${deliveryId}`, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to execute dispatch for delivery ${deliveryId}`)),
     );

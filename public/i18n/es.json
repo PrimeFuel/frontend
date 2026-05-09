@@ -157,5 +157,116 @@
   "status": {
     "active": "Activo",
     "inactive": "Inactivo"
+  },
+  "vehicle-list": {
+    "title": "Flota de Vehículos",
+    "subtitle": "Gestiona los vehículos de entrega de combustible",
+    "show-all": "Mostrar Todos",
+    "show-available": "Solo Disponibles",
+    "add-button": "Registrar Vehículo",
+    "edit-tooltip": "Editar Vehículo",
+    "delete-tooltip": "Eliminar Vehículo",
+    "empty": "No hay vehículos registrados",
+    "fields": {
+      "license-plate": "Placa",
+      "brand": "Marca",
+      "model": "Modelo",
+      "capacity": "Capacidad",
+      "status": "Estado"
+    }
+  },
+  "vehicle-form": {
+    "title": "Registrar Vehículo",
+    "subtitle": "Agrega un nuevo vehículo a tu flota de entregas",
+    "cancel": "Cancelar",
+    "register": "Registrar Vehículo",
+    "fields": {
+      "license-plate": "Placa",
+      "brand": "Marca",
+      "model": "Modelo",
+      "capacity": "Capacidad",
+      "unit": "Unidad"
+    },
+    "placeholders": {
+      "license-plate": "ej. ABC-123",
+      "brand": "ej. Volvo",
+      "model": "ej. FH16 500",
+      "capacity": "ej. 15000"
+    }
+  },
+  "driver-list": {
+    "title": "Registro de Conductores",
+    "subtitle": "Gestiona los conductores autorizados para entregas",
+    "show-all": "Mostrar Todos",
+    "show-available": "Solo Disponibles",
+    "add-button": "Registrar Conductor",
+    "edit-tooltip": "Editar Conductor",
+    "delete-tooltip": "Eliminar Conductor",
+    "empty": "No hay conductores registrados",
+    "fields": {
+      "full-name": "Nombre Completo",
+      "license-number": "Nº de Licencia",
+      "phone": "Teléfono",
+      "email": "Correo",
+      "status": "Estado"
+    }
+  },
+  "driver-form": {
+    "title": "Registrar Conductor",
+    "subtitle": "Agrega un nuevo conductor autorizado",
+    "cancel": "Cancelar",
+    "register": "Registrar Conductor",
+    "fields": {
+      "first-name": "Nombre",
+      "last-name": "Apellido",
+      "license-number": "Nº de Licencia",
+      "phone": "Teléfono",
+      "email": "Correo"
+    },
+    "placeholders": {
+      "first-name": "ej. Juan",
+      "last-name": "ej. Pérez",
+      "license-number": "ej. Q12345678",
+      "phone": "ej. +51987654321",
+      "email": "ej. conductor@fulltank.com"
+    }
+  },
+  "vehicle-status": {
+    "available": "Disponible",
+    "in_route": "En Ruta",
+    "maintenance": "Mantenimiento",
+    "out_of_service": "Fuera de Servicio"
+  },
+  "driver-status": {
+    "available": "Disponible",
+    "assigned": "Asignado",
+    "on_leave": "De Permiso",
+    "inactive": "Inactivo"
+  },
+  "dispatch-dashboard": {
+    "title": "Despacho",
+    "subtitle": "Resumen de recursos de flota y entregas activas",
+    "available-vehicles": "Vehículos Disponibles",
+    "available-drivers": "Conductores Disponibles",
+    "active-deliveries": "Entregas Activas",
+    "active-deliveries-title": "Entregas Activas",
+    "total": "Total",
+    "completed": "Completadas",
+    "manage-vehicles": "Gestionar Vehículos",
+    "manage-drivers": "Gestionar Conductores",
+    "empty": "No hay entregas activas",
+    "fields": {
+      "order-id": "ID de Orden",
+      "vehicle": "Vehículo",
+      "driver": "Conductor",
+      "status": "Estado",
+      "scheduled": "Fecha Programada"
+    }
+  },
+  "delivery-status": {
+    "assigned": "Asignado",
+    "in_transit": "En Tránsito",
+    "delivered": "Entregado",
+    "cancelled": "Cancelado"
   }
 }

@@ -61,6 +61,16 @@ export class DispatchDashboard implements OnInit {
   }
 
   protected getStatusClass(status: string): string {
-    return status.toLowerCase().replace('_', '-');
+    return status.toLowerCase().replace(/_/g, '-');
+  }
+
+  protected getVehiclePlate(vehicleId: string): string {
+    const vehicle = this.store.vehicleList().find(v => v.id === vehicleId);
+    return vehicle ? vehicle.licensePlate : vehicleId;
+  }
+
+  protected getDriverName(driverId: string): string {
+    const driver = this.store.driverList().find(d => d.id === driverId);
+    return driver ? `${driver.firstName} ${driver.lastName}` : driverId;
   }
 }
