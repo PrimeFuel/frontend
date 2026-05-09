@@ -97,6 +97,52 @@
       "last-updated": "Última Actualización"
     }
   },
+  "supplier-dashboard": {
+    "title": "Reportes",
+    "subtitle": "Resumen integral del rendimiento de tus ventas",
+    "export-pdf": "Exportar PDF",
+    "total-sales-revenue": "Ingresos Totales por Ventas",
+    "avg-fulfillment-rate": "Tasa Promedio de Cumplimiento",
+    "avg-lead-time": "Tiempo Promedio de Entrega",
+    "vs-last-period": "vs período anterior",
+    "target": "Objetivo",
+    "days": "Días",
+    "client-sales-performance": "Rendimiento de Ventas por Cliente",
+    "view-all-clients": "Ver Todos los Clientes",
+    "empty": "No hay datos de clientes disponibles",
+    "fields": {
+      "company": "Nombre de la Empresa",
+      "total-volume": "Volumen Total",
+      "status": "Estado"
+    }
+  },
+  "client-portfolio": {
+    "title": "Reportes de Clientes Proveedores",
+    "subtitle": "Gestiona tu portafolio de clientes B2B, monitorea el consumo industrial de combustible y rastrea el volumen histórico de pedidos",
+    "total-clients": "Total de Clientes",
+    "revenue": "Ingresos",
+    "active-orders": "Órdenes Activas",
+    "growth": "Tasa de Crecimiento",
+    "portfolio-title": "Portafolio de Clientes",
+    "filter-by-sector": "Filtrar por Sector",
+    "all-sectors": "Todos los Sectores",
+    "volume-distribution": "Distribución de Volumen por Sector",
+    "empty": "No hay clientes disponibles",
+    "fields": {
+      "company": "Entidad Empresarial",
+      "sector": "Sector",
+      "total-volume": "Volumen Total (MT)",
+      "last-active": "Última Actividad",
+      "status": "Estado"
+    },
+    "sectors": {
+      "transport": "Transporte",
+      "mining": "Minería",
+      "construction": "Construcción",
+      "maritime": "Marítimo",
+      "logistics": "Logística"
+    }
+  },
   "fuel-type": {
     "diesel": "Diesel",
     "gasoline_90": "Gasolina 90",

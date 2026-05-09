@@ -97,6 +97,52 @@
       "last-updated": "Last Updated"
     }
   },
+  "supplier-dashboard": {
+    "title": "Reports",
+    "subtitle": "Comprehensive overview of your sales performance",
+    "export-pdf": "Export PDF",
+    "total-sales-revenue": "Total Sales Revenue",
+    "avg-fulfillment-rate": "Avg. Fulfillment Rate",
+    "avg-lead-time": "Avg. Lead Time",
+    "vs-last-period": "vs last period",
+    "target": "Target",
+    "days": "Days",
+    "client-sales-performance": "Client Sales Performance",
+    "view-all-clients": "View All Clients",
+    "empty": "No client data available",
+    "fields": {
+      "company": "Company Name",
+      "total-volume": "Total Volume",
+      "status": "Status"
+    }
+  },
+  "client-portfolio": {
+    "title": "Supplier Clients Reports",
+    "subtitle": "Manage your B2B client portfolio, monitor industrial fuel consumption, and track historical order volume",
+    "total-clients": "Total Clients",
+    "revenue": "Revenue",
+    "active-orders": "Active Orders",
+    "growth": "Growth Rate",
+    "portfolio-title": "Client Portfolio",
+    "filter-by-sector": "Filter by Sector",
+    "all-sectors": "All Sectors",
+    "volume-distribution": "Volume Distribution by Sector",
+    "empty": "No clients available",
+    "fields": {
+      "company": "Company Entity",
+      "sector": "Sector",
+      "total-volume": "Total Volume (MT)",
+      "last-active": "Last Active",
+      "status": "Status"
+    },
+    "sectors": {
+      "transport": "Transport",
+      "mining": "Mining",
+      "construction": "Construction",
+      "maritime": "Maritime",
+      "logistics": "Logistics"
+    }
+  },
   "fuel-type": {
     "diesel": "Diesel",
     "gasoline_90": "Gasoline 90",
