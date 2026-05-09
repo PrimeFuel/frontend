@@ -1,0 +1,12 @@
+{
+  "catalog": [
+    {
+      "name": "Premium Diesel",
+      "type": "GASOLINE_90",
+      "description": "-Premium Gasoline",
+      "pricePerLiter": 23,
+      "unit": "GALLONS",
+      "id": 1
+    }
+  ]
+}

@@ -125,14 +125,9 @@ export class ProductForm implements OnInit {
       unit: this.productForm.value.unit,
     };
 
-    this.store.createProduct(command);
-
-    // Navegar después de crear
-    setTimeout(() => {
-      if (this.store.successMsg()) {
-        this.router.navigate(['../product-catalog'], { relativeTo: this.route });
-      }
-    }, 1000);
+    this.store.createProduct(command, () => {
+      this.router.navigate(['../product-inventory'], { relativeTo: this.route });
+    });
   }
 
   private updateProduct(): void {
@@ -141,23 +136,20 @@ export class ProductForm implements OnInit {
     const command: UpdateProductCommand = {
       productId: this.productId,
       name: this.productForm.value.name,
+      type: this.productForm.value.type,
       description: this.productForm.value.description,
       pricePerLiter: this.productForm.value.pricePerLiter,
+      unit: this.productForm.value.unit,
       isActive: this.productForm.value.isActive,
     };
 
-    this.store.updateProduct(this.productId, command);
-
-    // Navegar después de actualizar
-    setTimeout(() => {
-      if (this.store.successMsg()) {
-        this.router.navigate(['../../product-catalog'], { relativeTo: this.route });
-      }
-    }, 1000);
+    this.store.updateProduct(this.productId, command, () => {
+      this.router.navigate(['../../product-inventory'], { relativeTo: this.route });
+    });
   }
 
   protected onCancel(): void {
-    const path = this.isEditMode ? '../../product-catalog' : '../product-catalog';
+    const path = this.isEditMode ? '../../product-inventory' : '../product-inventory';
     this.router.navigate([path], { relativeTo: this.route });
   }
 
