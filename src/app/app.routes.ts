@@ -25,9 +25,10 @@ const paymentRoutes = () =>
 const notificationRoutes = () =>
   import('./notification/presentation/notification-routes').then((m) => m.notificationRoutes);
 
+
+*/
 const reportingRoutes = () =>
   import('./reporting/presentation/reporting-routes').then((m) => m.reportingRoutes);
-*/
 
 const baseTitle = 'FullTank';
 
@@ -42,9 +43,9 @@ export const routes: Routes = [
   { path: 'fulfillment', loadChildren: fulfillmentRoutes },
   { path: 'payment', loadChildren: paymentRoutes },
   { path: 'notification', loadChildren: notificationRoutes },
-  { path: 'reporting', loadChildren: reportingRoutes },
-  */
 
+  */
+  { path: 'reporting', loadChildren: reportingRoutes },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `Page Not Found - ${baseTitle}` },
 ];
