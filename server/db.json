@@ -1,12 +1,203 @@
 {
   "catalog": [
     {
-      "name": "Premium Diesel",
+      "id": "1",
+      "name": "Diesel B5",
+      "type": "DIESEL",
+      "description": "Combustible diésel con mezcla de biodiesel al 5%, apto para maquinaria pesada e industria",
+      "pricePerLiter": 4.5,
+      "unit": "LITERS",
+      "isActive": true,
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Gasolina 90",
       "type": "GASOLINE_90",
-      "description": "-Premium Gasoline",
-      "pricePerLiter": 23,
-      "unit": "GALLONS",
-      "id": 1
+      "description": "Gasolina de octanaje 90 para vehículos convencionales de uso cotidiano",
+      "pricePerLiter": 4.2,
+      "unit": "LITERS",
+      "isActive": true,
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Gasolina 95",
+      "type": "GASOLINE_95",
+      "description": "Gasolina de octanaje 95 para vehículos modernos con motores de alta compresión",
+      "pricePerLiter": 4.6,
+      "unit": "LITERS",
+      "isActive": true,
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Gasolina 97 Premium",
+      "type": "GASOLINE_97",
+      "description": "Gasolina premium de alto octanaje para vehículos de alto rendimiento y sport",
+      "pricePerLiter": 4.9,
+      "unit": "LITERS",
+      "isActive": true,
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "v1",
+      "providerId": "1",
+      "licensePlate": "ABC-123",
+      "brand": "Volvo",
+      "model": "FH16 500",
+      "capacity": 15000,
+      "unit": "LITERS",
+      "status": "AVAILABLE",
+      "createdAt": "2025-01-15T08:00:00.000Z"
+    },
+    {
+      "id": "v2",
+      "providerId": "1",
+      "licensePlate": "DEF-456",
+      "brand": "Mercedes-Benz",
+      "model": "Actros 1845",
+      "capacity": 12000,
+      "unit": "LITERS",
+      "status": "IN_ROUTE",
+      "createdAt": "2025-02-20T08:00:00.000Z"
+    },
+    {
+      "id": "v3",
+      "providerId": "1",
+      "licensePlate": "GHI-789",
+      "brand": "MAN",
+      "model": "TGX 18.500",
+      "capacity": 18000,
+      "unit": "LITERS",
+      "status": "AVAILABLE",
+      "createdAt": "2025-03-10T08:00:00.000Z"
+    },
+    {
+      "id": "v4",
+      "providerId": "1",
+      "licensePlate": "JKL-012",
+      "brand": "Scania",
+      "model": "R 580 LA",
+      "capacity": 20000,
+      "unit": "LITERS",
+      "status": "MAINTENANCE",
+      "createdAt": "2025-04-05T08:00:00.000Z"
+    },
+    {
+      "providerId": "1",
+      "licensePlate": "VXU-345",
+      "brand": "Mercedes",
+      "model": "FH16 500",
+      "capacity": 500,
+      "unit": "LITERS",
+      "status": "AVAILABLE",
+      "id": "I4ICKzm"
+    }
+  ],
+  "drivers": [
+    {
+      "id": "d1",
+      "providerId": "1",
+      "firstName": "Carlos",
+      "lastName": "Ramírez",
+      "licenseNumber": "Q12345678",
+      "phoneNumber": "+51987654321",
+      "email": "carlos.ramirez@fulltank.com",
+      "status": "AVAILABLE",
+      "createdAt": "2025-01-20T08:00:00.000Z"
+    },
+    {
+      "id": "d2",
+      "providerId": "1",
+      "firstName": "María",
+      "lastName": "García",
+      "licenseNumber": "Q87654321",
+      "phoneNumber": "+51912345678",
+      "email": "maria.garcia@fulltank.com",
+      "status": "ASSIGNED",
+      "createdAt": "2025-02-15T08:00:00.000Z"
+    },
+    {
+      "id": "d3",
+      "providerId": "1",
+      "firstName": "Juan",
+      "lastName": "López",
+      "licenseNumber": "Q11223344",
+      "phoneNumber": "+51998765432",
+      "email": "juan.lopez@fulltank.com",
+      "status": "AVAILABLE",
+      "createdAt": "2025-03-25T08:00:00.000Z"
+    },
+    {
+      "providerId": "1",
+      "firstName": "ffqfq",
+      "lastName": "qwqweqwe",
+      "licenseNumber": "qweweqwe",
+      "phoneNumber": "141443333",
+      "email": "pepe@gmail.com",
+      "status": "AVAILABLE",
+      "id": "SjoO7tW"
+    },
+    {
+      "providerId": "1",
+      "firstName": "32r44141",
+      "lastName": "212421421412",
+      "licenseNumber": "142124124214",
+      "phoneNumber": "123123333",
+      "email": "pepe@fulltank.com",
+      "status": "AVAILABLE",
+      "id": "c6NEdB7"
+    },
+    {
+      "providerId": "1",
+      "firstName": "pepito",
+      "lastName": "ramirez",
+      "licenseNumber": "eqwewqeqwe",
+      "phoneNumber": "123456789",
+      "email": "pepe@e.com",
+      "status": "AVAILABLE",
+      "id": "dLKRrA5"
+    }
+  ],
+  "deliveries": [
+    {
+      "id": "del1",
+      "orderId": "ord1",
+      "vehicleId": "v2",
+      "driverId": "d2",
+      "providerId": "1",
+      "status": "IN_TRANSIT",
+      "scheduledDate": "2025-05-10T10:00:00.000Z",
+      "actualDeliveryDate": null,
+      "notes": "Entrega prioritaria zona norte",
+      "createdAt": "2025-05-09T08:00:00.000Z"
+    },
+    {
+      "id": "del2",
+      "orderId": "ord2",
+      "vehicleId": "v1",
+      "driverId": "d1",
+      "providerId": "1",
+      "status": "IN_TRANSIT",
+      "scheduledDate": "2025-05-10T14:00:00.000Z",
+      "actualDeliveryDate": null,
+      "notes": "Entrega zona sur - Gasolina 95",
+      "createdAt": "2025-05-09T09:00:00.000Z"
+    },
+    {
+      "id": "del3",
+      "orderId": "ord3",
+      "vehicleId": "v3",
+      "driverId": "d3",
+      "providerId": "1",
+      "status": "ASSIGNED",
+      "scheduledDate": "2025-05-11T08:30:00.000Z",
+      "actualDeliveryDate": null,
+      "notes": "Entrega mañana - Diesel B5",
+      "createdAt": "2025-05-09T10:00:00.000Z"
     }
   ]
 }

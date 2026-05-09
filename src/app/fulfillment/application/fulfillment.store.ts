@@ -4,8 +4,8 @@ import { FulfillmentApi } from '../infrastructure/fulfillment-api';
 import { Vehicle } from '../domain/model/vehicle.entity';
 import { Driver } from '../domain/model/driver.entity';
 import { Delivery } from '../domain/model/delivery.entity';
-import { RegisterVehicleRequest, UpdateVehicleStatusRequest } from '../infrastructure/vehicle.request';
-import { RegisterDriverRequest, UpdateDriverStatusRequest } from '../infrastructure/driver.request';
+import { RegisterVehicleRequest, UpdateVehicleStatusRequest, UpdateVehicleRequest } from '../infrastructure/vehicle.request';
+import { RegisterDriverRequest, UpdateDriverStatusRequest, UpdateDriverRequest } from '../infrastructure/driver.request';
 
 /**
  * @summary Store de estado para el BC Fulfillment.
@@ -112,7 +112,7 @@ export class FulfillmentStore {
       });
   }
 
-  registerVehicle(request: RegisterVehicleRequest): void {
+  registerVehicle(request: RegisterVehicleRequest, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set('');
     this._successMsg.set('');
@@ -122,14 +122,70 @@ export class FulfillmentStore {
       .pipe(retry(2))
       .subscribe({
         next: (vehicle) => {
-          setTimeout(() => {
-            this._vehicleList.update((list) => [...list, vehicle]);
-            this._successMsg.set('Vehicle registered successfully');
-            this._isLoading.set(false);
-          }, 100);
+          this._vehicleList.update((list) => [...list, vehicle]);
+          this._successMsg.set('Vehicle registered successfully');
+          this._isLoading.set(false);
+          onSuccess?.();
         },
         error: (err) => {
           this._error.set(err.message || 'Failed to register vehicle');
+          this._isLoading.set(false);
+        },
+      });
+  }
+
+  loadVehicleById(vehicleId: string): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api
+      .getVehicleById(vehicleId)
+      .pipe(retry(2))
+      .subscribe({
+        next: (vehicle) => {
+          this._selectedVehicle.set(vehicle);
+          this._isLoading.set(false);
+        },
+        error: (err) => {
+          this._error.set(err.message || 'Failed to load vehicle');
+          this._isLoading.set(false);
+        },
+      });
+  }
+
+  updateVehicle(vehicleId: string, request: UpdateVehicleRequest, onSuccess?: () => void): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api
+      .updateVehicle(vehicleId, request)
+      .pipe(retry(2))
+      .subscribe({
+        next: (vehicle) => {
+          this._vehicleList.update((list) => list.map((v) => (v.id === vehicleId ? vehicle : v)));
+          this._selectedVehicle.set(vehicle);
+          this._successMsg.set('Vehicle updated successfully');
+          this._isLoading.set(false);
+          onSuccess?.();
+        },
+        error: (err) => {
+          this._error.set(err.message || 'Failed to update vehicle');
+          this._isLoading.set(false);
+        },
+      });
+  }
+
+  deleteVehicle(vehicleId: string): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api
+      .deleteVehicle(vehicleId)
+      .pipe(retry(2))
+      .subscribe({
+        next: () => {
+          this._vehicleList.update((list) => list.filter((v) => v.id !== vehicleId));
+          this._isLoading.set(false);
+        },
+        error: (err) => {
+          this._error.set(err.message || 'Failed to delete vehicle');
           this._isLoading.set(false);
         },
       });
@@ -202,7 +258,7 @@ export class FulfillmentStore {
       });
   }
 
-  registerDriver(request: RegisterDriverRequest): void {
+  registerDriver(request: RegisterDriverRequest, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set('');
     this._successMsg.set('');
@@ -212,14 +268,70 @@ export class FulfillmentStore {
       .pipe(retry(2))
       .subscribe({
         next: (driver) => {
-          setTimeout(() => {
-            this._driverList.update((list) => [...list, driver]);
-            this._successMsg.set('Driver registered successfully');
-            this._isLoading.set(false);
-          }, 100);
+          this._driverList.update((list) => [...list, driver]);
+          this._successMsg.set('Driver registered successfully');
+          this._isLoading.set(false);
+          onSuccess?.();
         },
         error: (err) => {
           this._error.set(err.message || 'Failed to register driver');
+          this._isLoading.set(false);
+        },
+      });
+  }
+
+  loadDriverById(driverId: string): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api
+      .getDriverById(driverId)
+      .pipe(retry(2))
+      .subscribe({
+        next: (driver) => {
+          this._selectedDriver.set(driver);
+          this._isLoading.set(false);
+        },
+        error: (err) => {
+          this._error.set(err.message || 'Failed to load driver');
+          this._isLoading.set(false);
+        },
+      });
+  }
+
+  updateDriver(driverId: string, request: UpdateDriverRequest, onSuccess?: () => void): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api
+      .updateDriver(driverId, request)
+      .pipe(retry(2))
+      .subscribe({
+        next: (driver) => {
+          this._driverList.update((list) => list.map((d) => (d.id === driverId ? driver : d)));
+          this._selectedDriver.set(driver);
+          this._successMsg.set('Driver updated successfully');
+          this._isLoading.set(false);
+          onSuccess?.();
+        },
+        error: (err) => {
+          this._error.set(err.message || 'Failed to update driver');
+          this._isLoading.set(false);
+        },
+      });
+  }
+
+  deleteDriver(driverId: string): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api
+      .deleteDriver(driverId)
+      .pipe(retry(2))
+      .subscribe({
+        next: () => {
+          this._driverList.update((list) => list.filter((d) => d.id !== driverId));
+          this._isLoading.set(false);
+        },
+        error: (err) => {
+          this._error.set(err.message || 'Failed to delete driver');
           this._isLoading.set(false);
         },
       });
@@ -259,10 +371,8 @@ export class FulfillmentStore {
       .pipe(retry(2))
       .subscribe({
         next: (deliveries) => {
-          setTimeout(() => {
-            this._deliveryList.set(deliveries);
-            this._isLoading.set(false);
-          }, 100);
+          this._deliveryList.set(deliveries); // sin setTimeout
+          this._isLoading.set(false);
         },
         error: (err) => {
           this._error.set(err.message || 'Failed to load deliveries');

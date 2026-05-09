@@ -10,13 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
-import { RegisterDriverRequest } from '../../../infrastructure/driver.request';
+import { RegisterDriverRequest, UpdateDriverRequest } from '../../../infrastructure/driver.request';
 
-/**
- * @summary Vista de formulario para conductores.
- * @remarks Permite registrar nuevos conductores autorizados.
- * @author FullTank Platform
- */
 @Component({
   selector: 'app-driver-form',
   standalone: true,
@@ -40,11 +35,11 @@ export class DriverForm implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  // TODO: Reemplazar con providerId real de IAM cuando se implemente
   private readonly TEMP_PROVIDER_ID = '1';
 
   protected driverForm: FormGroup;
   protected isEditMode = false;
+  protected driverId: string | null = null;
 
   constructor() {
     this.driverForm = this.fb.group({
@@ -57,10 +52,23 @@ export class DriverForm implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.isEditMode = true;
-      // TODO: Implementar carga de conductor para edición
+    this.driverId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.driverId;
+
+    if (this.isEditMode && this.driverId) {
+      this.store.loadDriverById(this.driverId);
+      setTimeout(() => {
+        const driver = this.store.selectedDriver();
+        if (driver) {
+          this.driverForm.patchValue({
+            firstName: driver.firstName,
+            lastName: driver.lastName,
+            licenseNumber: driver.licenseNumber,
+            phoneNumber: driver.phoneNumber,
+            email: driver.email,
+          });
+        }
+      }, 500);
     }
   }
 
@@ -69,25 +77,39 @@ export class DriverForm implements OnInit {
       this.driverForm.markAllAsTouched();
       return;
     }
+    if (this.isEditMode && this.driverId) {
+      this.updateDriverData();
+    } else {
+      this.registerDriverData();
+    }
+  }
 
-    const formValue = this.driverForm.value;
+  private registerDriverData(): void {
     const request: RegisterDriverRequest = {
       providerId: this.TEMP_PROVIDER_ID,
-      firstName: formValue.firstName,
-      lastName: formValue.lastName,
-      licenseNumber: formValue.licenseNumber,
-      phoneNumber: formValue.phoneNumber,
-      email: formValue.email,
+      firstName: this.driverForm.value.firstName,
+      lastName: this.driverForm.value.lastName,
+      licenseNumber: this.driverForm.value.licenseNumber,
+      phoneNumber: this.driverForm.value.phoneNumber,
+      email: this.driverForm.value.email,
+      status: 'AVAILABLE',
     };
+    this.store.registerDriver(request, () => {
+      this.router.navigate(['/fulfillment/driver-list']);
+    });
+  }
 
-    this.store.registerDriver(request);
-
-    // Navegar después de registro exitoso
-    setTimeout(() => {
-      if (this.store.successMsg()) {
-        this.router.navigate(['/fulfillment/driver-list']);
-      }
-    }, 1000);
+  private updateDriverData(): void {
+    const request: UpdateDriverRequest = {
+      firstName: this.driverForm.value.firstName,
+      lastName: this.driverForm.value.lastName,
+      licenseNumber: this.driverForm.value.licenseNumber,
+      phoneNumber: this.driverForm.value.phoneNumber,
+      email: this.driverForm.value.email,
+    };
+    this.store.updateDriver(this.driverId!, request, () => {
+      this.router.navigate(['/fulfillment/driver-list']);
+    });
   }
 
   protected onCancel(): void {
@@ -96,18 +118,11 @@ export class DriverForm implements OnInit {
 
   protected getErrorMessage(field: string): string {
     const control = this.driverForm.get(field);
-    if (control?.hasError('required')) {
-      return 'This field is required';
-    }
-    if (control?.hasError('minlength')) {
+    if (control?.hasError('required')) return 'This field is required';
+    if (control?.hasError('minlength'))
       return `Minimum length is ${control.errors?.['minlength'].requiredLength}`;
-    }
-    if (control?.hasError('email')) {
-      return 'Invalid email format';
-    }
-    if (control?.hasError('pattern')) {
-      return 'Invalid phone format';
-    }
+    if (control?.hasError('email')) return 'Invalid email format';
+    if (control?.hasError('pattern')) return 'Invalid phone format';
     return '';
   }
 }
