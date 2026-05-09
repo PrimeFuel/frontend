@@ -11,7 +11,8 @@
   "catalog": {
     "products": "Products",
     "add-product": "Add Product",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "product-inventory": "Product Inventory"
   },
   "ordering": {
     "requests": "Requests",
@@ -45,11 +46,12 @@
     "go-home": "Go to Home"
   },
   "product-catalog": {
-    "title": "Product Catalog",
+    "title": "Product Inventory",
     "subtitle": "Manage your fuel products",
     "show-all": "Show All",
     "add-button": "Add Product",
     "edit-tooltip": "Edit Product",
+    "delete-tooltip": "Delete Product",
     "empty": "No products available",
     "fields": {
       "name": "Product Name",
