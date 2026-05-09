@@ -42,6 +42,8 @@ export const routes: Routes = [
   { path: 'notification', loadChildren: notificationRoutes },
   */
 
+  */
+  { path: 'reporting', loadChildren: reportingRoutes },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `Page Not Found - ${baseTitle}` },
 ];

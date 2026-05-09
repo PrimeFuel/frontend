@@ -8,7 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { LanguageSwitcher } from '../language-switcher/language-switcher';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -25,6 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatTooltipModule,
     TranslatePipe,
     RouterOutlet,
+    RouterLink,
     LanguageSwitcher,
   ],
   templateUrl: './layout.html',
@@ -76,11 +77,6 @@ export class Layout {
         { label: 'payment.transactions', link: '/payment/transaction-list' },
         { label: 'payment.process', link: '/payment/payment-form' },
       ],
-    },
-    {
-      label: 'nav.notifications',
-      icon: 'notifications',
-      link: '/notification/notification-panel',
     },
     {
       label: 'nav.reports',
