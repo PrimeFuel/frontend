@@ -106,7 +106,7 @@
           <ng-container matColumnDef="vehicleId">
             <th mat-header-cell *matHeaderCellDef>{{ 'dispatch-dashboard.fields.vehicle' | translate }}</th>
             <td mat-cell *matCellDef="let element">
-              <code>{{ element.vehicleId }}</code>
+              {{ getVehiclePlate(element.vehicleId) }}
             </td>
           </ng-container>
 
@@ -114,7 +114,7 @@
           <ng-container matColumnDef="driverId">
             <th mat-header-cell *matHeaderCellDef>{{ 'dispatch-dashboard.fields.driver' | translate }}</th>
             <td mat-cell *matCellDef="let element">
-              <code>{{ element.driverId }}</code>
+              {{ getDriverName(element.driverId) }}
             </td>
           </ng-container>
 

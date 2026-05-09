@@ -10,8 +10,19 @@ export interface RegisterVehicleRequest {
   brand: string;
   capacity: number;
   unit: string;
+  status: string;
 }
 
 export interface UpdateVehicleStatusRequest {
   status: string;
+}
+
+export interface UpdateVehicleRequest {
+  licensePlate?: string;
+  brand?: string;
+  model?: string;
+  capacity?: number;
+  unit?: string;
+  status?: string; // ← esto falta
+
 }
