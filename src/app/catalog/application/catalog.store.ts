@@ -104,7 +104,7 @@ export class CatalogStore {
       });
   }
 
-  createProduct(command: CreateProductCommand): void {
+  createProduct(command: CreateProductCommand, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set(null);
     this.api
@@ -115,6 +115,7 @@ export class CatalogStore {
           this._productList.update((list) => [...list, product]);
           this._successMsg.set('Product created successfully');
           this._isLoading.set(false);
+          onSuccess?.();
         },
         error: (err: any) => {
           this._error.set(this.formatError(err, 'Failed to create product'));
@@ -123,7 +124,7 @@ export class CatalogStore {
       });
   }
 
-  updateProduct(productId: string, command: UpdateProductCommand): void {
+  updateProduct(productId: string, command: UpdateProductCommand, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set(null);
     this.api
@@ -136,6 +137,7 @@ export class CatalogStore {
           );
           this._successMsg.set('Product updated successfully');
           this._isLoading.set(false);
+          onSuccess?.();
         },
         error: (err: any) => {
           this._error.set(this.formatError(err, 'Failed to update product'));

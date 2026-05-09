@@ -13,7 +13,9 @@ export interface CreateProductRequest {
 
 export interface UpdateProductRequest {
   name?: string;
+  type?: string;
   description?: string;
   pricePerLiter?: number;
+  unit?: string;
   isActive?: boolean;
 }

@@ -46,14 +46,14 @@ export class ProductCatalog implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.store.loadActiveProducts();
+    this.store.loadAllProducts();
   }
 
   protected onRefresh(): void {
-    this.store.loadActiveProducts();
+    this.store.loadAllProducts();
   }
 
-  protected onShowAll(): void {
-    this.store.loadAllProducts();
+  protected onDelete(productId: string): void {
+    this.store.deleteProduct(productId);
   }
 }
