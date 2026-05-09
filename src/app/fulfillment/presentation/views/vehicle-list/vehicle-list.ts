@@ -63,7 +63,11 @@ export class VehicleList implements OnInit {
     this.store.loadVehiclesByProvider(this.TEMP_PROVIDER_ID);
   }
 
+  protected onDelete(vehicleId: string): void {
+    this.store.deleteVehicle(vehicleId);
+  }
+
   protected getStatusClass(status: string): string {
-    return status.toLowerCase().replace('_', '-');
+    return status.toLowerCase().replace(/_/g, '-');
   }
 }

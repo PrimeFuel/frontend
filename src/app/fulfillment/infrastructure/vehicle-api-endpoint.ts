@@ -5,15 +5,10 @@ import { environment } from '../../../environments/environment';
 import { Vehicle } from '../domain/model/vehicle.entity';
 import { VehicleResource, VehiclesResponse } from './vehicle-response';
 import { VehicleAssembler } from './vehicle-assembler';
-import { RegisterVehicleRequest, UpdateVehicleStatusRequest } from './vehicle.request';
+import { RegisterVehicleRequest, UpdateVehicleStatusRequest, UpdateVehicleRequest } from './vehicle.request';
 
-const fulfillmentEndpointUrl = `${environment.serverBasePath}${environment.fulfillmentVehiclesEndpointPath}`;
+const vehiclesEndpointUrl = `${environment.serverBasePath}${environment.fulfillmentVehiclesEndpointPath}`;
 
-/**
- * @summary Endpoint API para gestión de vehículos.
- * @remarks Expone operaciones CRUD y consultas específicas de vehículos.
- * @author FullTank Platform
- */
 export class VehicleApiEndpoint extends BaseApiEndpoint<
   Vehicle,
   VehicleResource,
@@ -21,32 +16,25 @@ export class VehicleApiEndpoint extends BaseApiEndpoint<
   VehicleAssembler
 > {
   constructor(http: HttpClient) {
-    super(http, fulfillmentEndpointUrl, new VehicleAssembler());
+    super(http, vehiclesEndpointUrl, new VehicleAssembler());
   }
 
-  /**
-   * Obtiene vehículos de un proveedor específico.
-   */
   getVehiclesByProvider(providerId: string): Observable<Vehicle[]> {
-    return this.http.get<VehiclesResponse>(`${this.endpointUrl}/provider/${providerId}`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
+    return this.http.get<VehicleResource[]>(`${this.endpointUrl}?providerId=${providerId}`).pipe(
+      map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
       catchError(this.handleError(`Failed to fetch vehicles for provider ${providerId}`)),
     );
   }
 
-  /**
-   * Obtiene vehículos disponibles.
-   */
   getAvailableVehicles(providerId: string): Observable<Vehicle[]> {
-    return this.http.get<VehiclesResponse>(`${this.endpointUrl}/provider/${providerId}/available`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
-      catchError(this.handleError('Failed to fetch available vehicles')),
-    );
+    return this.http
+      .get<VehicleResource[]>(`${this.endpointUrl}?providerId=${providerId}&status=AVAILABLE`)
+      .pipe(
+        map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
+        catchError(this.handleError('Failed to fetch available vehicles')),
+      );
   }
 
-  /**
-   * Registra un nuevo vehículo.
-   */
   registerVehicle(request: RegisterVehicleRequest): Observable<Vehicle> {
     return this.http.post<VehicleResource>(this.endpointUrl, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
@@ -54,13 +42,17 @@ export class VehicleApiEndpoint extends BaseApiEndpoint<
     );
   }
 
-  /**
-   * Actualiza el estado de un vehículo.
-   */
   updateVehicleStatus(vehicleId: string, request: UpdateVehicleStatusRequest): Observable<Vehicle> {
-    return this.http.put<VehicleResource>(`${this.endpointUrl}/${vehicleId}/status`, request).pipe(
+    return this.http.patch<VehicleResource>(`${this.endpointUrl}/${vehicleId}`, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to update vehicle status ${vehicleId}`)),
+    );
+  }
+
+  updateVehicle(vehicleId: string, request: UpdateVehicleRequest): Observable<Vehicle> {
+    return this.http.patch<VehicleResource>(`${this.endpointUrl}/${vehicleId}`, request).pipe(
+      map((resource) => this.assembler.toEntityFromResource(resource)),
+      catchError(this.handleError(`Failed to update vehicle ${vehicleId}`)),
     );
   }
 }

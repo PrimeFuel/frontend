@@ -10,8 +10,19 @@ export interface RegisterDriverRequest {
   licenseNumber: string;
   phoneNumber: string;
   email: string;
+  status: string;
 }
 
 export interface UpdateDriverStatusRequest {
   status: string;
+}
+
+export interface UpdateDriverRequest {
+  firstName?: string;
+  lastName?: string;
+  licenseNumber?: string;
+  phoneNumber?: string;
+  email?: string;
+  status?: string; // ← esto falta
+
 }

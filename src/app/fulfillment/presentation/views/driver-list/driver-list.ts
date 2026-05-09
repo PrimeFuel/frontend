@@ -63,8 +63,12 @@ export class DriverList implements OnInit {
     this.store.loadDriversByProvider(this.TEMP_PROVIDER_ID);
   }
 
+  protected onDelete(driverId: string): void {
+    this.store.deleteDriver(driverId);
+  }
+
   protected getStatusClass(status: string): string {
-    return status.toLowerCase().replace('_', '-');
+    return status.toLowerCase().replace(/_/g, '-');
   }
 
   protected getFullName(firstName: string, lastName: string): string {

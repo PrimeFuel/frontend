@@ -11,8 +11,8 @@ import { VehicleApiEndpoint } from './vehicle-api-endpoint';
 import { DriverApiEndpoint } from './driver-api-endpoint';
 import { DeliveryApiEndpoint } from './delivery-api-endpoint';
 
-import { RegisterVehicleRequest, UpdateVehicleStatusRequest } from './vehicle.request';
-import { RegisterDriverRequest, UpdateDriverStatusRequest } from './driver.request';
+import { RegisterVehicleRequest, UpdateVehicleStatusRequest, UpdateVehicleRequest } from './vehicle.request';
+import { RegisterDriverRequest, UpdateDriverStatusRequest, UpdateDriverRequest } from './driver.request';
 
 /**
  * @summary API gateway para el bounded context Fulfillment.
@@ -50,6 +50,18 @@ export class FulfillmentApi extends BaseApi {
     return this._vehicleEndpoint.updateVehicleStatus(vehicleId, request);
   }
 
+  getVehicleById(vehicleId: string): Observable<Vehicle> {
+    return this._vehicleEndpoint.getById(vehicleId);
+  }
+
+  updateVehicle(vehicleId: string, request: UpdateVehicleRequest): Observable<Vehicle> {
+    return this._vehicleEndpoint.updateVehicle(vehicleId, request);
+  }
+
+  deleteVehicle(vehicleId: string): Observable<void> {
+    return this._vehicleEndpoint.delete(vehicleId);
+  }
+
   // ── Drivers ──────────────────────────────────────────────────────────────
   getDriversByProvider(providerId: string): Observable<Driver[]> {
     return this._driverEndpoint.getDriversByProvider(providerId);
@@ -65,6 +77,18 @@ export class FulfillmentApi extends BaseApi {
 
   updateDriverStatus(driverId: string, request: UpdateDriverStatusRequest): Observable<Driver> {
     return this._driverEndpoint.updateDriverStatus(driverId, request);
+  }
+
+  getDriverById(driverId: string): Observable<Driver> {
+    return this._driverEndpoint.getById(driverId);
+  }
+
+  updateDriver(driverId: string, request: UpdateDriverRequest): Observable<Driver> {
+    return this._driverEndpoint.updateDriver(driverId, request);
+  }
+
+  deleteDriver(driverId: string): Observable<void> {
+    return this._driverEndpoint.delete(driverId);
   }
 
   // ── Deliveries ───────────────────────────────────────────────────────────
