@@ -28,8 +28,13 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
    * Obtiene todos los productos activos.
    */
   getActiveProducts(): Observable<FuelProduct[]> {
-    return this.http.get<ProductsResponse>(`${this.endpointUrl}/active`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
+    return this.http.get<ProductsResponse | ProductResource[]>(`${this.endpointUrl}?isActive=true`).pipe(
+      map((response) => {
+        if (Array.isArray(response)) {
+          return response.map((r) => this.assembler.toEntityFromResource(r));
+        }
+        return this.assembler.toEntitiesFromResponse(response as ProductsResponse);
+      }),
       catchError(this.handleError('Failed to fetch active products')),
     );
   }
@@ -48,7 +53,7 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
    * Actualiza un producto existente.
    */
   updateProduct(productId: string, request: UpdateProductRequest): Observable<FuelProduct> {
-    return this.http.put<ProductResource>(`${this.endpointUrl}/${productId}`, request).pipe(
+    return this.http.patch<ProductResource>(`${this.endpointUrl}/${productId}`, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to update product ${productId}`)),
     );

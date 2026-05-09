@@ -7,13 +7,8 @@ import { InventoryResource, InventoriesResponse } from './inventory-response';
 import { InventoryAssembler } from './inventory-assembler';
 import { UpdateStockRequest, ReserveStockRequest } from './inventory.request';
 
-const catalogEndpointUrl = `${environment.serverBasePath}${environment.catalogEndpointPath}`;
+const inventoryEndpointUrl = `${environment.serverBasePath}${environment.catalogInventoryEndpointPath}`;
 
-/**
- * @summary Endpoint API para gestión de inventario de combustible.
- * @remarks Expone operaciones para consultar y actualizar stock.
- * @author FullTank Platform
- */
 export class InventoryApiEndpoint extends BaseApiEndpoint<
   InventoryItem,
   InventoryResource,
@@ -21,46 +16,49 @@ export class InventoryApiEndpoint extends BaseApiEndpoint<
   InventoryAssembler
 > {
   constructor(http: HttpClient) {
-    super(http, catalogEndpointUrl, new InventoryAssembler());
+    super(http, inventoryEndpointUrl, new InventoryAssembler());
   }
 
-  /**
-   * Obtiene el inventario de un proveedor específico.
-   */
+  private extractInventory(response: any): InventoryItem[] {
+    const items: InventoryResource[] = Array.isArray(response)
+      ? response
+      : (response.inventory ?? response.inventories ?? []);
+    return items.map((i) => this.assembler.toEntityFromResource(i));
+  }
+
   getInventoryByProvider(providerId: string): Observable<InventoryItem[]> {
-    return this.http.get<InventoriesResponse>(`${this.endpointUrl}/inventory/provider/${providerId}`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
+    return this.http.get<any>(this.endpointUrl).pipe(
+      map((response) =>
+        this.extractInventory(response).filter((i) => i.providerId === providerId),
+      ),
       catchError(this.handleError(`Failed to fetch inventory for provider ${providerId}`)),
     );
   }
 
-  /**
-   * Obtiene el inventario de un producto específico.
-   */
   getInventoryByProduct(productId: string): Observable<InventoryItem[]> {
-    return this.http.get<InventoriesResponse>(`${this.endpointUrl}/inventory/product/${productId}`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
+    return this.http.get<any>(this.endpointUrl).pipe(
+      map((response) =>
+        this.extractInventory(response).filter((i) => i.productId === productId),
+      ),
       catchError(this.handleError(`Failed to fetch inventory for product ${productId}`)),
     );
   }
 
-  /**
-   * Actualiza el stock disponible.
-   */
   updateStock(inventoryItemId: string, request: UpdateStockRequest): Observable<InventoryItem> {
-    return this.http.put<InventoryResource>(`${this.endpointUrl}/inventory/${inventoryItemId}`, request).pipe(
-      map((resource) => this.assembler.toEntityFromResource(resource)),
-      catchError(this.handleError(`Failed to update stock for inventory item ${inventoryItemId}`)),
-    );
+    return this.http
+      .put<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}`, request)
+      .pipe(
+        map((resource) => this.assembler.toEntityFromResource(resource)),
+        catchError(this.handleError(`Failed to update stock for inventory item ${inventoryItemId}`)),
+      );
   }
 
-  /**
-   * Reserva stock durante el proceso de pedido.
-   */
   reserveStock(inventoryItemId: string, request: ReserveStockRequest): Observable<InventoryItem> {
-    return this.http.post<InventoryResource>(`${this.endpointUrl}/inventory/${inventoryItemId}/reserve`, request).pipe(
-      map((resource) => this.assembler.toEntityFromResource(resource)),
-      catchError(this.handleError(`Failed to reserve stock for inventory item ${inventoryItemId}`)),
-    );
+    return this.http
+      .post<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}/reserve`, request)
+      .pipe(
+        map((resource) => this.assembler.toEntityFromResource(resource)),
+        catchError(this.handleError(`Failed to reserve stock for inventory item ${inventoryItemId}`)),
+      );
   }
 }

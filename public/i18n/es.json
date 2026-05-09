@@ -11,7 +11,8 @@
   "catalog": {
     "products": "Productos",
     "add-product": "Agregar Producto",
-    "inventory": "Inventario"
+    "inventory": "Inventario",
+    "product-inventory": "Inventario de Productos"
   },
   "ordering": {
     "requests": "Solicitudes",
@@ -45,11 +46,12 @@
     "go-home": "Ir al Inicio"
   },
   "product-catalog": {
-    "title": "Catálogo de Productos",
+    "title": "Inventario de Productos",
     "subtitle": "Gestiona tus productos de combustible",
     "show-all": "Mostrar Todos",
     "add-button": "Agregar Producto",
     "edit-tooltip": "Editar Producto",
+    "delete-tooltip": "Eliminar Producto",
     "empty": "No hay productos disponibles",
     "fields": {
       "name": "Nombre del Producto",
