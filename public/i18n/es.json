@@ -11,8 +11,7 @@
   "catalog": {
     "products": "Productos",
     "add-product": "Agregar Producto",
-    "inventory": "Inventario",
-    "product-inventory": "Inventario de Productos"
+    "inventory": "Inventario"
   },
   "ordering": {
     "requests": "Solicitudes",
@@ -29,8 +28,9 @@
     "process": "Procesar Pago"
   },
   "reporting": {
-    "supplier-dashboard": "Panel del Proveedor",
-    "client-portfolio": "Portafolio de Clientes"
+    "dashboard": "Tablero",
+    "sales": "Reporte de Ventas",
+    "consumption": "Reporte de Consumo"
   },
   "home": {
     "title": "Plataforma FullTank",
@@ -46,12 +46,11 @@
     "go-home": "Ir al Inicio"
   },
   "product-catalog": {
-    "title": "Inventario de Productos",
+    "title": "Catálogo de Productos",
     "subtitle": "Gestiona tus productos de combustible",
     "show-all": "Mostrar Todos",
     "add-button": "Agregar Producto",
     "edit-tooltip": "Editar Producto",
-    "delete-tooltip": "Eliminar Producto",
     "empty": "No hay productos disponibles",
     "fields": {
       "name": "Nombre del Producto",
@@ -157,5 +156,82 @@
   "status": {
     "active": "Activo",
     "inactive": "Inactivo"
+  },
+  "request-list": {
+    "title": "Solicitudes de Combustible",
+    "id": "ID",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "delivery-date": "Entrega Deseada",
+    "status": "Estado",
+    "actions": "Acciones",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "new": "Nueva Solicitud",
+    "reject-title": "Rechazar Solicitud",
+    "reject-reason": "Motivo del Rechazo",
+    "reject-placeholder": "Explica por qué se rechaza esta solicitud",
+    "reject-cancel": "Cancelar",
+    "reject-confirm": "Confirmar Rechazo"
+  },
+  "request-form": {
+    "create-title": "Nueva Solicitud",
+    "edit-title": "Editar Solicitud",
+    "client-id": "ID del Cliente",
+    "provider-id": "ID del Proveedor",
+    "product-id": "ID del Producto",
+    "quantity": "Cantidad",
+    "unit": "Unidad",
+    "delivery-date": "Fecha de Entrega Deseada",
+    "delivery-address": "Dirección de Entrega",
+    "create": "Crear Solicitud",
+    "update": "Actualizar Solicitud",
+    "cancel": "Cancelar",
+    "required": "Este campo es obligatorio"
+  },
+  "order-list": {
+    "title": "Órdenes",
+    "id": "ID",
+    "request": "Solicitud",
+    "quantity": "Cantidad",
+    "total": "Total",
+    "status": "Estado",
+    "actions": "Acciones",
+    "view": "Ver Detalle",
+    "delete": "Eliminar"
+  },
+  "order-detail": {
+    "title": "Detalle de Orden",
+    "back": "Volver a Órdenes",
+    "request-id": "ID Solicitud",
+    "client": "Cliente",
+    "provider": "Proveedor",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "total": "Monto Total",
+    "address": "Dirección de Entrega",
+    "created-at": "Creada",
+    "dispatched-at": "Despachada",
+    "delivered-at": "Entregada",
+    "closed-at": "Cerrada",
+    "dispatch": "Despachar Orden",
+    "confirm-delivery": "Confirmar Entrega",
+    "close": "Cerrar Orden",
+    "not-found": "Orden no encontrada"
+  },
+  "request-status": {
+    "pending_approval": "Pendiente de Aprobación",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "cancelled": "Cancelada"
+  },
+  "order-status": {
+    "created": "Creada",
+    "dispatched": "Despachada",
+    "delivered": "Entregada",
+    "closed": "Cerrada",
+    "cancelled": "Cancelada"
   }
 }

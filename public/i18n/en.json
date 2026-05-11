@@ -8,29 +8,10 @@
     "notifications": "Notifications",
     "reports": "Reports"
   },
-  "catalog": {
-    "products": "Products",
-    "add-product": "Add Product",
-    "inventory": "Inventory",
-    "product-inventory": "Product Inventory"
-  },
   "ordering": {
     "requests": "Requests",
     "create-request": "New Request",
     "orders": "Orders"
-  },
-  "fulfillment": {
-    "vehicles": "Vehicles",
-    "drivers": "Drivers",
-    "dispatch": "Dispatch"
-  },
-  "payment": {
-    "transactions": "Transactions",
-    "process": "Process Payment"
-  },
-  "reporting": {
-    "supplier-dashboard": "Supplier Dashboard",
-    "client-portfolio": "Client Portfolio"
   },
   "home": {
     "title": "FullTank Platform",
@@ -45,117 +26,85 @@
     "content": "The page <strong>{{invalid_path}}</strong> does not exist.",
     "go-home": "Go to Home"
   },
-  "product-catalog": {
-    "title": "Product Inventory",
-    "subtitle": "Manage your fuel products",
-    "show-all": "Show All",
-    "add-button": "Add Product",
-    "edit-tooltip": "Edit Product",
-    "delete-tooltip": "Delete Product",
-    "empty": "No products available",
-    "fields": {
-      "name": "Product Name",
-      "type": "Fuel Type",
-      "price": "Price per Liter",
-      "unit": "Unit",
-      "status": "Status"
-    }
-  },
-  "product-form": {
-    "create-title": "Create Product",
-    "create-subtitle": "Add a new fuel product to your catalog",
-    "edit-title": "Edit Product",
-    "edit-subtitle": "Update product information",
-    "cancel": "Cancel",
-    "create": "Create Product",
-    "update": "Update Product",
-    "fields": {
-      "name": "Product Name",
-      "type": "Fuel Type",
-      "description": "Description",
-      "price": "Price per Liter",
-      "unit": "Unit",
-      "active": "Active Product"
-    },
-    "placeholders": {
-      "name": "e.g., Premium Diesel",
-      "description": "Describe the product characteristics",
-      "price": "0.00"
-    }
-  },
-  "inventory-list": {
-    "title": "Inventory Management",
-    "subtitle": "Monitor your fuel stock levels",
-    "low-stock-alert": "Low Stock Alert",
-    "items-below-threshold": "items below threshold",
-    "update-tooltip": "Update Stock",
-    "empty": "No inventory items available",
-    "fields": {
-      "product": "Product",
-      "available": "Available",
-      "reserved": "Reserved",
-      "unit": "Unit",
-      "last-updated": "Last Updated"
-    }
-  },
-  "supplier-dashboard": {
-    "title": "Reports",
-    "subtitle": "Comprehensive overview of your sales performance",
-    "export-pdf": "Export PDF",
-    "total-sales-revenue": "Total Sales Revenue",
-    "avg-fulfillment-rate": "Avg. Fulfillment Rate",
-    "avg-lead-time": "Avg. Lead Time",
-    "vs-last-period": "vs last period",
-    "target": "Target",
-    "days": "Days",
-    "client-sales-performance": "Client Sales Performance",
-    "view-all-clients": "View All Clients",
-    "empty": "No client data available",
-    "fields": {
-      "company": "Company Name",
-      "total-volume": "Total Volume",
-      "status": "Status"
-    }
-  },
-  "client-portfolio": {
-    "title": "Supplier Clients Reports",
-    "subtitle": "Manage your B2B client portfolio, monitor industrial fuel consumption, and track historical order volume",
-    "total-clients": "Total Clients",
-    "revenue": "Revenue",
-    "active-orders": "Active Orders",
-    "growth": "Growth Rate",
-    "portfolio-title": "Client Portfolio",
-    "filter-by-sector": "Filter by Sector",
-    "all-sectors": "All Sectors",
-    "volume-distribution": "Volume Distribution by Sector",
-    "empty": "No clients available",
-    "fields": {
-      "company": "Company Entity",
-      "sector": "Sector",
-      "total-volume": "Total Volume (MT)",
-      "last-active": "Last Active",
-      "status": "Status"
-    },
-    "sectors": {
-      "transport": "Transport",
-      "mining": "Mining",
-      "construction": "Construction",
-      "maritime": "Maritime",
-      "logistics": "Logistics"
-    }
-  },
-  "fuel-type": {
-    "diesel": "Diesel",
-    "gasoline_90": "Gasoline 90",
-    "gasoline_95": "Gasoline 95",
-    "gasoline_97": "Gasoline 97"
-  },
   "unit": {
     "liters": "Liters",
     "gallons": "Gallons"
   },
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive"
+  "request-list": {
+    "title": "Fuel Requests",
+    "id": "ID",
+    "product": "Product",
+    "quantity": "Quantity",
+    "delivery-date": "Desired Delivery",
+    "status": "Status",
+    "actions": "Actions",
+    "approve": "Approve",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "new": "New Request",
+    "reject-title": "Reject Request",
+    "reject-reason": "Rejection Reason",
+    "reject-placeholder": "Explain why this request is being rejected",
+    "reject-cancel": "Cancel",
+    "reject-confirm": "Confirm Reject"
+  },
+  "request-form": {
+    "create-title": "New Fuel Request",
+    "edit-title": "Edit Fuel Request",
+    "client-id": "Client ID",
+    "provider-id": "Provider ID",
+    "product-id": "Product ID",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "delivery-date": "Desired Delivery Date",
+    "delivery-address": "Delivery Address",
+    "create": "Create Request",
+    "update": "Update Request",
+    "cancel": "Cancel",
+    "required": "This field is required"
+  },
+  "order-list": {
+    "title": "Orders",
+    "id": "ID",
+    "request": "Request",
+    "quantity": "Quantity",
+    "total": "Total",
+    "status": "Status",
+    "actions": "Actions",
+    "view": "View Details",
+    "delete": "Delete"
+  },
+  "order-detail": {
+    "title": "Order Detail",
+    "back": "Back to Orders",
+    "request-id": "Request ID",
+    "client": "Client",
+    "provider": "Provider",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total Amount",
+    "address": "Delivery Address",
+    "created-at": "Created",
+    "dispatched-at": "Dispatched",
+    "delivered-at": "Delivered",
+    "closed-at": "Closed",
+    "dispatch": "Dispatch Order",
+    "confirm-delivery": "Confirm Delivery",
+    "close": "Close Order",
+    "not-found": "Order not found"
+  },
+  "request-status": {
+    "pending_approval": "Pending Approval",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled"
+  },
+  "order-status": {
+    "created": "Created",
+    "dispatched": "Dispatched",
+    "delivered": "Delivered",
+    "closed": "Closed",
+    "cancelled": "Cancelled"
   }
 }
