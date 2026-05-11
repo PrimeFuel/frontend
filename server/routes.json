@@ -1,0 +1,13 @@
+{
+  "/catalog/products": "/catalog",
+  "/catalog/inventory": "/inventory",
+
+  "/fulfillment/vehicles": "/vehicles",
+  "/fulfillment/vehicles/:id": "/vehicles/:id",
+
+  "/fulfillment/drivers": "/drivers",
+  "/fulfillment/drivers/:id": "/drivers/:id",
+
+  "/fulfillment/deliveries": "/deliveries",
+  "/fulfillment/deliveries/:id": "/deliveries/:id"
+}
