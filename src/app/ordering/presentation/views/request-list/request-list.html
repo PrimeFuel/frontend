@@ -1,0 +1,95 @@
+<h1 class="title">{{ 'request-list.title' | translate }}</h1>
+
+@if (store.loading()) {
+  <mat-spinner diameter="40"></mat-spinner>
+}
+@if (store.error()) {
+  <mat-error>{{ store.error() }}</mat-error>
+}
+
+@if (rejectingRequestId) {
+  <div class="reject-panel mat-elevation-z2">
+    <h3>{{ 'request-list.reject-title' | translate }}</h3>
+    <mat-form-field appearance="outline" class="reject-reason">
+      <mat-label>{{ 'request-list.reject-reason' | translate }}</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="rejectionReason"
+                [placeholder]="'request-list.reject-placeholder' | translate"></textarea>
+    </mat-form-field>
+    <div class="reject-actions">
+      <button mat-button (click)="cancelReject()">{{ 'request-list.reject-cancel' | translate }}</button>
+      <button mat-raised-button color="warn"
+              [disabled]="!rejectionReason.trim()"
+              (click)="confirmReject()">
+        <mat-icon>block</mat-icon>
+        {{ 'request-list.reject-confirm' | translate }}
+      </button>
+    </div>
+  </div>
+}
+
+<table mat-table [dataSource]="dataSource()" class="mat-elevation-z8" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.id' | translate }}</th>
+    <td mat-cell *matCellDef="let request" class="mono">{{ shortId(request.id) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="productId">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.product' | translate }}</th>
+    <td mat-cell *matCellDef="let request">{{ shortId(request.productId) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.quantity' | translate }}</th>
+    <td mat-cell *matCellDef="let request">{{ request.quantity }} {{ request.unit }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="desiredDeliveryDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.delivery-date' | translate }}</th>
+    <td mat-cell *matCellDef="let request">{{ request.desiredDeliveryDate | date:'mediumDate' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.status' | translate }}</th>
+    <td mat-cell *matCellDef="let request">
+      <mat-chip-set>
+        <mat-chip [class]="statusClass(request.status)">
+          {{ 'request-status.' + request.status.toLowerCase() | translate }}
+        </mat-chip>
+      </mat-chip-set>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>{{ 'request-list.actions' | translate }}</th>
+    <td mat-cell *matCellDef="let request">
+      @if (request.status === 'PENDING_APPROVAL') {
+        <button mat-icon-button color="primary"
+                [matTooltip]="'request-list.approve' | translate"
+                (click)="approveRequest(request)">
+          <mat-icon>check_circle</mat-icon>
+        </button>
+        <button mat-icon-button color="warn"
+                [matTooltip]="'request-list.reject' | translate"
+                (click)="startReject(request.id)">
+          <mat-icon>block</mat-icon>
+        </button>
+        <button mat-icon-button
+                [matTooltip]="'request-list.cancel' | translate"
+                (click)="cancelRequest(request)">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+      <button mat-icon-button
+              [matTooltip]="'request-list.delete' | translate"
+              (click)="deleteRequest(request.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+
+<button mat-raised-button color="primary" (click)="navigateToNew()">{{ 'request-list.new' | translate }}</button>
