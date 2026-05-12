@@ -9,8 +9,7 @@ import {
 } from '../domain/model/fuel-product.entity';import { ProductResource, ProductsResponse } from './product-response';
 import { ProductAssembler } from './product-assembler';
 
-const catalogEndpointUrl = `${environment.serverBasePath}${environment.catalogEndpointPath}`;
-
+const inventoryEndpointUrl = `${environment.serverBasePath}${environment.inventoryEndpointPath}`;
 /**
  * @summary Endpoint API para gestión de productos de combustible.
  * @remarks Expone operaciones CRUD y consultas específicas de productos.
@@ -23,7 +22,7 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
   ProductAssembler
 > {
   constructor(http: HttpClient) {
-    super(http, catalogEndpointUrl, new ProductAssembler());
+    super(http, inventoryEndpointUrl, new ProductAssembler());
   }
 
   /**

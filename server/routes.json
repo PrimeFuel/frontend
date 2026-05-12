@@ -1,5 +1,5 @@
 {
-  "/catalog/products": "/catalog",
+  "/catalog/products": "/inventory",
   "/catalog/inventory": "/inventory",
 
   "/fulfillment/vehicles": "/vehicles",

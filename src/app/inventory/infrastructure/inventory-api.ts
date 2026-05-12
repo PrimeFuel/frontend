@@ -25,7 +25,7 @@ import { InventoryApiEndpoint } from './inventory-api-endpoint';
  * @author FullTank Platform
  */
 @Injectable({ providedIn: 'root' })
-export class CatalogApi extends BaseApi {
+export class InventoryApi extends BaseApi {
 
   private readonly _productEndpoint: ProductApiEndpoint;
   private readonly _inventoryEndpoint: InventoryApiEndpoint;
