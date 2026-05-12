@@ -12,8 +12,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CatalogStore } from '../../../application/catalog.store';
-import { CreateProductCommand } from '../../../domain/model/create-product.command';
-import { UpdateProductCommand } from '../../../domain/model/update-product.command';
+import {
+  CreateProductPayload,
+  UpdateProductPayload
+} from '../../../domain/model/fuel-product.entity';
 
 /**
  * @summary Formulario para crear y editar productos de combustible.
@@ -117,7 +119,7 @@ export class ProductForm implements OnInit {
   }
 
   private createProduct(): void {
-    const command: CreateProductCommand = {
+    const payload: CreateProductPayload = {
       name: this.productForm.value.name,
       type: this.productForm.value.type,
       description: this.productForm.value.description,
@@ -125,7 +127,7 @@ export class ProductForm implements OnInit {
       unit: this.productForm.value.unit,
     };
 
-    this.store.createProduct(command, () => {
+    this.store.createProduct(payload, () => {
       this.router.navigate(['../product-inventory'], { relativeTo: this.route });
     });
   }
@@ -133,8 +135,7 @@ export class ProductForm implements OnInit {
   private updateProduct(): void {
     if (!this.productId) return;
 
-    const command: UpdateProductCommand = {
-      productId: this.productId,
+    const payload: UpdateProductPayload = {
       name: this.productForm.value.name,
       type: this.productForm.value.type,
       description: this.productForm.value.description,
@@ -143,7 +144,7 @@ export class ProductForm implements OnInit {
       isActive: this.productForm.value.isActive,
     };
 
-    this.store.updateProduct(this.productId, command, () => {
+    this.store.updateProduct(this.productId, payload, () => {
       this.router.navigate(['../../product-inventory'], { relativeTo: this.route });
     });
   }

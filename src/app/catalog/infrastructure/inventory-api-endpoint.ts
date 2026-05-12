@@ -2,10 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
-import { InventoryItem } from '../domain/model/inventory-item.entity';
-import { InventoryResource, InventoriesResponse } from './inventory-response';
+import {
+  InventoryItem,
+  UpdateStockPayload,
+  ReserveStockPayload
+} from '../domain/model/inventory-item.entity';import { InventoryResource, InventoriesResponse } from './inventory-response';
 import { InventoryAssembler } from './inventory-assembler';
-import { UpdateStockRequest, ReserveStockRequest } from './inventory.request';
 
 const inventoryEndpointUrl = `${environment.serverBasePath}${environment.catalogInventoryEndpointPath}`;
 
@@ -44,7 +46,7 @@ export class InventoryApiEndpoint extends BaseApiEndpoint<
     );
   }
 
-  updateStock(inventoryItemId: string, request: UpdateStockRequest): Observable<InventoryItem> {
+  updateStock(inventoryItemId: string, request: UpdateStockPayload): Observable<InventoryItem> {
     return this.http
       .put<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}`, request)
       .pipe(
@@ -53,7 +55,7 @@ export class InventoryApiEndpoint extends BaseApiEndpoint<
       );
   }
 
-  reserveStock(inventoryItemId: string, request: ReserveStockRequest): Observable<InventoryItem> {
+  reserveStock(inventoryItemId: string, request: ReserveStockPayload): Observable<InventoryItem> {
     return this.http
       .post<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}/reserve`, request)
       .pipe(

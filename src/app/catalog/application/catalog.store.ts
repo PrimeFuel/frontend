@@ -1,12 +1,17 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { retry } from 'rxjs';
 import { CatalogApi } from '../infrastructure/catalog-api';
-import { FuelProduct } from '../domain/model/fuel-product.entity';
-import { InventoryItem } from '../domain/model/inventory-item.entity';
-import { CreateProductCommand } from '../domain/model/create-product.command';
-import { UpdateProductCommand } from '../domain/model/update-product.command';
-import { UpdateStockCommand } from '../domain/model/update-stock.command';
-import { ReserveStockCommand } from '../domain/model/reserve-stock.command';
+import {
+  FuelProduct,
+  CreateProductPayload,
+  UpdateProductPayload
+} from '../domain/model/fuel-product.entity';
+
+import {
+  InventoryItem,
+  UpdateStockPayload,
+  ReserveStockPayload
+} from '../domain/model/inventory-item.entity';
 
 /**
  * @summary Store para gestión de estado del BC Catalog.
@@ -104,11 +109,14 @@ export class CatalogStore {
       });
   }
 
-  createProduct(command: CreateProductCommand, onSuccess?: () => void): void {
+  createProduct(
+    payload: CreateProductPayload,
+    onSuccess?: () => void
+  ): void{
     this._isLoading.set(true);
     this._error.set(null);
     this.api
-      .createProduct(command as any)
+      .createProduct(payload)
       .pipe(retry(2))
       .subscribe({
         next: (product: FuelProduct) => {
@@ -124,11 +132,15 @@ export class CatalogStore {
       });
   }
 
-  updateProduct(productId: string, command: UpdateProductCommand, onSuccess?: () => void): void {
+  updateProduct(
+    productId: string,
+    payload: UpdateProductPayload,
+    onSuccess?: () => void
+  ): void{
     this._isLoading.set(true);
     this._error.set(null);
     this.api
-      .updateProduct(productId, command as any)
+      .updateProduct(productId, payload)
       .pipe(retry(2))
       .subscribe({
         next: (product: FuelProduct) => {
@@ -203,11 +215,14 @@ export class CatalogStore {
       });
   }
 
-  updateStock(inventoryItemId: string, command: UpdateStockCommand): void {
+  updateStock(
+    inventoryItemId: string,
+    payload: UpdateStockPayload
+  ): void{
     this._isLoading.set(true);
     this._error.set(null);
     this.api
-      .updateStock(inventoryItemId, command as any)
+      .updateStock(inventoryItemId, payload)
       .pipe(retry(2))
       .subscribe({
         next: (item: InventoryItem) => {
@@ -224,11 +239,14 @@ export class CatalogStore {
       });
   }
 
-  reserveStock(inventoryItemId: string, command: ReserveStockCommand): void {
+  reserveStock(
+    inventoryItemId: string,
+    payload: ReserveStockPayload
+  ): void{
     this._isLoading.set(true);
     this._error.set(null);
     this.api
-      .reserveStock(inventoryItemId, command as any)
+      .reserveStock(inventoryItemId, payload)
       .pipe(retry(2))
       .subscribe({
         next: (item: InventoryItem) => {
@@ -245,7 +263,6 @@ export class CatalogStore {
       });
   }
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
 
   clearMessages(): void {
     this._error.set(null);
