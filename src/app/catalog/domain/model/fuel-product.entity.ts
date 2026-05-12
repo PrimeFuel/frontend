@@ -1,18 +1,12 @@
 import { BaseEntity } from '../../../shared/domain/model/base-entity';
 
-/**
- * @summary Entidad de dominio que representa un producto de combustible.
- * @remarks Almacena información del catálogo de productos disponibles
- * en la plataforma FullTank (Diesel, Gasolina 90, 95, 97, etc.).
- * @author FullTank Platform
- */
 export class FuelProduct implements BaseEntity {
   id: string;
   name: string;
-  type: string; // DIESEL, GASOLINE_90, GASOLINE_95, GASOLINE_97
+  type: string;
   description: string;
   pricePerLiter: number;
-  unit: string; // LITERS, GALLONS
+  unit: string;
   isActive: boolean;
   createdAt: string;
 
@@ -35,4 +29,21 @@ export class FuelProduct implements BaseEntity {
     this.isActive = params.isActive;
     this.createdAt = params.createdAt;
   }
+}
+
+export interface CreateProductPayload {
+  name: string;
+  type: string;
+  description: string;
+  pricePerLiter: number;
+  unit: string;
+}
+
+export interface UpdateProductPayload {
+  name?: string;
+  type?: string;
+  description?: string;
+  pricePerLiter?: number;
+  unit?: string;
+  isActive?: boolean;
 }
