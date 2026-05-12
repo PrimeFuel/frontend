@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CatalogStore } from '../../../application/catalog.store';
+import { InventoryStore } from '../../../application/inventory.store';
 
 /**
  * @summary Vista de inventario de productos de combustible.
@@ -38,7 +38,7 @@ import { CatalogStore } from '../../../application/catalog.store';
   styleUrl: './inventory-list.css',
 })
 export class InventoryList implements OnInit {
-  protected readonly store = inject(CatalogStore);
+  protected readonly store = inject(InventoryStore);
 
   // TODO: Reemplazar con providerId real de IAM cuando se implemente
   private readonly TEMP_PROVIDER_ID = '1';

@@ -6,8 +6,8 @@ const about = () => import('./shared/presentation/views/about/about').then((m) =
 const pageNotFound = () =>
   import('./shared/presentation/views/page-not-found/page-not-found').then((m) => m.PageNotFound);
 
-const catalogRoutes = () =>
-  import('./catalog/presentation/catalog-routes').then((m) => m.catalogRoutes);
+const inventoryRoutes = () =>
+  import('./inventory/presentation/inventory-routes').then((m) => m.inventoryRoutes);
 
 const fulfillmentRoutes = () =>
   import('./fulfillment/presentation/fulfillment-routes').then((m) => m.fulfillmentRoutes);
@@ -34,7 +34,7 @@ const baseTitle = 'FullTank';
 export const routes: Routes = [
   { path: 'home', component: Home, title: `Home - ${baseTitle}` },
   { path: 'about', loadComponent: about, title: `About - ${baseTitle}` },
-  { path: 'catalog', loadChildren: catalogRoutes },
+  { path: 'inventory', loadChildren: inventoryRoutes },
   { path: 'fulfillment', loadChildren: fulfillmentRoutes },
 
   /*

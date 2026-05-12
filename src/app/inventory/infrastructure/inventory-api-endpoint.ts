@@ -9,7 +9,7 @@ import {
 } from '../domain/model/inventory-item.entity';import { InventoryResource, InventoriesResponse } from './inventory-response';
 import { InventoryAssembler } from './inventory-assembler';
 
-const inventoryEndpointUrl = `${environment.serverBasePath}${environment.catalogInventoryEndpointPath}`;
+const inventoryEndpointUrl = `${environment.serverBasePath}${environment.inventoryEndpointPath}`;
 
 export class InventoryApiEndpoint extends BaseApiEndpoint<
   InventoryItem,
