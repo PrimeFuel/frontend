@@ -1,18 +1,12 @@
 import { BaseEntity } from '../../../shared/domain/model/base-entity';
 
-/**
- * @summary Entidad de dominio que representa un ítem de inventario.
- * @remarks Almacena el stock disponible de cada producto de combustible
- * por proveedor. Permite controlar disponibilidad antes de procesar pedidos.
- * @author FullTank Platform
- */
 export class InventoryItem implements BaseEntity {
   id: string;
   productId: string;
   providerId: string;
   availableQuantity: number;
   reservedQuantity: number;
-  unit: string; // LITERS, GALLONS
+  unit: string;
   lastUpdated: string;
 
   constructor(params: {
@@ -32,4 +26,12 @@ export class InventoryItem implements BaseEntity {
     this.unit = params.unit;
     this.lastUpdated = params.lastUpdated;
   }
+}
+
+export interface UpdateStockPayload {
+  availableQuantity: number;
+}
+
+export interface ReserveStockPayload {
+  quantityToReserve: number;
 }
