@@ -7,10 +7,10 @@ export const environment = {
   iamSignInEndpointPath: '/auth/sign-in',
   iamSignUpEndpointPath: '/auth/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
-  // Catalog (Productos e Inventario)
-  catalogEndpointPath: '/catalog',
-  catalogProductsEndpointPath: '/catalog',
-  catalogInventoryEndpointPath: '/catalog',
+  // Inventory (Productos e Inventario)
+  inventoryEndpointPath: '/inventory',
+  inventoryProductsEndpointPath: '/inventory',
+  inventoryStockEndpointPath: '/inventory',
   // Ordering (Solicitudes y Órdenes)
   orderingRequestsEndpointPath: '/ordering/requests',
   orderingOrdersEndpointPath: '/ordering/orders',

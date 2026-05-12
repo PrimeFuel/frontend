@@ -1,14 +1,14 @@
 {
   "nav": {
     "dashboard": "Tablero",
-    "catalog": "Catálogo",
+    "inventory": "Inventario",
     "ordering": "Pedidos",
     "fulfillment": "Despacho",
     "payment": "Pagos",
     "notifications": "Notificaciones",
     "reports": "Reportes"
   },
-  "catalog": {
+  "inventory": {
     "products": "Productos",
     "add-product": "Agregar Producto",
     "inventory": "Inventario",
@@ -45,7 +45,7 @@
     "content": "La página <strong>{{invalid_path}}</strong> no existe.",
     "go-home": "Ir al Inicio"
   },
-  "product-catalog": {
+  "product-inventory": {
     "title": "Inventario de Productos",
     "subtitle": "Gestiona tus productos de combustible",
     "show-all": "Mostrar Todos",
@@ -63,7 +63,7 @@
   },
   "product-form": {
     "create-title": "Crear Producto",
-    "create-subtitle": "Agrega un nuevo producto de combustible a tu catálogo",
+    "create-subtitle": "Agrega un nuevo producto de combustible a tu inventario",
     "edit-title": "Editar Producto",
     "edit-subtitle": "Actualiza la información del producto",
     "cancel": "Cancelar",

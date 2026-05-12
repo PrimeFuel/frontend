@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CatalogStore } from '../../../application/catalog.store';
+import { InventoryStore } from '../../../application/inventory.store';
 import {
   CreateProductPayload,
   UpdateProductPayload
@@ -43,7 +43,7 @@ import {
   styleUrl: './product-form.css',
 })
 export class ProductForm implements OnInit {
-  protected readonly store = inject(CatalogStore);
+  protected readonly store = inject(InventoryStore);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
