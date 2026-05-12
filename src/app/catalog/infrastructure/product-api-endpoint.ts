@@ -2,10 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
-import { FuelProduct } from '../domain/model/fuel-product.entity';
-import { ProductResource, ProductsResponse } from './product-response';
+import {
+  FuelProduct,
+  CreateProductPayload,
+  UpdateProductPayload
+} from '../domain/model/fuel-product.entity';import { ProductResource, ProductsResponse } from './product-response';
 import { ProductAssembler } from './product-assembler';
-import {CreateProductRequest, UpdateProductRequest} from '../domain/model/delete-product.command';
 
 const catalogEndpointUrl = `${environment.serverBasePath}${environment.catalogEndpointPath}`;
 
@@ -42,7 +44,7 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
   /**
    * Crea un nuevo producto de combustible.
    */
-  createProduct(request: CreateProductRequest): Observable<FuelProduct> {
+  createProduct(request: CreateProductPayload): Observable<FuelProduct> {
     return this.http.post<ProductResource>(this.endpointUrl, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError('Failed to create product')),
@@ -52,7 +54,7 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
   /**
    * Actualiza un producto existente.
    */
-  updateProduct(productId: string, request: UpdateProductRequest): Observable<FuelProduct> {
+  updateProduct(productId: string, request: UpdateProductPayload): Observable<FuelProduct> {
     return this.http.patch<ProductResource>(`${this.endpointUrl}/${productId}`, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to update product ${productId}`)),

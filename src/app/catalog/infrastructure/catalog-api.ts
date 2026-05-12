@@ -3,14 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseApi } from '../../shared/infrastructure/base-api';
 
-import { FuelProduct } from '../domain/model/fuel-product.entity';
-import { InventoryItem } from '../domain/model/inventory-item.entity';
+import {
+  FuelProduct,
+  CreateProductPayload,
+  UpdateProductPayload
+} from '../domain/model/fuel-product.entity';
+
+import {
+  InventoryItem,
+  UpdateStockPayload,
+  ReserveStockPayload
+} from '../domain/model/inventory-item.entity';
 
 import { ProductApiEndpoint } from './product-api-endpoint';
 import { InventoryApiEndpoint } from './inventory-api-endpoint';
-
-import { UpdateStockRequest, ReserveStockRequest } from './inventory.request';
-import {CreateProductRequest, UpdateProductRequest} from '../domain/model/delete-product.command';
 
 /**
  * @summary API gateway para el bounded context Catalog.
@@ -20,16 +26,19 @@ import {CreateProductRequest, UpdateProductRequest} from '../domain/model/delete
  */
 @Injectable({ providedIn: 'root' })
 export class CatalogApi extends BaseApi {
+
   private readonly _productEndpoint: ProductApiEndpoint;
   private readonly _inventoryEndpoint: InventoryApiEndpoint;
 
   constructor(http: HttpClient) {
     super();
+
     this._productEndpoint = new ProductApiEndpoint(http);
     this._inventoryEndpoint = new InventoryApiEndpoint(http);
   }
 
   // ── Products ─────────────────────────────────────────────────────────────
+
   getAllProducts(): Observable<FuelProduct[]> {
     return this._productEndpoint.getAll();
   }
@@ -42,12 +51,22 @@ export class CatalogApi extends BaseApi {
     return this._productEndpoint.getById(productId);
   }
 
-  createProduct(request: CreateProductRequest): Observable<FuelProduct> {
+  createProduct(
+    request: CreateProductPayload
+  ): Observable<FuelProduct> {
+
     return this._productEndpoint.createProduct(request);
   }
 
-  updateProduct(productId: string, request: UpdateProductRequest): Observable<FuelProduct> {
-    return this._productEndpoint.updateProduct(productId, request);
+  updateProduct(
+    productId: string,
+    request: UpdateProductPayload
+  ): Observable<FuelProduct> {
+
+    return this._productEndpoint.updateProduct(
+      productId,
+      request
+    );
   }
 
   deleteProduct(productId: string): Observable<void> {
@@ -55,19 +74,38 @@ export class CatalogApi extends BaseApi {
   }
 
   // ── Inventory ────────────────────────────────────────────────────────────
-  getInventoryByProvider(providerId: string): Observable<InventoryItem[]> {
-    return this._inventoryEndpoint.getInventoryByProvider(providerId);
+
+  getInventoryByProvider(
+    providerId: string
+  ): Observable<InventoryItem[]> {
+
+    return this._inventoryEndpoint
+      .getInventoryByProvider(providerId);
   }
 
-  getInventoryByProduct(productId: string): Observable<InventoryItem[]> {
-    return this._inventoryEndpoint.getInventoryByProduct(productId);
+  getInventoryByProduct(
+    productId: string
+  ): Observable<InventoryItem[]> {
+
+    return this._inventoryEndpoint
+      .getInventoryByProduct(productId);
   }
 
-  updateStock(inventoryItemId: string, request: UpdateStockRequest): Observable<InventoryItem> {
-    return this._inventoryEndpoint.updateStock(inventoryItemId, request);
+  updateStock(
+    inventoryItemId: string,
+    request: UpdateStockPayload
+  ): Observable<InventoryItem> {
+
+    return this._inventoryEndpoint
+      .updateStock(inventoryItemId, request);
   }
 
-  reserveStock(inventoryItemId: string, request: ReserveStockRequest): Observable<InventoryItem> {
-    return this._inventoryEndpoint.reserveStock(inventoryItemId, request);
+  reserveStock(
+    inventoryItemId: string,
+    request: ReserveStockPayload
+  ): Observable<InventoryItem> {
+
+    return this._inventoryEndpoint
+      .reserveStock(inventoryItemId, request);
   }
 }
