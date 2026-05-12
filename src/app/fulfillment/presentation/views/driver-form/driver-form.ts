@@ -10,8 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
-import { RegisterDriverRequest, UpdateDriverRequest } from '../../../infrastructure/driver.request';
-
+import { Driver } from '../../../domain/model/driver.entity';
 @Component({
   selector: 'app-driver-form',
   standalone: true,
@@ -85,7 +84,7 @@ export class DriverForm implements OnInit {
   }
 
   private registerDriverData(): void {
-    const request: RegisterDriverRequest = {
+    const request: Omit<Driver, 'id' | 'createdAt'> = {
       providerId: this.TEMP_PROVIDER_ID,
       firstName: this.driverForm.value.firstName,
       lastName: this.driverForm.value.lastName,
@@ -100,7 +99,7 @@ export class DriverForm implements OnInit {
   }
 
   private updateDriverData(): void {
-    const request: UpdateDriverRequest = {
+    const request: Partial<Omit<Driver, 'id' | 'providerId' | 'createdAt'>> = {
       firstName: this.driverForm.value.firstName,
       lastName: this.driverForm.value.lastName,
       licenseNumber: this.driverForm.value.licenseNumber,
