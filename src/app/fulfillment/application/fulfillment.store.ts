@@ -4,8 +4,6 @@ import { FulfillmentApi } from '../infrastructure/fulfillment-api';
 import { Vehicle } from '../domain/model/vehicle.entity';
 import { Driver } from '../domain/model/driver.entity';
 import { Delivery } from '../domain/model/delivery.entity';
-import { RegisterVehicleRequest, UpdateVehicleStatusRequest, UpdateVehicleRequest } from '../infrastructure/vehicle.request';
-import { RegisterDriverRequest, UpdateDriverStatusRequest, UpdateDriverRequest } from '../infrastructure/driver.request';
 
 /**
  * @summary Store de estado para el BC Fulfillment.
@@ -112,7 +110,7 @@ export class FulfillmentStore {
       });
   }
 
-  registerVehicle(request: RegisterVehicleRequest, onSuccess?: () => void): void {
+  registerVehicle(request: Omit<Vehicle, 'id' | 'createdAt'>, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set('');
     this._successMsg.set('');
@@ -152,7 +150,7 @@ export class FulfillmentStore {
       });
   }
 
-  updateVehicle(vehicleId: string, request: UpdateVehicleRequest, onSuccess?: () => void): void {
+  updateVehicle(vehicleId: string, request: Partial<Omit<Vehicle, 'id' | 'providerId' | 'createdAt'>>, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set('');
     this.api
@@ -191,7 +189,7 @@ export class FulfillmentStore {
       });
   }
 
-  updateVehicleStatus(vehicleId: string, request: UpdateVehicleStatusRequest): void {
+  updateVehicleStatus(vehicleId: string, request: Pick<Vehicle, 'status'>): void {
     this._isLoading.set(true);
     this._error.set('');
 
@@ -258,7 +256,7 @@ export class FulfillmentStore {
       });
   }
 
-  registerDriver(request: RegisterDriverRequest, onSuccess?: () => void): void {
+  registerDriver(request: Omit<Driver, 'id' | 'createdAt'>, onSuccess?: () => void): void{
     this._isLoading.set(true);
     this._error.set('');
     this._successMsg.set('');
@@ -298,7 +296,7 @@ export class FulfillmentStore {
       });
   }
 
-  updateDriver(driverId: string, request: UpdateDriverRequest, onSuccess?: () => void): void {
+  updateDriver(driverId: string, request: Partial<Omit<Driver, 'id' | 'providerId' | 'createdAt'>>, onSuccess?: () => void): void {
     this._isLoading.set(true);
     this._error.set('');
     this.api
@@ -337,7 +335,7 @@ export class FulfillmentStore {
       });
   }
 
-  updateDriverStatus(driverId: string, request: UpdateDriverStatusRequest): void {
+  updateDriverStatus(driverId: string, request: Pick<Driver, 'status'>): void {
     this._isLoading.set(true);
     this._error.set('');
 
@@ -402,7 +400,7 @@ export class FulfillmentStore {
       });
   }
 
-  assignResources(request: any): void {
+  assignResources(request: Omit<Delivery, 'id' | 'status' | 'actualDeliveryDate' | 'createdAt'>): void{
     this._isLoading.set(true);
     this._error.set('');
     this._successMsg.set('');
@@ -425,7 +423,7 @@ export class FulfillmentStore {
       });
   }
 
-  executeDispatch(deliveryId: string, request: any): void {
+  executeDispatch(deliveryId: string, request: Partial<Pick<Delivery, 'status' | 'actualDeliveryDate' | 'notes'>>): void{
     this._isLoading.set(true);
     this._error.set('');
     this._successMsg.set('');

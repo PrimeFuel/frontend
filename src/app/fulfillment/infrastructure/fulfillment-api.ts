@@ -11,8 +11,6 @@ import { VehicleApiEndpoint } from './vehicle-api-endpoint';
 import { DriverApiEndpoint } from './driver-api-endpoint';
 import { DeliveryApiEndpoint } from './delivery-api-endpoint';
 
-import { RegisterVehicleRequest, UpdateVehicleStatusRequest, UpdateVehicleRequest } from './vehicle.request';
-import { RegisterDriverRequest, UpdateDriverStatusRequest, UpdateDriverRequest } from './driver.request';
 
 /**
  * @summary API gateway para el bounded context Fulfillment.
@@ -42,11 +40,11 @@ export class FulfillmentApi extends BaseApi {
     return this._vehicleEndpoint.getAvailableVehicles(providerId);
   }
 
-  registerVehicle(request: RegisterVehicleRequest): Observable<Vehicle> {
+  registerVehicle(request: Omit<Vehicle, 'id' | 'createdAt'>): Observable<Vehicle> {
     return this._vehicleEndpoint.registerVehicle(request);
   }
 
-  updateVehicleStatus(vehicleId: string, request: UpdateVehicleStatusRequest): Observable<Vehicle> {
+  updateVehicleStatus(vehicleId: string, request: Pick<Vehicle, 'status'>): Observable<Vehicle> {
     return this._vehicleEndpoint.updateVehicleStatus(vehicleId, request);
   }
 
@@ -54,7 +52,10 @@ export class FulfillmentApi extends BaseApi {
     return this._vehicleEndpoint.getById(vehicleId);
   }
 
-  updateVehicle(vehicleId: string, request: UpdateVehicleRequest): Observable<Vehicle> {
+  updateVehicle(
+    vehicleId: string,
+    request: Partial<Omit<Vehicle, 'id' | 'providerId' | 'createdAt'>>
+  ): Observable<Vehicle> {
     return this._vehicleEndpoint.updateVehicle(vehicleId, request);
   }
 
@@ -71,11 +72,11 @@ export class FulfillmentApi extends BaseApi {
     return this._driverEndpoint.getAvailableDrivers(providerId);
   }
 
-  registerDriver(request: RegisterDriverRequest): Observable<Driver> {
+  registerDriver(request: Omit<Driver, 'id' | 'createdAt'>): Observable<Driver> {
     return this._driverEndpoint.registerDriver(request);
   }
 
-  updateDriverStatus(driverId: string, request: UpdateDriverStatusRequest): Observable<Driver> {
+  updateDriverStatus(driverId: string, request: Pick<Driver, 'status'>): Observable<Driver> {
     return this._driverEndpoint.updateDriverStatus(driverId, request);
   }
 
@@ -83,7 +84,10 @@ export class FulfillmentApi extends BaseApi {
     return this._driverEndpoint.getById(driverId);
   }
 
-  updateDriver(driverId: string, request: UpdateDriverRequest): Observable<Driver> {
+  updateDriver(
+    driverId: string,
+    request: Partial<Omit<Driver, 'id' | 'providerId' | 'createdAt'>>
+  ): Observable<Driver> {
     return this._driverEndpoint.updateDriver(driverId, request);
   }
 
@@ -100,7 +104,9 @@ export class FulfillmentApi extends BaseApi {
     return this._deliveryEndpoint.getDeliveryByOrder(orderId);
   }
 
-  assignResources(request: any): Observable<Delivery> {
+  assignResources(
+    request: Omit<Delivery, 'id' | 'status' | 'actualDeliveryDate' | 'createdAt'>
+  ): Observable<Delivery> {
     return this._deliveryEndpoint.assignResources(request);
   }
 
