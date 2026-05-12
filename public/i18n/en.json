@@ -1,14 +1,14 @@
 {
   "nav": {
     "dashboard": "Dashboard",
-    "catalog": "Catalog",
+    "inventory": "Inventory",
     "ordering": "Orders",
     "fulfillment": "Fulfillment",
     "payment": "Payment",
     "notifications": "Notifications",
     "reports": "Reports"
   },
-  "catalog": {
+  "inventory": {
     "products": "Products",
     "add-product": "Add Product",
     "inventory": "Inventory",
@@ -45,7 +45,7 @@
     "content": "The page <strong>{{invalid_path}}</strong> does not exist.",
     "go-home": "Go to Home"
   },
-  "product-catalog": {
+  "product-inventory": {
     "title": "Product Inventory",
     "subtitle": "Manage your fuel products",
     "show-all": "Show All",
@@ -63,7 +63,7 @@
   },
   "product-form": {
     "create-title": "Create Product",
-    "create-subtitle": "Add a new fuel product to your catalog",
+    "create-subtitle": "Add a new fuel product to your inventory",
     "edit-title": "Edit Product",
     "edit-subtitle": "Update product information",
     "cancel": "Cancel",

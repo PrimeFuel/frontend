@@ -8,7 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CatalogStore } from '../../../application/catalog.store';
+import { InventoryStore } from '../../../application/inventory.store';
 
 /**
  * @summary Vista de catálogo de productos de combustible.
@@ -17,7 +17,7 @@ import { CatalogStore } from '../../../application/catalog.store';
  * @author FullTank Platform
  */
 @Component({
-  selector: 'app-product-catalog',
+  selector: 'app-product-inventory',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,11 +30,11 @@ import { CatalogStore } from '../../../application/catalog.store';
     RouterModule,
     TranslatePipe,
   ],
-  templateUrl: './product-catalog.html',
-  styleUrl: './product-catalog.css',
+  templateUrl: './product-inventory.html',
+  styleUrl: './product-inventory.css',
 })
-export class ProductCatalog implements OnInit {
-  protected readonly store = inject(CatalogStore);
+export class ProductInventory implements OnInit {
+  protected readonly store = inject(InventoryStore);
 
   protected readonly displayedColumns: string[] = [
     'name',

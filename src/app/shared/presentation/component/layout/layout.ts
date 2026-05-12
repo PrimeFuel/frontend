@@ -40,13 +40,13 @@ export class Layout {
   options = [
     { label: 'nav.dashboard', icon: 'dashboard', link: '/dashboard' },
     {
-      label: 'nav.catalog',
-      icon: 'inventory',
-      link: '/catalog',
+      label: 'nav.inventory',
+      icon: 'inventory_2',
+      link: '/inventory',
       children: [
-        { label: 'catalog.product-inventory', link: '/catalog/product-inventory' },
-        { label: 'catalog.add-product', link: '/catalog/product-form' },
-      ],
+        { label: 'inventory.product-inventory', link: '/inventory/product-inventory' },
+        { label: 'inventory.add-product', link: '/inventory/product-form' },
+      ]
     },
     {
       label: 'nav.ordering',

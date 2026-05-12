@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { retry } from 'rxjs';
-import { CatalogApi } from '../infrastructure/catalog-api';
+import { InventoryApi } from '../infrastructure/inventory-api';
 import {
   FuelProduct,
   CreateProductPayload,
@@ -14,14 +14,14 @@ import {
 } from '../domain/model/inventory-item.entity';
 
 /**
- * @summary Store para gestión de estado del BC Catalog.
+ * @summary Store para gestión de estado del BC Inventory.
  * @remarks Maneja productos de combustible e inventario usando signals.
  * Expone selectores computados y comandos para el presentation layer.
  * @author FullTank Platform
  */
 @Injectable({ providedIn: 'root' })
-export class CatalogStore {
-  private readonly api = inject(CatalogApi);
+export class InventoryStore {
+  private readonly api = inject(InventoryApi);
 
   // ── State ────────────────────────────────────────────────────────────────
   private readonly _productList = signal<FuelProduct[]>([]);
