@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   // Base API URL
-  serverBasePath: 'http://localhost:3000',
+  serverBasePath: 'https://json-server-y51j.onrender.com',
   // IAM (Identity and Access Management)
   iamSignInEndpointPath: '/auth/sign-in',
   iamSignUpEndpointPath: '/auth/sign-up',

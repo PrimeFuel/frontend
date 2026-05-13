@@ -1,6 +1,6 @@
 {
-  "/catalog/products": "/inventory",
-  "/catalog/inventory": "/inventory",
+  "/products": "/inventory",
+  "/inventory": "/inventory",
   "/fulfillment/vehicles": "/vehicles",
   "/fulfillment/vehicles/:id": "/vehicles/:id",
   "/fulfillment/drivers": "/drivers",
