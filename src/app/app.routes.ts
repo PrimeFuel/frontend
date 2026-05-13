@@ -14,13 +14,12 @@ const fulfillmentRoutes = () =>
 
 const reportingRoutes = () =>
   import('./reporting/presentation/reporting-routes').then((m) => m.reportingRoutes);
-
+const orderingRoutes = () =>
+  import('./ordering/presentation/ordering-routes').then((m) => m.orderingRoutes);
 /*
 // Bounded Contexts pendientes de implementación
 const iamRoutes = () => import('./iam/presentation/iam-routes').then((m) => m.iamRoutes);
 
-const orderingRoutes = () =>
-  import('./ordering/presentation/ordering-routes').then((m) => m.orderingRoutes);
 
 const paymentRoutes = () =>
   import('./payment/presentation/payment-routes').then((m) => m.paymentRoutes);
@@ -43,6 +42,7 @@ export const routes: Routes = [
   { path: 'payment', loadChildren: paymentRoutes },
   { path: 'notification', loadChildren: notificationRoutes },
   */
+  { path: 'ordering', loadChildren: orderingRoutes },
 
 
   { path: 'reporting', loadChildren: reportingRoutes },

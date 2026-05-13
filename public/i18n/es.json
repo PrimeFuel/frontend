@@ -269,5 +269,82 @@
     "in_transit": "En Tránsito",
     "delivered": "Entregado",
     "cancelled": "Cancelado"
+  },
+  "request-list": {
+    "title": "Solicitudes de Combustible",
+    "id": "ID",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "delivery-date": "Entrega Deseada",
+    "status": "Estado",
+    "actions": "Acciones",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "new": "Nueva Solicitud",
+    "reject-title": "Rechazar Solicitud",
+    "reject-reason": "Motivo del Rechazo",
+    "reject-placeholder": "Explica por qué se rechaza esta solicitud",
+    "reject-cancel": "Cancelar",
+    "reject-confirm": "Confirmar Rechazo"
+  },
+  "request-form": {
+    "create-title": "Nueva Solicitud",
+    "edit-title": "Editar Solicitud",
+    "client-id": "ID del Cliente",
+    "provider-id": "ID del Proveedor",
+    "product-id": "ID del Producto",
+    "quantity": "Cantidad",
+    "unit": "Unidad",
+    "delivery-date": "Fecha de Entrega Deseada",
+    "delivery-address": "Dirección de Entrega",
+    "create": "Crear Solicitud",
+    "update": "Actualizar Solicitud",
+    "cancel": "Cancelar",
+    "required": "Este campo es obligatorio"
+  },
+  "order-list": {
+    "title": "Órdenes",
+    "id": "ID",
+    "request": "Solicitud",
+    "quantity": "Cantidad",
+    "total": "Total",
+    "status": "Estado",
+    "actions": "Acciones",
+    "view": "Ver Detalle",
+    "delete": "Eliminar"
+  },
+  "order-detail": {
+    "title": "Detalle de Orden",
+    "back": "Volver a Órdenes",
+    "request-id": "ID Solicitud",
+    "client": "Cliente",
+    "provider": "Proveedor",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "total": "Monto Total",
+    "address": "Dirección de Entrega",
+    "created-at": "Creada",
+    "dispatched-at": "Despachada",
+    "delivered-at": "Entregada",
+    "closed-at": "Cerrada",
+    "dispatch": "Despachar Orden",
+    "confirm-delivery": "Confirmar Entrega",
+    "close": "Cerrar Orden",
+    "not-found": "Orden no encontrada"
+  },
+  "request-status": {
+    "pending_approval": "Pendiente de Aprobación",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "cancelled": "Cancelada"
+  },
+  "order-status": {
+    "created": "Creada",
+    "dispatched": "Despachada",
+    "delivered": "Entregada",
+    "closed": "Cerrada",
+    "cancelled": "Cancelada"
   }
 }
