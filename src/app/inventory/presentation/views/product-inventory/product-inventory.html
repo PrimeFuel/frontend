@@ -61,7 +61,7 @@
       <!-- Unit Column -->
       <ng-container matColumnDef="unit">
         <th mat-header-cell *matHeaderCellDef>{{ 'product-inventory.fields.unit' | translate }}</th>
-        <td mat-cell *matCellDef="let element">{{ element.unit }}</td>
+        <td mat-cell *matCellDef="let element">{{ 'unit.' + (element.unit?.toLowerCase() ?? '') | translate }}</td>
       </ng-container>
 
       <!-- Status Column -->
