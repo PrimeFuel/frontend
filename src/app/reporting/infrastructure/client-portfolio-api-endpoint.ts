@@ -10,7 +10,9 @@ const reportingEndpointUrl = `${environment.serverBasePath}${environment.reporti
 
 /**
  * @summary Endpoint API para gestión de portafolio de clientes.
- * @remarks Expone consultas de clientes del proveedor para reportes.
+ * @remarks Carga todos los clientes de una vez. El filtro por sector
+ * se maneja client-side en el store (filterBySector) para evitar
+ * problemas de routing en json-server.
  * @author FullTank Platform
  */
 export class ClientPortfolioApiEndpoint extends BaseApiEndpoint<
@@ -24,22 +26,31 @@ export class ClientPortfolioApiEndpoint extends BaseApiEndpoint<
   }
 
   /**
-   * Obtiene el portafolio de clientes de un proveedor.
+   * Carga todos los clientes. json-server devuelve array plano.
    */
   getClientPortfolio(providerId: string): Observable<ClientPortfolio[]> {
-    return this.http.get<ClientPortfoliosResponse>(`${this.endpointUrl}/clients/${providerId}`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
-      catchError(this.handleError(`Failed to fetch client portfolio for provider ${providerId}`)),
-    );
+    return this.http
+      .get<any>(`${this.endpointUrl}/clients`)
+      .pipe(
+        map((response) => {
+          const list: ClientPortfolioResource[] = Array.isArray(response)
+            ? response
+            : response.clients ?? [];
+          return list
+            .filter((r) => r.providerId === providerId)
+            .map((r) => this.assembler.toEntityFromResource(r));
+        }),
+        catchError(this.handleError(`Failed to fetch client portfolio`)),
+      );
   }
 
   /**
-   * Obtiene clientes filtrados por sector.
+   * @deprecated Usar store.filterBySector() en su lugar.
+   * Mantenido para compatibilidad con ReportingApi.
    */
   getClientsBySector(providerId: string, sector: string): Observable<ClientPortfolio[]> {
-    return this.http.get<ClientPortfoliosResponse>(`${this.endpointUrl}/clients/${providerId}/sector/${sector}`).pipe(
-      map((response) => this.assembler.toEntitiesFromResponse(response)),
-      catchError(this.handleError(`Failed to fetch clients for sector ${sector}`)),
+    return this.getClientPortfolio(providerId).pipe(
+      map((clients) => clients.filter((c) => c.sector === sector)),
     );
   }
 }

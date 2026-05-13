@@ -29,8 +29,8 @@
     "process": "Procesar Pago"
   },
   "reporting": {
-    "supplier-dashboard": "Panel del Proveedor",
-    "client-portfolio": "Portafolio de Clientes"
+    "supplier-dashboard": "Reporte General",
+    "client-portfolio": "Reportes de tus clientes"
   },
   "home": {
     "title": "Plataforma FullTank",
@@ -133,6 +133,7 @@
       "company": "Entidad Empresarial",
       "sector": "Sector",
       "total-volume": "Volumen Total (MT)",
+      "total-cost": "Costo Total",
       "last-active": "Última Actividad",
       "status": "Estado"
     },

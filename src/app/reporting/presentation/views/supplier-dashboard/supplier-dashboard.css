@@ -30,17 +30,43 @@
   gap: 12px;
 }
 
-/* KPI Cards Grid */
+/* KPI Cards: revenue 2/3, columna derecha 1/3 */
 .kpi-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 2fr 1fr;
   gap: 20px;
+  align-items: stretch;
+}
+
+/* Columna derecha: fulfillment + lead time apilados */
+.kpi-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.kpi-right-column .kpi-card {
+  flex: 1;
 }
 
 .kpi-card {
   background: white;
   border-radius: 12px;
   overflow: hidden;
+}
+
+/* Revenue card: muestra KPI arriba y gráfica abajo */
+.kpi-revenue {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-revenue mat-card-content {
+  padding: 20px !important;
+}
+
+.chart-wrapper {
+  padding: 0 16px 16px;
 }
 
 .kpi-card mat-card-content {
@@ -202,4 +228,11 @@ table {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+/* Responsive: en móvil todo en columna */
+@media (max-width: 768px) {
+  .kpi-cards {
+    grid-template-columns: 1fr;
+  }
 }

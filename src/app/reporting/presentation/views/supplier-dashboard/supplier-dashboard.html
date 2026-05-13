@@ -29,9 +29,11 @@
     </div>
   }
 
-  <!-- KPI Cards -->
+  <!-- KPI Cards: revenue ocupa 2/3, las otras dos comparten 1/3 apiladas -->
   <div class="kpi-cards">
-    <mat-card class="kpi-card">
+
+    <!-- Total Sales Revenue (2/3) -->
+    <mat-card class="kpi-card kpi-revenue">
       <mat-card-content>
         <div class="kpi-icon">
           <mat-icon>show_chart</mat-icon>
@@ -45,44 +47,52 @@
           </span>
         </div>
       </mat-card-content>
+      <div class="chart-wrapper">
+        <app-sales-bar-chart></app-sales-bar-chart>
+      </div>
     </mat-card>
 
-    <mat-card class="kpi-card">
-      <mat-card-content>
-        <div class="kpi-icon fulfillment">
-          <mat-icon>verified</mat-icon>
-        </div>
-        <div class="kpi-content">
-          <h3>{{ 'supplier-dashboard.avg-fulfillment-rate' | translate }}</h3>
-          <p class="kpi-value">{{ store.avgFulfillmentRate() | number:'1.1-1' }}%</p>
-          <span class="kpi-subtitle">{{ 'supplier-dashboard.target' | translate }}: 95.0%</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <!-- Columna derecha: Fulfillment + Lead Time apilados (1/3) -->
+    <div class="kpi-right-column">
 
-    <mat-card class="kpi-card">
-      <mat-card-content>
-        <div class="kpi-icon lead-time">
-          <mat-icon>schedule</mat-icon>
-        </div>
-        <div class="kpi-content">
-          <h3>{{ 'supplier-dashboard.avg-lead-time' | translate }}</h3>
-          @if (store.fulfillmentMetrics()) {
-            <p class="kpi-value">{{ store.fulfillmentMetrics()!.avgLeadTime }} {{ 'supplier-dashboard.days' | translate }}</p>
-            <span class="kpi-subtitle">{{ 'supplier-dashboard.target' | translate }}: 5.0 {{ 'supplier-dashboard.days' | translate }}</span>
-          } @else {
-            <p class="kpi-value">--</p>
-          }
-        </div>
-      </mat-card-content>
-    </mat-card>
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <div class="kpi-icon fulfillment">
+            <mat-icon>verified</mat-icon>
+          </div>
+          <div class="kpi-content">
+            <h3>{{ 'supplier-dashboard.avg-fulfillment-rate' | translate }}</h3>
+            <p class="kpi-value">{{ store.avgFulfillmentRate() | number:'1.1-1' }}%</p>
+            <span class="kpi-subtitle">{{ 'supplier-dashboard.target' | translate }}: 95.0%</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <div class="kpi-icon lead-time">
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div class="kpi-content">
+            <h3>{{ 'supplier-dashboard.avg-lead-time' | translate }}</h3>
+            @if (store.fulfillmentMetrics()) {
+              <p class="kpi-value">{{ store.fulfillmentMetrics()!.avgLeadTime }} {{ 'supplier-dashboard.days' | translate }}</p>
+              <span class="kpi-subtitle">{{ 'supplier-dashboard.target' | translate }}: 5.0 {{ 'supplier-dashboard.days' | translate }}</span>
+            } @else {
+              <p class="kpi-value">--</p>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
   </div>
 
   <!-- Client Sales Performance -->
   <mat-card class="table-card">
     <mat-card-header>
       <mat-card-title>{{ 'supplier-dashboard.client-sales-performance' | translate }}</mat-card-title>
-      <button mat-button color="primary" routerLink="../client-portfolio">
+      <button mat-button color="primary" routerLink="../client-reports">
         {{ 'supplier-dashboard.view-all-clients' | translate }}
         <mat-icon>arrow_forward</mat-icon>
       </button>
@@ -118,7 +128,6 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-          <!-- Row shown when there is no data -->
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="3" style="text-align: center; padding: 2rem;">
               {{ 'supplier-dashboard.empty' | translate }}
