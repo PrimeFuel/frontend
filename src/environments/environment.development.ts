@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   // Base API URL
-  serverBasePath: 'https://json-server-y51j.onrender.com',
+  serverBasePath: 'http://localhost:3000',
   // IAM (Identity and Access Management)
   iamSignInEndpointPath: '/auth/sign-in',
   iamSignUpEndpointPath: '/auth/sign-up',
@@ -11,8 +11,8 @@ export const environment = {
   inventoryProductsEndpointPath: '/inventory',
   inventoryStockEndpointPath: '/inventory',
   // Ordering (Solicitudes y Órdenes)
-  orderingRequestsEndpointPath: '/ordering/requests',
-  orderingOrdersEndpointPath: '/ordering/orders',
+  orderingRequestsEndpointPath: '/requests',
+  orderingOrdersEndpointPath: '/orders',
   // Fulfillment (Logística y Despacho)
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',

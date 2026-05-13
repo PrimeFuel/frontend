@@ -1,0 +1,73 @@
+<h1 class="title">{{ (isEdit ? 'request-form.edit-title' : 'request-form.create-title') | translate }}</h1>
+
+@if (store.error()) { <p class="error">{{ store.error() }}</p> }
+
+<form [formGroup]="form" (ngSubmit)="submit()" class="form">
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.client-id' | translate }}</mat-label>
+    <input matInput formControlName="clientId">
+    @if (form.controls.clientId.invalid && form.controls.clientId.touched) {
+      <mat-error>{{ 'request-form.required' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.provider-id' | translate }}</mat-label>
+    <input matInput formControlName="providerId">
+    @if (form.controls.providerId.invalid && form.controls.providerId.touched) {
+      <mat-error>{{ 'request-form.required' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.product-id' | translate }}</mat-label>
+    <input matInput formControlName="productId">
+    @if (form.controls.productId.invalid && form.controls.productId.touched) {
+      <mat-error>{{ 'request-form.required' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.quantity' | translate }}</mat-label>
+    <input matInput type="number" formControlName="quantity" min="1">
+    @if (form.controls.quantity.invalid && form.controls.quantity.touched) {
+      <mat-error>{{ 'request-form.required' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.unit' | translate }}</mat-label>
+    <mat-select formControlName="unit">
+      @for (u of units; track u.value) {
+        <mat-option [value]="u.value">{{ u.label | translate }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.delivery-date' | translate }}</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="desiredDeliveryDate" [min]="minDate">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    @if (form.controls.desiredDeliveryDate.invalid && form.controls.desiredDeliveryDate.touched) {
+      <mat-error>{{ 'request-form.required' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'request-form.delivery-address' | translate }}</mat-label>
+    <textarea matInput rows="2" formControlName="deliveryAddress"></textarea>
+    @if (form.controls.deliveryAddress.invalid && form.controls.deliveryAddress.touched) {
+      <mat-error>{{ 'request-form.required' | translate }}</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="cancel()">{{ 'request-form.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      {{ (isEdit ? 'request-form.update' : 'request-form.create') | translate }}
+    </button>
+  </div>
+
+</form>
