@@ -29,8 +29,8 @@
     "process": "Process Payment"
   },
   "reporting": {
-    "supplier-dashboard": "Supplier Dashboard",
-    "client-portfolio": "Client Portfolio"
+    "supplier-dashboard": "General Report",
+    "client-portfolio": "Your Clients Reports"
   },
   "home": {
     "title": "FullTank Platform",
@@ -133,6 +133,7 @@
       "company": "Company Entity",
       "sector": "Sector",
       "total-volume": "Total Volume (MT)",
+      "total-cost": "Total Cost",
       "last-active": "Last Active",
       "status": "Status"
     },
