@@ -4,14 +4,13 @@ import { ClientPortfolioResource, ClientPortfoliosResponse } from './client-port
 
 /**
  * @summary Assembler para transformar portafolio de clientes entre capas.
- * @remarks Convierte ClientPortfolioResource ↔ ClientPortfolio entity.
  * @author FullTank Platform
  */
 export class ClientPortfolioAssembler
   implements BaseAssembler<ClientPortfolio, ClientPortfolioResource, ClientPortfoliosResponse>
 {
   toEntitiesFromResponse(response: ClientPortfoliosResponse): ClientPortfolio[] {
-    return response.clients.map((resource) => this.toEntityFromResource(resource));
+    return response.clients.map((r) => this.toEntityFromResource(r));
   }
 
   toEntityFromResource(resource: ClientPortfolioResource): ClientPortfolio {
@@ -21,6 +20,8 @@ export class ClientPortfolioAssembler
       companyName: resource.companyName,
       sector: resource.sector,
       totalVolume: resource.totalVolume,
+      totalCost: (resource as any).totalCost ?? 0,
+      activeOrders: (resource as any).activeOrders ?? 0,
       lastActiveDate: resource.lastActiveDate,
       status: resource.status,
       createdAt: resource.createdAt,
