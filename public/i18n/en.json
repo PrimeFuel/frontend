@@ -4,7 +4,6 @@
     "inventory": "Inventory",
     "ordering": "Orders",
     "fulfillment": "Fulfillment",
-    "payment": "Payment",
     "notifications": "Notifications",
     "reports": "Reports"
   },
@@ -23,10 +22,6 @@
     "vehicles": "Vehicles",
     "drivers": "Drivers",
     "dispatch": "Dispatch"
-  },
-  "payment": {
-    "transactions": "Transactions",
-    "process": "Process Payment"
   },
   "reporting": {
     "supplier-dashboard": "Supplier Dashboard",

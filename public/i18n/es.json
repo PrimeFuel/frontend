@@ -4,7 +4,6 @@
     "inventory": "Inventario",
     "ordering": "Pedidos",
     "fulfillment": "Despacho",
-    "payment": "Pagos",
     "notifications": "Notificaciones",
     "reports": "Reportes"
   },
@@ -23,10 +22,6 @@
     "vehicles": "Vehículos",
     "drivers": "Conductores",
     "dispatch": "Despacho"
-  },
-  "payment": {
-    "transactions": "Transacciones",
-    "process": "Procesar Pago"
   },
   "reporting": {
     "supplier-dashboard": "Panel del Proveedor",
