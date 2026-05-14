@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
-import {Toolbar} from '../../component/toolbar/toolbar';
+import { Toolbar } from '../../component/toolbar/toolbar';
 
 /**
  * @summary Vista de inicio (Home) de FullTank.
@@ -12,7 +14,7 @@ import {Toolbar} from '../../component/toolbar/toolbar';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Toolbar, TranslatePipe],
+  imports: [Toolbar, TranslatePipe, RouterModule, MatButtonModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
