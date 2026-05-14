@@ -69,15 +69,6 @@ export class Layout {
       ],
     },
     {
-      label: 'nav.payment',
-      icon: 'payments',
-      link: '/payment',
-      children: [
-        { label: 'payment.transactions', link: '/payment/transaction-list' },
-        { label: 'payment.process', link: '/payment/payment-form' },
-      ],
-    },
-    {
       label: 'nav.reports',
       icon: 'analytics',
       link: '/reporting',
