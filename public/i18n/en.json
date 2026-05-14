@@ -34,7 +34,9 @@
   },
   "home": {
     "title": "FullTank Platform",
-    "content": "Fuel ordering and logistics management system for businesses"
+    "content": "Fuel ordering and logistics management system for businesses",
+    "buyers-btn": "I'm a Buyer",
+    "suppliers-btn": "I'm a Supplier"
   },
   "about": {
     "title": "About FullTank",

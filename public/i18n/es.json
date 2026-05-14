@@ -34,7 +34,9 @@
   },
   "home": {
     "title": "Plataforma FullTank",
-    "content": "Sistema de pedidos de combustible y gestión logística para empresas"
+    "content": "Sistema de pedidos de combustible y gestión logística para empresas",
+    "buyers-btn": "Soy Comprador",
+    "suppliers-btn": "Soy Proveedor"
   },
   "about": {
     "title": "Acerca de FullTank",
