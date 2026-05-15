@@ -36,7 +36,6 @@ export const routes: Routes = [
 
   { path: 'ordering', loadChildren: orderingRoutes },
 
-
   { path: 'reporting', loadChildren: reportingRoutes },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `Page Not Found - ${baseTitle}` },
