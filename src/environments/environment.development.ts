@@ -27,6 +27,6 @@ export const environment = {
   reportingKpisEndpointPath: '/reporting/kpis',
   reportingSalesEndpointPath: '/reporting/sales',
   reportingConsumptionEndpointPath: '/reporting/consumption',
-  reportingMonthlyRevenueEndpointPath: '/monthly-revenue',  // ← agregar esto
+  reportingMonthlyRevenueEndpointPath: '/monthly-revenue',
 
 };
