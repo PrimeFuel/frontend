@@ -1,0 +1,4 @@
+{
+  "/notifications": "/notifications",
+  "/notifications/:id": "/notifications/:id"
+}

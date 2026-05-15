@@ -1,0 +1,94 @@
+{
+  "notifications": [
+    {
+      "id": "ntf-1",
+      "userId": "u1",
+      "orderId": "ord-1",
+      "type": "ORDER_CREATED",
+      "message": "Tu solicitud fue aprobada y se generó la orden ord-1 por 3000 L de Diesel B5.",
+      "isRead": false,
+      "createdAt": "2026-05-13T09:05:00.000Z"
+    },
+    {
+      "id": "ntf-2",
+      "userId": "u1",
+      "orderId": "ord-2",
+      "type": "ORDER_DISPATCHED",
+      "message": "La orden ord-2 fue despachada. El transporte está en camino a la dirección de entrega.",
+      "isRead": false,
+      "createdAt": "2026-05-13T07:30:00.000Z"
+    },
+    {
+      "id": "ntf-3",
+      "userId": "u1",
+      "orderId": "ord-3",
+      "type": "ORDER_DELIVERED",
+      "message": "La orden ord-3 fue entregada correctamente en Terminal Logístico Sur, Pisco.",
+      "isRead": true,
+      "createdAt": "2026-05-12T14:30:00.000Z"
+    },
+    {
+      "id": "ntf-4",
+      "userId": "u1",
+      "orderId": "ord-4",
+      "type": "ORDER_CLOSED",
+      "message": "La orden ord-4 fue cerrada. ¡Gracias por usar FullTank!",
+      "isRead": true,
+      "createdAt": "2026-05-08T16:00:00.000Z"
+    },
+    {
+      "id": "ntf-5",
+      "userId": "u1",
+      "orderId": "ord-1",
+      "type": "PAYMENT_REGISTERED",
+      "message": "Se registró un comprobante de pago por S/ 42,600.00 vinculado a la orden ord-1.",
+      "isRead": false,
+      "createdAt": "2026-05-13T10:15:00.000Z"
+    },
+    {
+      "id": "ntf-6",
+      "userId": "u1",
+      "orderId": "ord-2",
+      "type": "PAYMENT_APPROVED",
+      "message": "El pago de la orden ord-2 fue aprobado. La orden pasa a despacho.",
+      "isRead": true,
+      "createdAt": "2026-05-12T11:20:00.000Z"
+    },
+    {
+      "id": "ntf-7",
+      "userId": "u1",
+      "orderId": "ord-2",
+      "type": "DELIVERY_ASSIGNED",
+      "message": "Se asignaron recursos logísticos (vehículo ABC-123, conductor Carlos Ramírez) a la orden ord-2.",
+      "isRead": false,
+      "createdAt": "2026-05-13T08:45:00.000Z"
+    },
+    {
+      "id": "ntf-8",
+      "userId": "u1",
+      "orderId": "ord-2",
+      "type": "DELIVERY_IN_TRANSIT",
+      "message": "Tu entrega está en tránsito. ETA estimada en 2 horas.",
+      "isRead": false,
+      "createdAt": "2026-05-13T09:50:00.000Z"
+    },
+    {
+      "id": "ntf-9",
+      "userId": "u2",
+      "orderId": null,
+      "type": "ORDER_REJECTED",
+      "message": "Tu solicitud req-3 fue rechazada por stock insuficiente.",
+      "isRead": false,
+      "createdAt": "2026-05-11T16:00:00.000Z"
+    },
+    {
+      "id": "ntf-10",
+      "userId": "u1",
+      "orderId": "ord-1",
+      "type": "ORDER_APPROVED",
+      "message": "Tu solicitud req-1 fue aprobada por el proveedor.",
+      "isRead": true,
+      "createdAt": "2026-05-06T09:00:00.000Z"
+    }
+  ]
+}
