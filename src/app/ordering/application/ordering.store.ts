@@ -78,6 +78,55 @@ export class OrderingStore {
     return computed(() => id ? this.orders().find(o => o.id === id) : undefined);
   }
 
+
+  acceptRequest(request: Request): void {
+    const now = new Date().toISOString();
+
+    const order = new Order({
+      id: `ord-${Date.now()}`,
+      requestId: request.id,
+      clientId: request.clientId,
+      providerId: request.providerId,
+      productId: request.productId,
+      quantity: request.quantity,
+      unit: request.unit,
+      totalAmount: 0,
+      deliveryAddress: request.deliveryAddress,
+      status: 'CREATED',
+      dispatchedAt: null,
+      deliveredAt: null,
+      closedAt: null,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+
+    this.orderingApi.createOrder(order).subscribe({
+      next: createdOrder => {
+        this.ordersSignal.update(orders => [...orders, createdOrder]);
+
+        this.orderingApi.deleteRequest(request.id).subscribe({
+          next: () => {
+            this.requestsSignal.update(requests =>
+              requests.filter(r => r.id !== request.id)
+            );
+            this.loadingSignal.set(false);
+          },
+          error: error => {
+            this.errorSignal.set(this.formatError(error, 'Failed to delete accepted request'));
+            this.loadingSignal.set(false);
+          }
+        });
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, 'Failed to accept request'));
+        this.loadingSignal.set(false);
+      }
+    });
+  }
+
   addRequest(request: Request): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
