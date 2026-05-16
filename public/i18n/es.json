@@ -343,5 +343,40 @@
     "delivered": "Entregada",
     "closed": "Cerrada",
     "cancelled": "Cancelada"
+  },
+  "notification": {
+    "title": "Notificaciones",
+    "panel": "Panel de notificaciones",
+    "unread-count": "No leídas"
+  },
+  "notification-list": {
+    "title": "Notificaciones",
+    "subtitle": "Mantente al tanto de los eventos relevantes de tus pedidos, pagos y entregas",
+    "show-all": "Mostrar Todas",
+    "show-unread": "Solo No Leídas",
+    "mark-all-read": "Marcar Todas como Leídas",
+    "mark-read-tooltip": "Marcar como Leída",
+    "mark-unread-tooltip": "Marcar como No Leída",
+    "delete-tooltip": "Eliminar Notificación",
+    "empty": "No tienes notificaciones",
+    "fields": {
+      "order": "Orden",
+      "type": "Tipo",
+      "message": "Mensaje",
+      "status": "Estado",
+      "created-at": "Fecha"
+    }
+  },
+  "notification-type": {
+    "order_created": "Orden Creada",
+    "order_approved": "Orden Aprobada",
+    "order_rejected": "Orden Rechazada",
+    "order_dispatched": "Orden Despachada",
+    "order_delivered": "Orden Entregada",
+    "order_closed": "Orden Cerrada",
+    "payment_registered": "Pago Registrado",
+    "payment_approved": "Pago Aprobado",
+    "delivery_assigned": "Entrega Asignada",
+    "delivery_in_transit": "Entrega en Tránsito"
   }
 }
