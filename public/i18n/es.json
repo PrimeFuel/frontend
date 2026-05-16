@@ -4,7 +4,6 @@
     "inventory": "Inventario",
     "ordering": "Pedidos",
     "fulfillment": "Despacho",
-    "payment": "Pagos",
     "notifications": "Notificaciones",
     "reports": "Reportes"
   },
@@ -24,17 +23,15 @@
     "drivers": "Conductores",
     "dispatch": "Despacho"
   },
-  "payment": {
-    "transactions": "Transacciones",
-    "process": "Procesar Pago"
-  },
   "reporting": {
     "supplier-dashboard": "Reporte General",
     "client-portfolio": "Reportes de tus clientes"
   },
   "home": {
     "title": "Plataforma FullTank",
-    "content": "Sistema de pedidos de combustible y gestión logística para empresas"
+    "content": "Sistema de pedidos de combustible y gestión logística para empresas",
+    "buyers-btn": "Soy Comprador",
+    "suppliers-btn": "Soy Proveedor"
   },
   "about": {
     "title": "Acerca de FullTank",
