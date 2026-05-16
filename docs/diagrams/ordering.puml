@@ -1,0 +1,155 @@
+@startuml Ordering BC
+
+skinparam backgroundColor #FAFAFA
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #555555
+skinparam classHeaderBackgroundColor #2C3E50
+skinparam classFontColor White
+skinparam ArrowColor #2C3E50
+skinparam linetype ortho
+
+package "ordering.domain" #D6E4F0 {
+  interface BaseEntity {
+    +id: string
+  }
+
+  class Request {
+    -_id: string
+    -_clientId: string
+    -_providerId: string
+    -_productId: string
+    -_quantity: number
+    -_unit: string
+    -_desiredDeliveryDate: string
+    -_deliveryAddress: string
+    -_status: string
+    -_rejectionReason: string | null
+    -_createdAt: string
+    -_updatedAt: string
+    +id: string
+    +clientId: string
+    +status: string
+    +rejectionReason: string | null
+  }
+
+  class Order {
+    -_id: string
+    -_requestId: string
+    -_clientId: string
+    -_providerId: string
+    -_productId: string
+    -_quantity: number
+    -_unit: string
+    -_totalAmount: number
+    -_deliveryAddress: string
+    -_status: string
+    -_dispatchedAt: string | null
+    -_deliveredAt: string | null
+    -_closedAt: string | null
+    -_createdAt: string
+    -_updatedAt: string
+    +id: string
+    +requestId: string
+    +status: string
+    +totalAmount: number
+  }
+
+  Request .up.|> BaseEntity
+  Order .up.|> BaseEntity
+}
+
+package "ordering.application" #FFF9E6 {
+  class OrderingStore {
+    -requestsSignal: Signal<Request[]>
+    -ordersSignal: Signal<Order[]>
+    -loadingSignal: Signal<boolean>
+    -errorSignal: Signal<string | null>
+    +requests: Signal<Request[]>
+    +requestCount: Signal<number>
+    +orders: Signal<Order[]>
+    +orderCount: Signal<number>
+    +pendingRequests: Signal<Request[]>
+    +approvedRequests: Signal<Request[]>
+    +activeOrders: Signal<Order[]>
+    +closedOrders: Signal<Order[]>
+    +loadRequests(): void
+    +loadOrders(): void
+    +createRequest(request: Request): void
+    +approveRequest(id: string): void
+    +rejectRequest(id: string, reason: string): void
+    +dispatchOrder(id: string): void
+    +closeOrder(id: string): void
+  }
+}
+
+package "ordering.infrastructure" #D6EAD6 {
+  abstract class BaseApi {}
+  abstract class BaseApiEndpoint {}
+
+  class OrderingApi {
+    -requestsEndpoint: RequestsApiEndpoint
+    -ordersEndpoint: OrdersApiEndpoint
+    +getRequests(): Observable<Request[]>
+    +getOrders(): Observable<Order[]>
+    +getRequestById(id: string): Observable<Request>
+    +getOrderById(id: string): Observable<Order>
+    +createRequest(request: Request): Observable<Request>
+    +approveRequest(id: string): Observable<Request>
+    +rejectRequest(id: string, reason: string): Observable<Request>
+    +dispatchOrder(id: string): Observable<Order>
+    +closeOrder(id: string): Observable<Order>
+  }
+
+  class RequestsApiEndpoint {
+  }
+
+  class OrdersApiEndpoint {
+  }
+
+  class RequestAssembler {
+    +toEntityFromResource(resource): Request
+    +toResourceFromEntity(entity): RequestResource
+    +toEntitiesFromResponse(response): Request[]
+  }
+
+  class OrderAssembler {
+    +toEntityFromResource(resource): Order
+    +toResourceFromEntity(entity): OrderResource
+    +toEntitiesFromResponse(response): Order[]
+  }
+
+  OrderingApi -up-|> BaseApi
+  RequestsApiEndpoint -up-|> BaseApiEndpoint
+  OrdersApiEndpoint -up-|> BaseApiEndpoint
+  RequestsApiEndpoint *-- RequestAssembler
+  OrdersApiEndpoint *-- OrderAssembler
+  OrderingApi *-- RequestsApiEndpoint
+  OrderingApi *-- OrdersApiEndpoint
+}
+
+package "ordering.presentation" #F7E6D6 {
+  class RequestListComponent {
+    -store: OrderingStore
+    +filterStatus: string
+    +searchCode: string
+  }
+  class RequestFormComponent {
+    -store: OrderingStore
+    +form: FormGroup
+  }
+  class OrderListComponent {
+    -store: OrderingStore
+  }
+  class OrderDetailComponent {
+    -store: OrderingStore
+    -selectedOrder: Signal<Order>
+  }
+}
+
+OrderingStore --> OrderingApi : injects
+RequestListComponent --> OrderingStore : injects
+RequestFormComponent --> OrderingStore : injects
+OrderListComponent --> OrderingStore : injects
+OrderDetailComponent --> OrderingStore : injects
+
+@enduml

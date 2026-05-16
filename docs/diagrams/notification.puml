@@ -1,0 +1,95 @@
+@startuml Notification BC
+
+skinparam backgroundColor #FAFAFA
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #555555
+skinparam classHeaderBackgroundColor #2C3E50
+skinparam classFontColor White
+skinparam ArrowColor #2C3E50
+skinparam linetype ortho
+
+package "notification.domain" #D6E4F0 {
+  interface BaseEntity {
+    +id: string
+  }
+
+  class Notification {
+    +id: string
+    +userId: string
+    +orderId: string | null
+    +type: string
+    +message: string
+    +isRead: boolean
+    +createdAt: string
+    +markAsRead(): void
+    +markAsUnread(): void
+    +isOrderEvent(): boolean
+    +isPaymentEvent(): boolean
+    +isDeliveryEvent(): boolean
+  }
+
+  Notification .up.|> BaseEntity
+}
+
+package "notification.application" #FFF9E6 {
+  class NotificationStore {
+    -_notificationList: Signal<Notification[]>
+    -_selectedNotification: Signal<Notification | null>
+    -_isLoading: Signal<boolean>
+    -_error: Signal<string>
+    +notificationList: Signal<Notification[]>
+    +isLoading: Signal<boolean>
+    +unreadNotifications: Signal<Notification[]>
+    +readNotifications: Signal<Notification[]>
+    +unreadCount: Signal<number>
+    +orderNotifications: Signal<Notification[]>
+    +paymentNotifications: Signal<Notification[]>
+    +deliveryNotifications: Signal<Notification[]>
+    +loadNotificationsByUser(userId: string): void
+    +markAsRead(id: string): void
+    +markAllAsRead(): void
+  }
+}
+
+package "notification.infrastructure" #D6EAD6 {
+  abstract class BaseApi {}
+  abstract class BaseApiEndpoint {}
+
+  class NotificationApi {
+    -_notificationEndpoint: NotificationApiEndpoint
+    +getNotificationsByUser(userId: string): Observable<Notification[]>
+    +getUnreadNotificationsByUser(userId: string): Observable<Notification[]>
+    +getNotificationsByOrder(orderId: string): Observable<Notification[]>
+    +getNotificationById(id: string): Observable<Notification>
+    +markAsRead(id: string): Observable<Notification>
+    +markAllAsRead(userId: string): Observable<void>
+  }
+
+  class NotificationApiEndpoint {
+    +getNotificationsByUser(userId: string): Observable<Notification[]>
+    +getUnreadNotificationsByUser(userId: string): Observable<Notification[]>
+    +getNotificationsByOrder(orderId: string): Observable<Notification[]>
+  }
+
+  class NotificationAssembler {
+    +toEntityFromResource(resource): Notification
+    +toResourceFromEntity(entity): NotificationResource
+    +toEntitiesFromResponse(response): Notification[]
+  }
+
+  NotificationApi -up-|> BaseApi
+  NotificationApiEndpoint -up-|> BaseApiEndpoint
+  NotificationApiEndpoint *-- NotificationAssembler
+  NotificationApi *-- NotificationApiEndpoint
+}
+
+package "notification.presentation" #F7E6D6 {
+  class NotificationListComponent {
+    -store: NotificationStore
+  }
+}
+
+NotificationStore --> NotificationApi : injects
+NotificationListComponent --> NotificationStore : injects
+
+@enduml
