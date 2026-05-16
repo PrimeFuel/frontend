@@ -343,6 +343,41 @@
     "delivered": "Delivered",
     "closed": "Closed",
     "cancelled": "Cancelled"
+  },
+  "notification": {
+    "title": "Notifications",
+    "panel": "Notifications panel",
+    "unread-count": "Unread"
+  },
+  "notification-list": {
+    "title": "Notifications",
+    "subtitle": "Stay on top of relevant events for your orders, payments and deliveries",
+    "show-all": "Show All",
+    "show-unread": "Unread Only",
+    "mark-all-read": "Mark All as Read",
+    "mark-read-tooltip": "Mark as Read",
+    "mark-unread-tooltip": "Mark as Unread",
+    "delete-tooltip": "Delete Notification",
+    "empty": "You have no notifications",
+    "fields": {
+      "order": "Order",
+      "type": "Type",
+      "message": "Message",
+      "status": "Status",
+      "created-at": "Date"
+    }
+  },
+  "notification-type": {
+    "order_created": "Order Created",
+    "order_approved": "Order Approved",
+    "order_rejected": "Order Rejected",
+    "order_dispatched": "Order Dispatched",
+    "order_delivered": "Order Delivered",
+    "order_closed": "Order Closed",
+    "payment_registered": "Payment Registered",
+    "payment_approved": "Payment Approved",
+    "delivery_assigned": "Delivery Assigned",
+    "delivery_in_transit": "Delivery in Transit"
   }
 
 }

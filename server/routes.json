@@ -8,5 +8,7 @@
   "/fulfillment/deliveries": "/deliveries",
   "/fulfillment/deliveries/:id": "/deliveries/:id",
   "/reporting/kpis/fulfillment/:id": "/reporting-kpis-fulfillment/:id",
-  "/reporting/reports/clients": "/reporting-reports-clients"
+  "/reporting/reports/clients": "/reporting-reports-clients",
+  "/notifications": "/notifications",
+  "/notifications/:id": "/notifications/:id"
 }
