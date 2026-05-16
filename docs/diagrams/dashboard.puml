@@ -1,0 +1,48 @@
+@startuml Dashboard BC
+
+skinparam backgroundColor #FAFAFA
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #555555
+skinparam classHeaderBackgroundColor #2C3E50
+skinparam classFontColor White
+skinparam ArrowColor #2C3E50
+skinparam linetype ortho
+
+package "dashboard.domain" #D6E4F0 {
+  interface DashboardSummary {
+    +totalFuel: number
+    +pendingOrders: number
+  }
+}
+
+package "dashboard.application" #FFF9E6 {
+  class DashboardStore {
+    +totalFuel: Signal<number>
+    +pendingOrders: Signal<number>
+    +activeOrders: Signal<any[]>
+  }
+}
+
+package "dashboard.infrastructure" #D6EAD6 {
+  class DashboardApiService {
+    -http: HttpClient
+    -serverUrl: string
+    +getInventory(): Observable<any[]>
+    +getOrders(): Observable<any[]>
+  }
+}
+
+package "dashboard.presentation" #F7E6D6 {
+  class DashboardComponent {
+    -store: DashboardStore
+    -orderingStore: OrderingStore
+    +ngOnInit(): void
+    +ngOnDestroy(): void
+  }
+}
+
+DashboardStore ..> DashboardSummary : uses
+DashboardComponent --> DashboardStore : injects
+DashboardComponent --> DashboardApiService : injects
+
+@enduml
