@@ -1,0 +1,26 @@
+<div class="landing-container">
+  <app-toolbar></app-toolbar>
+
+  <main class="landing-content">
+
+    <div class="text-section">
+      <h1 class="main-title">{{ 'home.title' | translate }}</h1>
+      <p class="sub-title">{{ 'home.content' | translate }}</p>
+
+      <div class="cta-buttons">
+        <a mat-flat-button routerLink="/reporting/client-reports" class="btn-buyers">
+          {{ 'home.buyers-btn' | translate }}
+        </a>
+        <a mat-stroked-button routerLink="/reporting/report-main" class="btn-suppliers">
+          {{ 'home.suppliers-btn' | translate }}
+        </a>
+      </div>
+
+    </div>
+
+    <div class="image-section">
+      <img src="/fuel-truck-delivery.jpg" alt="Fuel truck delivering to client" class="hero-image"/>
+    </div>
+
+  </main>
+</div>

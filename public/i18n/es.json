@@ -1,0 +1,382 @@
+{
+  "nav": {
+    "dashboard": "Tablero",
+    "inventory": "Inventario",
+    "ordering": "Pedidos",
+    "fulfillment": "Despacho",
+    "notifications": "Notificaciones",
+    "reports": "Reportes"
+  },
+  "inventory": {
+    "products": "Productos",
+    "add-product": "Agregar Producto",
+    "inventory": "Inventario",
+    "product-inventory": "Inventario de Productos"
+  },
+  "ordering": {
+    "requests": "Solicitudes",
+    "create-request": "Nueva Solicitud",
+    "orders": "Órdenes"
+  },
+  "fulfillment": {
+    "vehicles": "Vehículos",
+    "drivers": "Conductores",
+    "dispatch": "Despacho"
+  },
+  "reporting": {
+    "supplier-dashboard": "Reporte General",
+    "client-portfolio": "Reportes de tus clientes"
+  },
+  "home": {
+    "title": "Plataforma FullTank",
+    "content": "Sistema de pedidos de combustible y gestión logística para empresas",
+    "buyers-btn": "Soy Comprador",
+    "suppliers-btn": "Soy Proveedor"
+  },
+  "about": {
+    "title": "Acerca de FullTank",
+    "content": "FullTank es una plataforma integral para pedidos de combustible, gestión de flotas y seguimiento de entregas."
+  },
+  "page-not-found": {
+    "title": "404 - Página No Encontrada",
+    "content": "La página <strong>{{invalid_path}}</strong> no existe.",
+    "go-home": "Ir al Inicio"
+  },
+  "product-inventory": {
+    "title": "Inventario de Productos",
+    "subtitle": "Gestiona tus productos de combustible",
+    "show-all": "Mostrar Todos",
+    "add-button": "Agregar Producto",
+    "edit-tooltip": "Editar Producto",
+    "delete-tooltip": "Eliminar Producto",
+    "empty": "No hay productos disponibles",
+    "fields": {
+      "name": "Nombre del Producto",
+      "type": "Tipo de Combustible",
+      "price": "Precio por Litro",
+      "unit": "Unidad",
+      "status": "Estado"
+    }
+  },
+  "product-form": {
+    "create-title": "Crear Producto",
+    "create-subtitle": "Agrega un nuevo producto de combustible a tu inventario",
+    "edit-title": "Editar Producto",
+    "edit-subtitle": "Actualiza la información del producto",
+    "cancel": "Cancelar",
+    "create": "Crear Producto",
+    "update": "Actualizar Producto",
+    "fields": {
+      "name": "Nombre del Producto",
+      "type": "Tipo de Combustible",
+      "description": "Descripción",
+      "price": "Precio por Litro",
+      "unit": "Unidad",
+      "active": "Producto Activo"
+    },
+    "placeholders": {
+      "name": "ej., Diesel Premium",
+      "description": "Describe las características del producto",
+      "price": "0.00"
+    }
+  },
+  "inventory-list": {
+    "title": "Gestión de Inventario",
+    "subtitle": "Monitorea tus niveles de stock de combustible",
+    "low-stock-alert": "Alerta de Stock Bajo",
+    "items-below-threshold": "ítems por debajo del umbral",
+    "update-tooltip": "Actualizar Stock",
+    "empty": "No hay ítems de inventario disponibles",
+    "fields": {
+      "product": "Producto",
+      "available": "Disponible",
+      "reserved": "Reservado",
+      "unit": "Unidad",
+      "last-updated": "Última Actualización"
+    }
+  },
+  "supplier-dashboard": {
+    "title": "Reportes",
+    "subtitle": "Resumen integral del rendimiento de tus ventas",
+    "export-pdf": "Exportar PDF",
+    "total-sales-revenue": "Ingresos Totales por Ventas",
+    "avg-fulfillment-rate": "Tasa Promedio de Cumplimiento",
+    "avg-lead-time": "Tiempo Promedio de Entrega",
+    "vs-last-period": "vs período anterior",
+    "target": "Objetivo",
+    "days": "Días",
+    "client-sales-performance": "Rendimiento de Ventas por Cliente",
+    "view-all-clients": "Ver Todos los Clientes",
+    "empty": "No hay datos de clientes disponibles",
+    "fields": {
+      "company": "Nombre de la Empresa",
+      "total-volume": "Volumen Total",
+      "status": "Estado"
+    }
+  },
+  "client-portfolio": {
+    "title": "Reportes de Clientes Proveedores",
+    "subtitle": "Gestiona tu portafolio de clientes B2B, monitorea el consumo industrial de combustible y rastrea el volumen histórico de pedidos",
+    "total-clients": "Total de Clientes",
+    "revenue": "Ingresos",
+    "active-orders": "Órdenes Activas",
+    "growth": "Tasa de Crecimiento",
+    "portfolio-title": "Portafolio de Clientes",
+    "filter-by-sector": "Filtrar por Sector",
+    "all-sectors": "Todos los Sectores",
+    "volume-distribution": "Distribución de Volumen por Sector",
+    "empty": "No hay clientes disponibles",
+    "fields": {
+      "company": "Entidad Empresarial",
+      "sector": "Sector",
+      "total-volume": "Volumen Total (MT)",
+      "total-cost": "Costo Total",
+      "last-active": "Última Actividad",
+      "status": "Estado"
+    },
+    "sectors": {
+      "transport": "Transporte",
+      "mining": "Minería",
+      "construction": "Construcción",
+      "maritime": "Marítimo",
+      "logistics": "Logística"
+    }
+  },
+  "fuel-type": {
+    "diesel": "Diesel",
+    "gasoline_90": "Gasolina 90",
+    "gasoline_95": "Gasolina 95",
+    "gasoline_97": "Gasolina 97"
+  },
+  "unit": {
+    "liters": "Litros",
+    "gallons": "Galones"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "vehicle-list": {
+    "title": "Flota de Vehículos",
+    "subtitle": "Gestiona los vehículos de entrega de combustible",
+    "show-all": "Mostrar Todos",
+    "show-available": "Solo Disponibles",
+    "add-button": "Registrar Vehículo",
+    "edit-tooltip": "Editar Vehículo",
+    "delete-tooltip": "Eliminar Vehículo",
+    "empty": "No hay vehículos registrados",
+    "fields": {
+      "license-plate": "Placa",
+      "brand": "Marca",
+      "model": "Modelo",
+      "capacity": "Capacidad",
+      "status": "Estado"
+    }
+  },
+  "vehicle-form": {
+    "title": "Registrar Vehículo",
+    "subtitle": "Agrega un nuevo vehículo a tu flota de entregas",
+    "cancel": "Cancelar",
+    "register": "Registrar Vehículo",
+    "fields": {
+      "license-plate": "Placa",
+      "brand": "Marca",
+      "model": "Modelo",
+      "capacity": "Capacidad",
+      "unit": "Unidad"
+    },
+    "placeholders": {
+      "license-plate": "ej. ABC-123",
+      "brand": "ej. Volvo",
+      "model": "ej. FH16 500",
+      "capacity": "ej. 15000"
+    }
+  },
+  "driver-list": {
+    "title": "Registro de Conductores",
+    "subtitle": "Gestiona los conductores autorizados para entregas",
+    "show-all": "Mostrar Todos",
+    "show-available": "Solo Disponibles",
+    "add-button": "Registrar Conductor",
+    "edit-tooltip": "Editar Conductor",
+    "delete-tooltip": "Eliminar Conductor",
+    "empty": "No hay conductores registrados",
+    "fields": {
+      "full-name": "Nombre Completo",
+      "license-number": "Nº de Licencia",
+      "phone": "Teléfono",
+      "email": "Correo",
+      "status": "Estado"
+    }
+  },
+  "driver-form": {
+    "title": "Registrar Conductor",
+    "subtitle": "Agrega un nuevo conductor autorizado",
+    "cancel": "Cancelar",
+    "register": "Registrar Conductor",
+    "fields": {
+      "first-name": "Nombre",
+      "last-name": "Apellido",
+      "license-number": "Nº de Licencia",
+      "phone": "Teléfono",
+      "email": "Correo"
+    },
+    "placeholders": {
+      "first-name": "ej. Juan",
+      "last-name": "ej. Pérez",
+      "license-number": "ej. Q12345678",
+      "phone": "ej. +51987654321",
+      "email": "ej. conductor@fulltank.com"
+    }
+  },
+  "vehicle-status": {
+    "available": "Disponible",
+    "in_route": "En Ruta",
+    "maintenance": "Mantenimiento",
+    "out_of_service": "Fuera de Servicio"
+  },
+  "driver-status": {
+    "available": "Disponible",
+    "assigned": "Asignado",
+    "on_leave": "De Permiso",
+    "inactive": "Inactivo"
+  },
+  "dispatch-dashboard": {
+    "title": "Despacho",
+    "subtitle": "Resumen de recursos de flota y entregas activas",
+    "available-vehicles": "Vehículos Disponibles",
+    "available-drivers": "Conductores Disponibles",
+    "active-deliveries": "Entregas Activas",
+    "active-deliveries-title": "Entregas Activas",
+    "total": "Total",
+    "completed": "Completadas",
+    "manage-vehicles": "Gestionar Vehículos",
+    "manage-drivers": "Gestionar Conductores",
+    "empty": "No hay entregas activas",
+    "fields": {
+      "order-id": "ID de Orden",
+      "vehicle": "Vehículo",
+      "driver": "Conductor",
+      "status": "Estado",
+      "scheduled": "Fecha Programada"
+    }
+  },
+  "delivery-status": {
+    "assigned": "Asignado",
+    "in_transit": "En Tránsito",
+    "delivered": "Entregado",
+    "cancelled": "Cancelado"
+  },
+  "request-list": {
+    "title": "Solicitudes de Combustible",
+    "id": "ID",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "delivery-date": "Entrega Deseada",
+    "status": "Estado",
+    "actions": "Acciones",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "new": "Nueva Solicitud",
+    "reject-title": "Rechazar Solicitud",
+    "reject-reason": "Motivo del Rechazo",
+    "reject-placeholder": "Explica por qué se rechaza esta solicitud",
+    "reject-cancel": "Cancelar",
+    "reject-confirm": "Confirmar Rechazo"
+  },
+  "request-form": {
+    "create-title": "Nueva Solicitud",
+    "edit-title": "Editar Solicitud",
+    "client-id": "ID del Cliente",
+    "provider-id": "ID del Proveedor",
+    "product-id": "ID del Producto",
+    "quantity": "Cantidad",
+    "unit": "Unidad",
+    "delivery-date": "Fecha de Entrega Deseada",
+    "delivery-address": "Dirección de Entrega",
+    "create": "Crear Solicitud",
+    "update": "Actualizar Solicitud",
+    "cancel": "Cancelar",
+    "required": "Este campo es obligatorio"
+  },
+  "order-list": {
+    "title": "Órdenes",
+    "id": "ID",
+    "request": "Solicitud",
+    "quantity": "Cantidad",
+    "total": "Total",
+    "status": "Estado",
+    "actions": "Acciones",
+    "view": "Ver Detalle",
+    "delete": "Eliminar"
+  },
+  "order-detail": {
+    "title": "Detalle de Orden",
+    "back": "Volver a Órdenes",
+    "request-id": "ID Solicitud",
+    "client": "Cliente",
+    "provider": "Proveedor",
+    "product": "Producto",
+    "quantity": "Cantidad",
+    "total": "Monto Total",
+    "address": "Dirección de Entrega",
+    "created-at": "Creada",
+    "dispatched-at": "Despachada",
+    "delivered-at": "Entregada",
+    "closed-at": "Cerrada",
+    "dispatch": "Despachar Orden",
+    "confirm-delivery": "Confirmar Entrega",
+    "close": "Cerrar Orden",
+    "not-found": "Orden no encontrada"
+  },
+  "request-status": {
+    "pending_approval": "Pendiente de Aprobación",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "cancelled": "Cancelada"
+  },
+  "order-status": {
+    "created": "Creada",
+    "dispatched": "Despachada",
+    "delivered": "Entregada",
+    "closed": "Cerrada",
+    "cancelled": "Cancelada"
+  },
+  "notification": {
+    "title": "Notificaciones",
+    "panel": "Panel de notificaciones",
+    "unread-count": "No leídas"
+  },
+  "notification-list": {
+    "title": "Notificaciones",
+    "subtitle": "Mantente al tanto de los eventos relevantes de tus pedidos, pagos y entregas",
+    "show-all": "Mostrar Todas",
+    "show-unread": "Solo No Leídas",
+    "mark-all-read": "Marcar Todas como Leídas",
+    "mark-read-tooltip": "Marcar como Leída",
+    "mark-unread-tooltip": "Marcar como No Leída",
+    "delete-tooltip": "Eliminar Notificación",
+    "empty": "No tienes notificaciones",
+    "fields": {
+      "order": "Orden",
+      "type": "Tipo",
+      "message": "Mensaje",
+      "status": "Estado",
+      "created-at": "Fecha"
+    }
+  },
+  "notification-type": {
+    "order_created": "Orden Creada",
+    "order_approved": "Orden Aprobada",
+    "order_rejected": "Orden Rechazada",
+    "order_dispatched": "Orden Despachada",
+    "order_delivered": "Orden Entregada",
+    "order_closed": "Orden Cerrada",
+    "payment_registered": "Pago Registrado",
+    "payment_approved": "Pago Aprobado",
+    "delivery_assigned": "Entrega Asignada",
+    "delivery_in_transit": "Entrega en Tránsito"
+  }
+}
