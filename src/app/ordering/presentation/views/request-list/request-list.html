@@ -7,25 +7,7 @@
   <mat-error>{{ store.error() }}</mat-error>
 }
 
-@if (rejectingRequestId) {
-  <div class="reject-panel mat-elevation-z2">
-    <h3>{{ 'request-list.reject-title' | translate }}</h3>
-    <mat-form-field appearance="outline" class="reject-reason">
-      <mat-label>{{ 'request-list.reject-reason' | translate }}</mat-label>
-      <textarea matInput rows="3" [(ngModel)]="rejectionReason"
-                [placeholder]="'request-list.reject-placeholder' | translate"></textarea>
-    </mat-form-field>
-    <div class="reject-actions">
-      <button mat-button (click)="cancelReject()">{{ 'request-list.reject-cancel' | translate }}</button>
-      <button mat-raised-button color="warn"
-              [disabled]="!rejectionReason.trim()"
-              (click)="confirmReject()">
-        <mat-icon>block</mat-icon>
-        {{ 'request-list.reject-confirm' | translate }}
-      </button>
-    </div>
-  </div>
-}
+
 
 <table mat-table [dataSource]="dataSource()" class="mat-elevation-z8" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
   <ng-container matColumnDef="id">
@@ -62,27 +44,16 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>{{ 'request-list.actions' | translate }}</th>
     <td mat-cell *matCellDef="let request">
-      @if (request.status === 'PENDING_APPROVAL') {
-        <button mat-icon-button color="primary"
-                [matTooltip]="'request-list.approve' | translate"
-                (click)="approveRequest(request)">
-          <mat-icon>check_circle</mat-icon>
-        </button>
-        <button mat-icon-button color="warn"
-                [matTooltip]="'request-list.reject' | translate"
-                (click)="startReject(request.id)">
-          <mat-icon>block</mat-icon>
-        </button>
-        <button mat-icon-button
-                [matTooltip]="'request-list.cancel' | translate"
-                (click)="cancelRequest(request)">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-      <button mat-icon-button
-              [matTooltip]="'request-list.delete' | translate"
-              (click)="deleteRequest(request.id)">
-        <mat-icon>delete</mat-icon>
+      <button mat-icon-button color="primary"
+              matTooltip="Aceptar"
+              (click)="acceptRequest(request)">
+        <mat-icon>check_circle</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn"
+              matTooltip="Denegar"
+              (click)="denyRequest(request)">
+        <mat-icon>block</mat-icon>
       </button>
     </td>
   </ng-container>

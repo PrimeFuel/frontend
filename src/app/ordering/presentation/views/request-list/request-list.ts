@@ -45,9 +45,6 @@ import { DatePipe } from '@angular/common';
     MatChip,
     MatChipSet,
     MatTooltip,
-    MatFormField,
-    MatLabel,
-    MatInput,
   ],
   templateUrl: './request-list.html',
   styleUrl: './request-list.css',
@@ -72,7 +69,7 @@ export class RequestList implements AfterViewChecked {
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource = computed(() => {
-    const source = new MatTableDataSource(this.store.requests());
+    const source = new MatTableDataSource(this.store.pendingRequests());
     source.sort = this.sort;
     source.paginator = this.paginator;
     return source;
@@ -85,38 +82,12 @@ export class RequestList implements AfterViewChecked {
     this.router.navigate(['/ordering/request-form']).then();
   }
 
-  approveRequest(request: Request) {
-    request.status = 'APPROVED';
-    request.updatedAt = new Date().toISOString();
-    this.store.updateRequest(request);
+  acceptRequest(request: Request) {
+    this.store.acceptRequest(request);
   }
 
-  startReject(requestId: string) {
-    this.rejectingRequestId = requestId;
-    this.rejectionReason = '';
-  }
-
-  confirmReject() {
-    if (!this.rejectingRequestId || !this.rejectionReason.trim()) return;
-    const request = this.store.getRequestById(this.rejectingRequestId)();
-    if (!request) return;
-    request.status = 'REJECTED';
-    request.rejectionReason = this.rejectionReason.trim();
-    request.updatedAt = new Date().toISOString();
-    this.store.updateRequest(request);
-    this.rejectingRequestId = null;
-    this.rejectionReason = '';
-  }
-
-  cancelReject() {
-    this.rejectingRequestId = null;
-    this.rejectionReason = '';
-  }
-
-  cancelRequest(request: Request) {
-    request.status = 'CANCELLED';
-    request.updatedAt = new Date().toISOString();
-    this.store.updateRequest(request);
+  denyRequest(request: Request) {
+    this.store.deleteRequest(request.id);
   }
 
   deleteRequest(id: string) {

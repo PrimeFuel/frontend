@@ -171,44 +171,7 @@
       "id": "dLKRrA5"
     }
   ],
-  "deliveries": [
-    {
-      "id": "del1",
-      "orderId": "ord1",
-      "vehicleId": "v2",
-      "driverId": "d2",
-      "providerId": "1",
-      "status": "IN_TRANSIT",
-      "scheduledDate": "2025-05-10T10:00:00.000Z",
-      "actualDeliveryDate": null,
-      "notes": "Entrega prioritaria zona norte",
-      "createdAt": "2025-05-09T08:00:00.000Z"
-    },
-    {
-      "id": "del2",
-      "orderId": "ord2",
-      "vehicleId": "v1",
-      "driverId": "d1",
-      "providerId": "1",
-      "status": "IN_TRANSIT",
-      "scheduledDate": "2025-05-10T14:00:00.000Z",
-      "actualDeliveryDate": null,
-      "notes": "Entrega zona sur - Gasolina 95",
-      "createdAt": "2025-05-09T09:00:00.000Z"
-    },
-    {
-      "id": "del3",
-      "orderId": "ord3",
-      "vehicleId": "v3",
-      "driverId": "d3",
-      "providerId": "1",
-      "status": "ASSIGNED",
-      "scheduledDate": "2025-05-11T08:30:00.000Z",
-      "actualDeliveryDate": null,
-      "notes": "Entrega mañana - Diesel B5",
-      "createdAt": "2025-05-09T10:00:00.000Z"
-    }
-  ],
+  "deliveries": [],
   "reporting-kpis-fulfillment": [
     {
       "id": "1",
@@ -478,20 +441,6 @@
       "rejectionReason": "Cantidad excesiva para el período solicitado.",
       "createdAt": "2026-05-11T04:43:26.819Z",
       "updatedAt": "2026-05-11T04:44:14.676Z"
-    },
-    {
-      "id": "req-7",
-      "clientId": "cli-5",
-      "providerId": "prov-1",
-      "productId": "prod-1",
-      "quantity": 2000,
-      "unit": "LITERS",
-      "desiredDeliveryDate": "2026-06-01T00:00:00.000Z",
-      "deliveryAddress": "Av. La Marina 2500, San Miguel, Lima",
-      "status": "PENDING_APPROVAL",
-      "rejectionReason": null,
-      "createdAt": "2026-05-11T10:00:00.000Z",
-      "updatedAt": "2026-05-11T10:00:00.000Z"
     }
   ],
   "orders": [
