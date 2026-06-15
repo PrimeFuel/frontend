@@ -1,30 +1,49 @@
 export const environment = {
   production: false,
-  // Base API URL
-  serverBasePath: 'https://json-server-y51j.onrender.com',
+
+  // ── Spring Boot REST API base ──────────────────────────────────────────────
+  // The frontend now consumes the real Spring Boot backend instead of json-server.
+  serverBasePath: 'http://localhost:8080/api/v1',
+
   // IAM (Identity and Access Management)
-  iamSignInEndpointPath: '/auth/sign-in',
-  iamSignUpEndpointPath: '/auth/sign-up',
+  iamSignInEndpointPath: '/authentication/sign-in',
+  iamSignUpEndpointPath: '/authentication/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
-  // Inventory (Productos e Inventario)
-  inventoryEndpointPath: '/inventory',
-  inventoryProductsEndpointPath: '/inventory',
-  inventoryStockEndpointPath: '/inventory',
-  // Ordering (Solicitudes y Órdenes)
-  orderingRequestsEndpointPath: '/ordering/requests',
-  orderingOrdersEndpointPath: '/ordering/orders',
-  // Fulfillment (Logística y Despacho)
+  iamUsersEndpointPath: '/users',
+  iamBuyerCompaniesEndpointPath: '/buyer-companies',
+  iamProviderCompaniesEndpointPath: '/provider-companies',
+
+  // Inventory
+  inventoryEndpointPath: '/fuel-products',
+  inventoryProductsEndpointPath: '/fuel-products',
+  inventoryStockEndpointPath: '/fuel-products',
+  inventoryMovementsEndpointPath: '/inventory-movements',
+
+  // Ordering
+  orderingRequestsEndpointPath: '/fuel-requests',
+  orderingOrdersEndpointPath: '/fuel-orders',
+
+  // Fulfillment
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
   fulfillmentDeliveriesEndpointPath: '/deliveries',
-  // Payment (Transacciones y Pagos)
-  paymentTransactionsEndpointPath: '/payment/transactions',
-  paymentPaymentsEndpointPath: '/payment/payments',
-  // Notification (Notificaciones)
+
+  // Catalog
+  catalogProvidersEndpointPath: '/provider-companies',
+  catalogProductsEndpointPath: '/fuel-products',
+
+  // Equipment
+  equipmentEndpointPath: '/equipment',
+  favoriteProvidersEndpointPath: '/favorite-providers',
+  refillHistoryEndpointPath: '/refill-history',
+
+  // Payment
+  paymentPaymentsEndpointPath: '/payments',
+  paymentInvoicesEndpointPath: '/invoices',
+
+  // Notification
   notificationEndpointPath: '/notifications',
-  // Reporting (Reportes y Analytics)
-  reportingReportsEndpointPath: '/reporting/reports',
-  reportingKpisEndpointPath: '/reporting/kpis',
-  reportingSalesEndpointPath: '/reporting/sales',
-  reportingConsumptionEndpointPath: '/reporting/consumption',
+
+  // Reporting & Analytics
+  analyticsEndpointPath: '/analytics',
 };
