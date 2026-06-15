@@ -1,11 +1,14 @@
 export const environment = {
   production: true,
 
-  // Base API URL
-  serverBasePath: 'https://json-server-y51j.onrender.com',
+  // ── Spring Boot REST API base ──────────────────────────────────────────────
+  // The frontend now consumes the real Spring Boot backend instead of json-server.
+  // Override this value with the deployed backend URL when publishing to prod.
+  serverBasePath: 'http://localhost:8080/api/v1',
+
   // IAM (Identity and Access Management)
-  iamSignInEndpointPath: '/auth/sign-in',
-  iamSignUpEndpointPath: '/auth/sign-up',
+  iamSignInEndpointPath: '/authentication/sign-in',
+  iamSignUpEndpointPath: '/authentication/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
   // Inventory (Productos e Inventario)
   inventoryEndpointPath: '/inventory',
@@ -18,10 +21,21 @@ export const environment = {
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
   fulfillmentDeliveriesEndpointPath: '/deliveries',
-  // Payment (Transacciones y Pagos)
-  paymentTransactionsEndpointPath: '/payment/transactions',
-  paymentPaymentsEndpointPath: '/payment/payments',
-  // Notification (Notificaciones)
+
+  // Catalog
+  catalogProvidersEndpointPath: '/provider-companies',
+  catalogProductsEndpointPath: '/fuel-products',
+
+  // Equipment
+  equipmentEndpointPath: '/equipment',
+  favoriteProvidersEndpointPath: '/favorite-providers',
+  refillHistoryEndpointPath: '/refill-history',
+
+  // Payment
+  paymentPaymentsEndpointPath: '/payments',
+  paymentInvoicesEndpointPath: '/invoices',
+
+  // Notification
   notificationEndpointPath: '/notifications',
   // Reporting (Reportes y Analytics)
   reportingReportsEndpointPath: '/reporting/reports',

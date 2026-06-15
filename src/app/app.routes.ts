@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { Home } from './shared/presentation/views/home/home';
+import { authGuard, buyerGuard, dashboardRedirectGuard, providerGuard } from './iam/infrastructure/auth.guard';
 
 const about = () => import('./shared/presentation/views/about/about').then((m) => m.About);
-
 const pageNotFound = () =>
   import('./shared/presentation/views/page-not-found/page-not-found').then((m) => m.PageNotFound);
 

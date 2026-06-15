@@ -3,8 +3,8 @@ export const environment = {
   // Base API URL
   serverBasePath: 'http://localhost:3000',
   // IAM (Identity and Access Management)
-  iamSignInEndpointPath: '/auth/sign-in',
-  iamSignUpEndpointPath: '/auth/sign-up',
+  iamSignInEndpointPath: '/authentication/sign-in',
+  iamSignUpEndpointPath: '/authentication/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
   // Inventory (Productos e Inventario)
   inventoryEndpointPath: '/inventory',
@@ -17,10 +17,21 @@ export const environment = {
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
   fulfillmentDeliveriesEndpointPath: '/deliveries',
-  // Payment (Transacciones y Pagos)
-  paymentTransactionsEndpointPath: '/payment/transactions',
-  paymentPaymentsEndpointPath: '/payment/payments',
-  // Notification (Notificaciones)
+
+  // Catalog
+  catalogProvidersEndpointPath: '/provider-companies',
+  catalogProductsEndpointPath: '/fuel-products',
+
+  // Equipment
+  equipmentEndpointPath: '/equipment',
+  favoriteProvidersEndpointPath: '/favorite-providers',
+  refillHistoryEndpointPath: '/refill-history',
+
+  // Payment
+  paymentPaymentsEndpointPath: '/payments',
+  paymentInvoicesEndpointPath: '/invoices',
+
+  // Notification
   notificationEndpointPath: '/notifications',
   // Reporting (Reportes y Analytics)
   reportingReportsEndpointPath: '/reporting/reports',
