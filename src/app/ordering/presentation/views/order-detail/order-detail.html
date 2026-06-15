@@ -1,0 +1,104 @@
+<div class="header">
+  <button mat-icon-button (click)="back()" [matTooltip]="'order-detail.back' | translate">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h1 class="title">{{ 'order-detail.title' | translate }}</h1>
+</div>
+
+@if (store.loading()) {
+  <mat-spinner diameter="40"></mat-spinner>
+}
+@if (store.error()) {
+  <mat-error>{{ store.error() }}</mat-error>
+}
+
+@if (order(); as o) {
+  <mat-card class="detail-card">
+    <mat-card-content>
+      <div class="status-row">
+        <h2 class="mono">{{ o.id }}</h2>
+        <mat-chip-set>
+          <mat-chip [class]="statusClass(o.status)">
+            {{ 'order-status.' + o.status.toLowerCase() | translate }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <div class="grid">
+        <div class="item">
+          <label>{{ 'order-detail.request-id' | translate }}</label>
+          <span>{{ o.requestId }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.client' | translate }}</label>
+          <span>{{ o.clientId }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.provider' | translate }}</label>
+          <span>{{ o.providerId }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.product' | translate }}</label>
+          <span>{{ o.productId }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.quantity' | translate }}</label>
+          <span class="strong">{{ o.quantity }} {{ o.unit }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.total' | translate }}</label>
+          <span class="strong">S/ {{ o.totalAmount | number:'1.2-2' }}</span>
+        </div>
+        <div class="item full">
+          <label>{{ 'order-detail.address' | translate }}</label>
+          <span>{{ o.deliveryAddress }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.created-at' | translate }}</label>
+          <span>{{ o.createdAt | date:'medium' }}</span>
+        </div>
+        @if (o.dispatchedAt) {
+          <div class="item">
+            <label>{{ 'order-detail.dispatched-at' | translate }}</label>
+            <span>{{ o.dispatchedAt | date:'medium' }}</span>
+          </div>
+        }
+        @if (o.deliveredAt) {
+          <div class="item">
+            <label>{{ 'order-detail.delivered-at' | translate }}</label>
+            <span>{{ o.deliveredAt | date:'medium' }}</span>
+          </div>
+        }
+        @if (o.closedAt) {
+          <div class="item">
+            <label>{{ 'order-detail.closed-at' | translate }}</label>
+            <span>{{ o.closedAt | date:'medium' }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="actions">
+        @if (o.status === 'CREATED') {
+          <button mat-raised-button color="primary" (click)="dispatch(o)">
+            <mat-icon>local_shipping</mat-icon>
+            {{ 'order-detail.dispatch' | translate }}
+          </button>
+        }
+        @if (o.status === 'DISPATCHED') {
+          <button mat-raised-button color="primary" (click)="confirmDelivery(o)">
+            <mat-icon>done_all</mat-icon>
+            {{ 'order-detail.confirm-delivery' | translate }}
+          </button>
+        }
+        @if (o.status === 'DELIVERED') {
+          <button mat-raised-button color="accent" (click)="closeOrder(o)">
+            <mat-icon>archive</mat-icon>
+            {{ 'order-detail.close' | translate }}
+          </button>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @else if (!store.loading()) {
+  <p class="empty">{{ 'order-detail.not-found' | translate }}</p>
+}

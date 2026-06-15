@@ -10,21 +10,14 @@ export const environment = {
   iamSignInEndpointPath: '/authentication/sign-in',
   iamSignUpEndpointPath: '/authentication/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
-  iamUsersEndpointPath: '/users',
-  iamBuyerCompaniesEndpointPath: '/buyer-companies',
-  iamProviderCompaniesEndpointPath: '/provider-companies',
-
-  // Inventory
-  inventoryEndpointPath: '/fuel-products',
-  inventoryProductsEndpointPath: '/fuel-products',
-  inventoryStockEndpointPath: '/fuel-products',
-  inventoryMovementsEndpointPath: '/inventory-movements',
-
-  // Ordering
-  orderingRequestsEndpointPath: '/fuel-requests',
-  orderingOrdersEndpointPath: '/fuel-orders',
-
-  // Fulfillment
+  // Inventory (Productos e Inventario)
+  inventoryEndpointPath: '/inventory',
+  inventoryProductsEndpointPath: '/inventory',
+  inventoryStockEndpointPath: '/inventory',
+  // Ordering (Solicitudes y Órdenes)
+  orderingRequestsEndpointPath: '/requests',
+  orderingOrdersEndpointPath: '/orders',
+  // Fulfillment (Logística y Despacho)
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
   fulfillmentDeliveriesEndpointPath: '/deliveries',
@@ -44,7 +37,11 @@ export const environment = {
 
   // Notification
   notificationEndpointPath: '/notifications',
+  // Reporting (Reportes y Analytics)
+  reportingReportsEndpointPath: '/reporting/reports',
+  reportingKpisEndpointPath: '/reporting/kpis',
+  reportingSalesEndpointPath: '/reporting/sales',
+  reportingConsumptionEndpointPath: '/reporting/consumption',
+  reportingMonthlyRevenueEndpointPath: '/monthly-revenue',  // ← agregar esto
 
-  // Reporting & Analytics
-  analyticsEndpointPath: '/analytics',
 };

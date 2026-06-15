@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
 import { Vehicle } from '../domain/model/vehicle.entity';
 import { VehicleResource, VehiclesResponse } from './vehicle-response';
 import { VehicleAssembler } from './vehicle-assembler';
-import { RegisterVehicleRequest, UpdateVehicleStatusRequest, UpdateVehicleRequest } from './vehicle.request';
 
 const vehiclesEndpointUrl = `${environment.serverBasePath}${environment.fulfillmentVehiclesEndpointPath}`;
 
@@ -35,21 +34,21 @@ export class VehicleApiEndpoint extends BaseApiEndpoint<
       );
   }
 
-  registerVehicle(request: RegisterVehicleRequest): Observable<Vehicle> {
+  registerVehicle(request: Omit<Vehicle, 'id' | 'createdAt'>): Observable<Vehicle> {
     return this.http.post<VehicleResource>(this.endpointUrl, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError('Failed to register vehicle')),
     );
   }
 
-  updateVehicleStatus(vehicleId: string, request: UpdateVehicleStatusRequest): Observable<Vehicle> {
+  updateVehicleStatus(vehicleId: string, request: Pick<Vehicle, 'status'>): Observable<Vehicle> {
     return this.http.patch<VehicleResource>(`${this.endpointUrl}/${vehicleId}`, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to update vehicle status ${vehicleId}`)),
     );
   }
 
-  updateVehicle(vehicleId: string, request: UpdateVehicleRequest): Observable<Vehicle> {
+  updateVehicle(vehicleId: string, request: Partial<Omit<Vehicle, 'id' | 'providerId' | 'createdAt'>>): Observable<Vehicle> {
     return this.http.patch<VehicleResource>(`${this.endpointUrl}/${vehicleId}`, request).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to update vehicle ${vehicleId}`)),

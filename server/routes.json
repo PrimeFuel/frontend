@@ -1,13 +1,14 @@
 {
-  "/catalog/products": "/inventory",
-  "/catalog/inventory": "/inventory",
-
+  "/products": "/inventory",
+  "/inventory": "/inventory",
   "/fulfillment/vehicles": "/vehicles",
   "/fulfillment/vehicles/:id": "/vehicles/:id",
-
   "/fulfillment/drivers": "/drivers",
   "/fulfillment/drivers/:id": "/drivers/:id",
-
   "/fulfillment/deliveries": "/deliveries",
-  "/fulfillment/deliveries/:id": "/deliveries/:id"
+  "/fulfillment/deliveries/:id": "/deliveries/:id",
+  "/reporting/kpis/fulfillment/:id": "/reporting-kpis-fulfillment/:id",
+  "/reporting/reports/clients": "/reporting-reports-clients",
+  "/notifications": "/notifications",
+  "/notifications/:id": "/notifications/:id"
 }

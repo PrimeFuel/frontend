@@ -11,8 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
-import { RegisterVehicleRequest, UpdateVehicleRequest } from '../../../infrastructure/vehicle.request';
-
+import { Vehicle } from '../../../domain/model/vehicle.entity';
 @Component({
   selector: 'app-vehicle-form',
   standalone: true,
@@ -94,7 +93,7 @@ export class VehicleForm implements OnInit {
   }
 
   private registerVehicleData(): void {
-    const request: RegisterVehicleRequest = {
+    const request: Omit<Vehicle, 'id' | 'createdAt'> = {
       providerId: this.TEMP_PROVIDER_ID,
       licensePlate: this.vehicleForm.value.licensePlate,
       brand: this.vehicleForm.value.brand,
@@ -109,7 +108,7 @@ export class VehicleForm implements OnInit {
   }
 
   private updateVehicleData(): void {
-    const request: UpdateVehicleRequest = {
+    const request: Partial<Omit<Vehicle, 'id' | 'providerId' | 'createdAt'>> = {
       licensePlate: this.vehicleForm.value.licensePlate,
       brand: this.vehicleForm.value.brand,
       model: this.vehicleForm.value.model,

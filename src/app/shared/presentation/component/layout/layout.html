@@ -1,16 +1,25 @@
-<div class="shell">
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="icon-btn" (click)="toggleSidebar()" aria-label="Toggle menu">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <img src="/fulltank-logo.png" alt="FullTank" class="brand-logo" />
-      <span class="brand-name">FullTank</span>
-      <span class="ft-pill" [class.buyer]="isBuyer()" [class.provider]="isProvider()">
-        {{ (isProvider() ? 'iam.provider' : 'iam.buyer') | translate }}
-      </span>
-    </div>
+<!-- TOOLBAR FIJO -->
+<mat-toolbar class="toolbar">
+  <button mat-icon-button
+          aria-label="Toggle navigation menu"
+          (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <img src="/fulltank-logo.png" alt="FullTank logo"/>
+  <span class="toolbar-title">FullTank</span>
+  <span class="spacer"></span>
+  <app-language-switcher/>
+  <button mat-icon-button
+          aria-label="Notifications"
+          routerLink="/notification/notification-list"
+          matTooltip="Notifications"
+          class="notif-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24"
+         fill="black"
+         stroke="black"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
 
     <div class="topbar-right">
       <app-language-switcher />
