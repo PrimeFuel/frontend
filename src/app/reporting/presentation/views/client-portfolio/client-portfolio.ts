@@ -14,8 +14,8 @@ import { ReportingStore } from '../../../application/reporting.store';
 
 /**
  * @summary Vista de portafolio completo de clientes.
- * @remarks Muestra métricas de ventas, tabla de clientes y distribución
- * por sector. Pantalla 2 accesible desde "View All Clients".
+ * @remarks KPIs calculados en tiempo real desde los clientes del db.
+ * Filtro por sector es client-side (store.filterBySector).
  * @author FullTank Platform
  */
 @Component({
@@ -40,7 +40,6 @@ import { ReportingStore } from '../../../application/reporting.store';
 export class ClientPortfolio implements OnInit {
   protected readonly store = inject(ReportingStore);
 
-  // TODO: Reemplazar con providerId real de IAM cuando se implemente
   private readonly TEMP_PROVIDER_ID = '1';
   private readonly CURRENT_PERIOD = 'Q3_2024';
 
@@ -50,17 +49,18 @@ export class ClientPortfolio implements OnInit {
     'companyName',
     'sector',
     'totalVolume',
+    'totalCost',
     'lastActive',
     'status',
   ];
 
   protected readonly sectors = [
-    { value: 'all', label: 'client-portfolio.all-sectors' },
-    { value: 'Transport', label: 'client-portfolio.sectors.transport' },
-    { value: 'Mining', label: 'client-portfolio.sectors.mining' },
+    { value: 'all',          label: 'client-portfolio.all-sectors' },
+    { value: 'Transport',    label: 'client-portfolio.sectors.transport' },
+    { value: 'Mining',       label: 'client-portfolio.sectors.mining' },
     { value: 'Construction', label: 'client-portfolio.sectors.construction' },
-    { value: 'Maritime', label: 'client-portfolio.sectors.maritime' },
-    { value: 'Logistics', label: 'client-portfolio.sectors.logistics' },
+    { value: 'Maritime',     label: 'client-portfolio.sectors.maritime' },
+    { value: 'Logistics',    label: 'client-portfolio.sectors.logistics' },
   ];
 
   ngOnInit(): void {
@@ -68,20 +68,17 @@ export class ClientPortfolio implements OnInit {
   }
 
   protected loadPortfolioData(): void {
-    this.store.loadSalesMetrics(this.TEMP_PROVIDER_ID, this.CURRENT_PERIOD);
     this.store.loadClientPortfolio(this.TEMP_PROVIDER_ID);
-    this.store.loadSectorDistribution(this.TEMP_PROVIDER_ID, this.CURRENT_PERIOD);
+    this.store.loadFulfillmentMetrics(this.TEMP_PROVIDER_ID, this.CURRENT_PERIOD);
   }
 
   protected onSectorChange(): void {
-    if (this.selectedSector === 'all') {
-      this.store.loadClientPortfolio(this.TEMP_PROVIDER_ID);
-    } else {
-      this.store.loadClientsBySector(this.TEMP_PROVIDER_ID, this.selectedSector);
-    }
+    // Client-side filter — no HTTP call, no errors
+    this.store.filterBySector(this.selectedSector);
   }
 
   protected onRefresh(): void {
+    this.selectedSector = 'all';
     this.loadPortfolioData();
   }
 
@@ -90,6 +87,6 @@ export class ClientPortfolio implements OnInit {
   }
 
   protected getSectorClass(sector: string): string {
-    return sector.toLowerCase().replace(' ', '-');
+    return sector.toLowerCase().replace(/\s+/g, '-');
   }
 }
