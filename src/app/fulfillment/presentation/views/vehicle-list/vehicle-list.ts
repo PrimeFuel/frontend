@@ -1,73 +1,69 @@
-import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
+import { Vehicle } from '../../../domain/model/vehicle.entity';
+import { IamStore } from '../../../../iam/application/iam.store';
+import { num } from '../../../../shared/domain/model/view-helpers';
 
-/**
- * @summary Vista de lista de vehículos.
- * @remarks Muestra vehículos de la flota del proveedor con filtros por estado.
- * @author FullTank Platform
- */
 @Component({
   selector: 'app-vehicle-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    RouterModule,
-    TranslatePipe,
-  ],
+  imports: [CommonModule, MatIconModule, MatSnackBarModule, TranslatePipe],
   templateUrl: './vehicle-list.html',
   styleUrl: './vehicle-list.css',
 })
 export class VehicleList implements OnInit {
   protected readonly store = inject(FulfillmentStore);
+  private readonly iam = inject(IamStore);
+  private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
-  // TODO: Reemplazar con providerId real de IAM cuando se implemente
-  private readonly TEMP_PROVIDER_ID = '1';
+  readonly num = num;
+  readonly availableOnly = signal(false);
 
-  protected readonly displayedColumns: string[] = [
-    'licensePlate',
-    'brand',
-    'model',
-    'capacity',
-    'status',
-    'actions',
-  ];
+  private get providerId(): string {
+    return String(this.iam.currentProviderId() ?? 1);
+  }
+
+  readonly filteredVehicles = computed(() => {
+    const list = this.store.vehicleList();
+    return this.availableOnly() ? list.filter((v) => v.status === 'AVAILABLE') : list;
+  });
 
   ngOnInit(): void {
-    this.store.loadVehiclesByProvider(this.TEMP_PROVIDER_ID);
+    this.store.loadVehiclesByProvider(this.providerId);
   }
 
-  protected onRefresh(): void {
-    this.store.loadVehiclesByProvider(this.TEMP_PROVIDER_ID);
+  refresh(): void {
+    this.store.loadVehiclesByProvider(this.providerId);
   }
 
-  protected onShowAvailable(): void {
-    this.store.loadAvailableVehicles(this.TEMP_PROVIDER_ID);
+  add(): void {
+    this.router.navigate(['/fulfillment/vehicles/new']);
   }
 
-  protected onShowAll(): void {
-    this.store.loadVehiclesByProvider(this.TEMP_PROVIDER_ID);
+  edit(v: Vehicle): void {
+    this.router.navigate(['/fulfillment/vehicles', v.id, 'edit']);
   }
 
-  protected onDelete(vehicleId: string): void {
-    this.store.deleteVehicle(vehicleId);
+  remove(v: Vehicle): void {
+    if (confirm(this.translate.instant('messages.delete-vehicle', { name: v.licensePlate }))) {
+      this.store.deleteVehicle(v.id);
+      this.snackBar.open(
+        this.translate.instant('messages.vehicle-removed'),
+        this.translate.instant('messages.ok'),
+        { duration: 2500 },
+      );
+    }
   }
 
-  protected getStatusClass(status: string): string {
-    return status.toLowerCase().replace(/_/g, '-');
+  statusClass(status: string): string {
+    return (status || '').toLowerCase();
   }
 }
+
