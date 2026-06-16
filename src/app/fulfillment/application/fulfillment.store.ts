@@ -57,7 +57,7 @@ export class FulfillmentStore {
 
   public readonly activeDeliveries = computed(() =>
     this._deliveryList().filter(
-      (delivery) => delivery.status === 'ASSIGNED' || delivery.status === 'IN_TRANSIT',
+      (delivery) => delivery.status === 'SCHEDULED' || delivery.status === 'DISPATCHED',
     ),
   );
 
