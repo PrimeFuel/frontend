@@ -39,3 +39,4 @@ export class Vehicle implements BaseEntity {
     this.createdAt = params.createdAt;
   }
 }
+
