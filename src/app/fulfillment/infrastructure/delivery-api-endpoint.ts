@@ -19,28 +19,38 @@ export class DeliveryApiEndpoint extends BaseApiEndpoint<
   }
 
   getDeliveriesByProvider(providerId: string): Observable<Delivery[]> {
-    return this.http.get<DeliveryResource[]>(`${this.endpointUrl}?providerId=${providerId}`).pipe(
+    return this.http.get<DeliveryResource[]>(`${this.endpointUrl}/provider/${providerId}`).pipe(
       map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
       catchError(this.handleError(`Failed to fetch deliveries for provider ${providerId}`)),
     );
   }
 
   getDeliveryByOrder(orderId: string): Observable<Delivery> {
-    return this.http.get<DeliveryResource[]>(`${this.endpointUrl}?orderId=${orderId}`).pipe(
-      map((response) => this.assembler.toEntityFromResource(response[0])),
+    // Backend route: GET /deliveries/order/{orderId} → single delivery resource.
+    return this.http.get<DeliveryResource>(`${this.endpointUrl}/order/${orderId}`).pipe(
+      map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to fetch delivery for order ${orderId}`)),
     );
   }
 
   assignResources(request: any): Observable<Delivery> {
-    return this.http.post<DeliveryResource>(this.endpointUrl, request).pipe(
+    const payload = {
+      orderId: Number(request.orderId),
+      providerId: Number(request.providerId),
+      driverId: Number(request.driverId),
+      vehicleId: Number(request.vehicleId),
+      scheduledDate: request.scheduledDate ?? '',
+      notes: request.notes ?? '',
+    };
+    return this.http.post<DeliveryResource>(this.endpointUrl, payload).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError('Failed to assign resources')),
     );
   }
 
   executeDispatch(deliveryId: string, request: any): Observable<Delivery> {
-    return this.http.patch<DeliveryResource>(`${this.endpointUrl}/${deliveryId}`, request).pipe(
+    const action = (request?.status ?? '').toUpperCase() === 'DELIVERED' ? 'complete' : 'dispatch';
+    return this.http.post<DeliveryResource>(`${this.endpointUrl}/${deliveryId}/${action}`, {}).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError(`Failed to execute dispatch for delivery ${deliveryId}`)),
     );
