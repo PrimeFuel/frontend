@@ -2,29 +2,15 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
 import { Driver } from '../../../domain/model/driver.entity';
+import { IamStore } from '../../../../iam/application/iam.store';
 @Component({
   selector: 'app-driver-form',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    TranslatePipe,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, TranslatePipe],
   templateUrl: './driver-form.html',
   styleUrl: './driver-form.css',
 })
@@ -33,12 +19,16 @@ export class DriverForm implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly iam = inject(IamStore);
 
-  private readonly TEMP_PROVIDER_ID = '1';
+  private get providerId(): string {
+    return String(this.iam.currentProviderId() ?? 1);
+  }
 
   protected driverForm: FormGroup;
   protected isEditMode = false;
   protected driverId: string | null = null;
+  protected readonly statuses = ['AVAILABLE', 'ASSIGNED'];
 
   constructor() {
     this.driverForm = this.fb.group({
@@ -47,6 +37,7 @@ export class DriverForm implements OnInit {
       licenseNumber: ['', [Validators.required, Validators.minLength(8)]],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{9,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
+      status: ['AVAILABLE', Validators.required],
     });
   }
 
@@ -65,6 +56,7 @@ export class DriverForm implements OnInit {
             licenseNumber: driver.licenseNumber,
             phoneNumber: driver.phoneNumber,
             email: driver.email,
+            status: driver.status,
           });
         }
       }, 500);
@@ -85,16 +77,16 @@ export class DriverForm implements OnInit {
 
   private registerDriverData(): void {
     const request: Omit<Driver, 'id' | 'createdAt'> = {
-      providerId: this.TEMP_PROVIDER_ID,
+      providerId: this.providerId,
       firstName: this.driverForm.value.firstName,
       lastName: this.driverForm.value.lastName,
       licenseNumber: this.driverForm.value.licenseNumber,
       phoneNumber: this.driverForm.value.phoneNumber,
       email: this.driverForm.value.email,
-      status: 'AVAILABLE',
+      status: this.driverForm.value.status || 'AVAILABLE',
     };
     this.store.registerDriver(request, () => {
-      this.router.navigate(['/fulfillment/driver-list']);
+      this.router.navigate(['/fulfillment/drivers']);
     });
   }
 
@@ -105,14 +97,15 @@ export class DriverForm implements OnInit {
       licenseNumber: this.driverForm.value.licenseNumber,
       phoneNumber: this.driverForm.value.phoneNumber,
       email: this.driverForm.value.email,
+      status: this.driverForm.value.status,
     };
     this.store.updateDriver(this.driverId!, request, () => {
-      this.router.navigate(['/fulfillment/driver-list']);
+      this.router.navigate(['/fulfillment/drivers']);
     });
   }
 
   protected onCancel(): void {
-    this.router.navigate(['/fulfillment/driver-list']);
+    this.router.navigate(['/fulfillment/drivers']);
   }
 
   protected getErrorMessage(field: string): string {
@@ -125,3 +118,4 @@ export class DriverForm implements OnInit {
     return '';
   }
 }
+
