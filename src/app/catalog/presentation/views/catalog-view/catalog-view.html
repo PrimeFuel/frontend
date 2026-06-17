@@ -1,0 +1,202 @@
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.catalog.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.catalog.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input
+        type="text"
+        [placeholder]="'catalog.search-placeholder' | translate"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+      />
+    </div>
+
+    <select class="ft-select fuel-select" [ngModel]="fuelFilter()" (ngModelChange)="fuelFilter.set($event)">
+      <option value="">{{ 'common.filters.all-fuel-types' | translate }}</option>
+      @for (f of fuelOptions; track f.code) {
+        <option [value]="f.code">{{ f.label }}</option>
+      }
+    </select>
+
+    <button
+      class="chip-toggle"
+      [class.active]="favoritesOnly()"
+      (click)="favoritesOnly.set(!favoritesOnly())"
+    >
+      <mat-icon>star</mat-icon> {{ 'common.filters.favorites' | translate }}
+    </button>
+
+    <button
+      class="chip-toggle"
+      [class.active]="compatibleOnly()"
+      (click)="compatibleOnly.set(!compatibleOnly())"
+    >
+      <mat-icon>verified</mat-icon> {{ 'common.filters.compatible' | translate }}
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'catalog.loading' | translate }}</p></div>
+  } @else if (filteredProviders().length === 0) {
+    <div class="ft-empty">
+      <mat-icon>storefront</mat-icon>
+      <p>{{ 'catalog.no-providers' | translate }}</p>
+      <button class="ft-btn outline sm" (click)="clearFilters()">
+        {{ 'common.actions.clear-filters' | translate }}
+      </button>
+    </div>
+  } @else {
+    <div class="ft-grid">
+      @for (p of filteredProviders(); track p.id) {
+        <div class="ft-card prov-card">
+          <button class="fav-btn" [class.on]="isFavorite(p)" (click)="toggleFavorite(p, $event)">
+            <mat-icon>{{ isFavorite(p) ? 'star' : 'star_border' }}</mat-icon>
+          </button>
+
+          <div class="prov-head">
+            <div class="prov-logo"><mat-icon>local_gas_station</mat-icon></div>
+            <div class="prov-id">
+              <h3>{{ p.name }}</h3>
+              <span class="prov-stars">
+                @for (star of stars; track star) {
+                  <mat-icon [class.filled]="star <= p.rating">star</mat-icon>
+                }
+                <span class="rating-num">{{ p.rating }}</span>
+              </span>
+            </div>
+          </div>
+
+          <p class="prov-desc">{{ p.description }}</p>
+
+          <div class="prov-fuels">
+            @for (f of providerFuelTypes(p); track f) {
+              <span class="fuel-chip" [class.compat]="myFuelTypes().has(f)">{{ fuelLabel(f) }}</span>
+            }
+          </div>
+
+          <div class="prov-metrics">
+            <div>
+              <strong>{{ providerProducts(p).length }}</strong>
+              <span>{{ 'catalog.products-label' | translate }}</span>
+            </div>
+            <div>
+              <strong>{{ money(fromPrice(p)) }}</strong>
+              <span>{{ 'catalog.from' | translate }}</span>
+            </div>
+          </div>
+
+          <div class="prov-foot">
+            <button class="view-btn" (click)="viewProvider(p)">
+              {{ 'common.actions.view' | translate }}
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Request panel overlay -->
+@if (panelProvider(); as provider) {
+  <div class="overlay" (click)="closePanel()">
+    <div class="panel" (click)="$event.stopPropagation()">
+      <div class="panel-head">
+        <div>
+          <h2>{{ 'catalog.request-title' | translate }}</h2>
+          <span class="panel-sub">{{ provider.name }}</span>
+        </div>
+        <button class="icon-x" (click)="closePanel()"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <div class="panel-body">
+        <label class="ft-label">{{ 'catalog.product' | translate }}</label>
+        <div class="product-list">
+          @for (pr of providerProducts(provider); track pr.id) {
+            <button
+              class="product-opt"
+              [class.active]="selectedProduct()?.id === pr.id"
+              (click)="selectProduct(pr)"
+            >
+              <span class="po-icon"><mat-icon>local_gas_station</mat-icon></span>
+              <div class="po-main">
+                <span class="po-name">{{ pr.name }}</span>
+                <span class="po-meta">
+                  <span class="po-fuel">{{ fuelLabel(pr.fuelType) }}</span>
+                  <span class="po-stock">{{ 'catalog.in-stock' | translate: { qty: num(pr.stock) } }}</span>
+                </span>
+              </div>
+              <span class="po-price">{{ money(pr.pricePerLiter) }}<small>/L</small></span>
+              <span class="po-check"><mat-icon>check_circle</mat-icon></span>
+            </button>
+          }
+        </div>
+
+        @if (selectedProduct(); as prod) {
+          <div class="form-grid">
+            <div class="ft-field">
+              <label class="ft-label">{{ 'common.labels.quantity' | translate }}</label>
+              <input class="ft-input" type="number" min="1" [value]="reqQty()" (input)="reqQty.set(+$any($event.target).value)" placeholder="e.g. 2000" />
+            </div>
+            <div class="ft-field">
+              <label class="ft-label">{{ 'common.labels.unit' | translate }}</label>
+              <select class="ft-select" [value]="reqUnit()" (change)="reqUnit.set($any($event.target).value)">
+                <option value="LITERS">{{ 'unit.liters' | translate }}</option>
+                <option value="GALLONS">{{ 'unit.gallons' | translate }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="ft-field">
+            <label class="ft-label">{{ 'catalog.deliver-into' | translate }}</label>
+            <select class="ft-select" [(ngModel)]="reqEquipmentId" (ngModelChange)="onEquipmentChange()">
+              <option [ngValue]="null">{{ 'catalog.none-manual' | translate }}</option>
+              @for (e of compatibleEquipment(); track e.id) {
+                <option [ngValue]="e.id">
+                  {{ e.name }} ({{ 'catalog.free' | translate: { qty: num(e.capacity - e.currentLevel) } }})
+                </option>
+              }
+            </select>
+            @if (compatibleEquipment().length === 0) {
+              <span class="ft-hint">{{ 'catalog.no-equipment-fuel' | translate: { fuel: fuelLabel(prod.fuelType) } }}</span>
+            }
+          </div>
+
+          <div class="form-grid">
+            <div class="ft-field">
+              <label class="ft-label">{{ 'common.labels.delivery-address' | translate }}</label>
+              <input class="ft-input" type="text" [(ngModel)]="reqAddress" [placeholder]="'common.labels.delivery-address' | translate" />
+            </div>
+            <div class="ft-field">
+              <label class="ft-label">{{ 'catalog.desired-date' | translate }}</label>
+              <input class="ft-input" type="date" [(ngModel)]="reqDate" />
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span>{{ 'catalog.estimated-total' | translate }}</span>
+            <strong>{{ money(totalAmount) }}</strong>
+          </div>
+
+          @if (validationError) {
+            <div class="ft-error panel-error"><mat-icon>error</mat-icon> {{ validationError }}</div>
+          }
+        }
+      </div>
+
+      <div class="panel-foot">
+        <button class="ft-btn outline" (click)="closePanel()">{{ 'common.actions.cancel' | translate }}</button>
+        <button class="ft-btn accent" [disabled]="!!validationError" (click)="submitRequest()">
+          {{ 'common.actions.submit-request' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
