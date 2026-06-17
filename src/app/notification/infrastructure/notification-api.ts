@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { BaseApi } from '../../shared/infrastructure/base-api';
-
 import { Notification } from '../domain/model/notification.entity';
 import { NotificationApiEndpoint } from './notification-api-endpoint';
 
@@ -15,9 +14,24 @@ export class NotificationApi extends BaseApi {
     this._notificationEndpoint = new NotificationApiEndpoint(http);
   }
 
-  // ── Consultas ────────────────────────────────────────────────────────────
   getNotificationsByUser(userId: string): Observable<Notification[]> {
     return this._notificationEndpoint.getNotificationsByUser(userId);
+  }
+
+  getBuyerNotifications(buyerCompanyId: number | string): Observable<Notification[]> {
+    return this._notificationEndpoint.getByBuyer(buyerCompanyId);
+  }
+
+  getProviderNotifications(providerId: number | string): Observable<Notification[]> {
+    return this._notificationEndpoint.getByProvider(providerId);
+  }
+
+  markAllReadForBuyer(buyerCompanyId: number | string): Observable<unknown> {
+    return this._notificationEndpoint.markAllReadBuyer(buyerCompanyId);
+  }
+
+  markAllReadForProvider(providerId: number | string): Observable<unknown> {
+    return this._notificationEndpoint.markAllReadProvider(providerId);
   }
 
   getUnreadNotificationsByUser(userId: string): Observable<Notification[]> {
@@ -32,7 +46,6 @@ export class NotificationApi extends BaseApi {
     return this._notificationEndpoint.getById(notificationId);
   }
 
-  // ── Comandos (sin clases Command: se usa Pick / Omit sobre la entidad) ───
   createNotification(
     request: Pick<Notification, 'userId' | 'orderId' | 'type' | 'message'>,
   ): Observable<Notification> {
@@ -47,11 +60,6 @@ export class NotificationApi extends BaseApi {
     return this._notificationEndpoint.updateReadState(notificationId, { isRead: false });
   }
 
-  /**
-   * Marca todas las notificaciones no leídas de un usuario como leídas.
-   * @remarks Se implementa como composición de getUnread + PATCH por cada
-   * notificación, ya que json-server (fake API) no soporta updates masivos.
-   */
   markAllAsReadForUser(userId: string): Observable<Notification[]> {
     return this._notificationEndpoint.getUnreadNotificationsByUser(userId).pipe(
       switchMap((unread) => {
