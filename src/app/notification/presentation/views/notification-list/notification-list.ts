@@ -1,137 +1,129 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NotificationStore } from '../../../application/notification.store';
 import { Notification } from '../../../domain/model/notification.entity';
+import { IamStore } from '../../../../iam/application/iam.store';
 
 @Component({
   selector: 'app-notification-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    MatBadgeModule,
-    MatCardModule,
-    MatDividerModule,
-    RouterModule,
-    TranslatePipe,
-  ],
+  imports: [CommonModule, MatIconModule, TranslatePipe],
   templateUrl: './notification-list.html',
   styleUrl: './notification-list.css',
 })
 export class NotificationList implements OnInit {
   protected readonly store = inject(NotificationStore);
-
-  // TODO: Reemplazar con userId real de IAM cuando se implemente
-  private readonly TEMP_USER_ID = 'u1';
+  private readonly iam = inject(IamStore);
+  private readonly router = inject(Router);
 
   protected filterMode: 'all' | 'unread' = 'all';
 
+  private get userId(): string {
+    return this.iam.userId() ?? 'u1';
+  }
+
   ngOnInit(): void {
-    this.store.loadNotificationsByUser(this.TEMP_USER_ID);
-  }
-
-  protected onShowAll(): void {
-    this.filterMode = 'all';
-    this.store.loadNotificationsByUser(this.TEMP_USER_ID);
-  }
-
-  protected onShowUnread(): void {
-    this.filterMode = 'unread';
-    this.store.loadUnreadNotificationsByUser(this.TEMP_USER_ID);
-  }
-
-  protected onRefresh(): void {
-    if (this.filterMode === 'unread') {
-      this.store.loadUnreadNotificationsByUser(this.TEMP_USER_ID);
+    // Load the notifications addressed to the current segment's recipient.
+    if (this.iam.isProvider()) {
+      this.store.loadForProvider(this.iam.currentProviderId() ?? 1);
     } else {
-      this.store.loadNotificationsByUser(this.TEMP_USER_ID);
+      this.store.loadForBuyer(this.iam.currentCompanyId() ?? 1);
     }
   }
 
-  protected onMarkAsRead(notification: Notification): void {
-    if (!notification.isRead) {
-      this.store.markAsRead(notification.id);
-    }
+  protected get visible(): Notification[] {
+    const list = this.store.notificationList();
+    return this.filterMode === 'unread' ? list.filter((n) => !n.isRead) : list;
   }
 
-  protected onMarkAsUnread(notification: Notification): void {
-    if (notification.isRead) {
-      this.store.markAsUnread(notification.id);
-    }
+  protected setFilter(mode: 'all' | 'unread'): void {
+    this.filterMode = mode;
   }
 
-  protected onToggleRead(notification: Notification): void {
-    if (notification.isRead) {
-      this.store.markAsUnread(notification.id);
+  protected markAllRead(): void {
+    if (this.iam.isProvider()) {
+      this.store.markAllReadForProvider(this.iam.currentProviderId() ?? 1);
     } else {
-      this.store.markAsRead(notification.id);
+      this.store.markAllReadForBuyer(this.iam.currentCompanyId() ?? 1);
     }
   }
 
-  protected onMarkAllAsRead(): void {
-    this.store.markAllAsRead(this.TEMP_USER_ID);
+  /** Marks read (no reload) and routes to the relevant context page. */
+  protected open(n: Notification): void {
+    if (!n.isRead) this.store.markAsRead(n.id);
+    this.router.navigate(this.targetFor(n));
   }
 
-  protected onDelete(notificationId: string): void {
-    this.store.deleteNotification(notificationId);
+  private targetFor(n: Notification): string[] {
+    const type = (n.type || '').toUpperCase();
+    const related = n.orderId || '';
+    if (this.iam.isProvider()) {
+      if (type === 'NEW_REQUEST' || type.includes('REQUEST')) return ['/ordering/pending'];
+      if (type.includes('STOCK') || type.includes('INVENTORY')) return ['/inventory/products'];
+      if (type.includes('VEHICLE') || type.includes('DRIVER') || type.includes('DELIVERY'))
+        return ['/fulfillment/vehicles'];
+      if (type.includes('PAYMENT') || type.includes('COLLECT')) return ['/ordering/collections'];
+      if (type.includes('REPORT')) return ['/reporting/provider'];
+      return ['/ordering/orders'];
+    }
+    // Buyer
+    if (type === 'REQUEST_PENDING' || type.includes('REQUEST')) return ['/ordering/my-requests'];
+    if (type === 'ORDER_REJECTED' || type.includes('REJECT'))
+      return ['/ordering/my-requests'];
+    if (type.includes('PAYMENT') || type.includes('INVOICE')) return ['/payment'];
+    if (type.includes('FUEL') || type.includes('EQUIPMENT') || type.includes('REFILL'))
+      return ['/equipment'];
+    if (type.includes('CATALOG') || type.includes('PROVIDER')) return ['/catalog'];
+    if (type.includes('REPORT')) return ['/reporting/buyer'];
+    if ((type.includes('ORDER') || type.includes('DELIVERY')) && related)
+      return ['/ordering/buyer-order', related];
+    if (type.includes('ORDER') || type.includes('DELIVERY')) return ['/ordering/my-orders'];
+    return ['/notification'];
   }
 
-  /**
-   * Determina el ícono Material a mostrar según el tipo de notificación.
-   * @remarks Usa los métodos de dominio de la entidad para clasificar.
-   */
-  protected getIconFor(notification: Notification): string {
-    if (notification.isOrderEvent()) return 'receipt_long';
-    if (notification.isPaymentEvent()) return 'payments';
-    if (notification.isDeliveryEvent()) return 'local_shipping';
+  protected iconFor(n: Notification): string {
+    const t = (n.type || '').toUpperCase();
+    if (t.includes('PAYMENT') || t.includes('INVOICE')) return 'payments';
+    if (t.includes('REQUEST')) return 'inbox';
+    if (t.includes('STOCK')) return 'inventory_2';
+    if (t.includes('DELIVERY') || t.includes('DISPATCH')) return 'local_shipping';
+    if (t.includes('FUEL') || t.includes('REFILL')) return 'local_gas_station';
+    if (t.includes('ORDER')) return 'receipt_long';
     return 'notifications';
   }
 
-  protected getTypeClass(type: string): string {
-    return type.toLowerCase().replace(/_/g, '-');
+  protected categoryClass(n: Notification): string {
+    const t = (n.type || '').toUpperCase();
+    if (t.includes('PAYMENT')) return 'cat-payment';
+    if (t.includes('REQUEST') || t.includes('ORDER')) return 'cat-order';
+    if (t.includes('STOCK') || t.includes('DELIVERY')) return 'cat-logistics';
+    return 'cat-default';
   }
 
-  protected getCategoryClass(notification: Notification): string {
-    if (notification.isOrderEvent()) return 'category-order';
-    if (notification.isPaymentEvent()) return 'category-payment';
-    if (notification.isDeliveryEvent()) return 'category-delivery';
-    return 'category-default';
-  }
-
-  /**
-   * Devuelve un texto relativo "hace X" para la fecha de creación.
-   */
   protected timeAgo(createdAt: string): string {
-    const created = new Date(createdAt).getTime();
-    const now = Date.now();
-    const diffMs = Math.max(0, now - created);
-    const diffMin = Math.floor(diffMs / 60000);
-    if (diffMin < 1) return 'hace unos segundos';
-    if (diffMin < 60) return `hace ${diffMin} min`;
-    const diffH = Math.floor(diffMin / 60);
-    if (diffH < 24) return `hace ${diffH} h`;
-    const diffD = Math.floor(diffH / 24);
-    if (diffD < 30) return `hace ${diffD} d`;
-    const diffMo = Math.floor(diffD / 30);
-    return `hace ${diffMo} mes${diffMo > 1 ? 'es' : ''}`;
+    const time = new Date(createdAt).getTime();
+    if (!createdAt || Number.isNaN(time)) return '';
+    const diffMin = Math.max(0, Math.floor((Date.now() - time) / 60000));
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const h = Math.floor(diffMin / 60);
+    if (h < 24) return `${h}h ago`;
+    const d = Math.floor(h / 24);
+    if (d < 30) return `${d}d ago`;
+    return `${Math.floor(d / 30)}mo ago`;
   }
 
-  protected trackById(_index: number, notification: Notification): string {
-    return notification.id;
+  protected title(n: Notification): string {
+    const explicit = (n as unknown as { title?: string }).title;
+    if (explicit) return explicit;
+    return (n.type || 'Notification')
+      .toLowerCase()
+      .split('_')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
   }
 }
 
