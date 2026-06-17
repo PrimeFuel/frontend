@@ -1,0 +1,10 @@
+.ft-kpi-grid.two {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  max-width: 640px;
+}
+.tabs {
+  margin-bottom: 1.25rem;
+}
+.ft-table-wrap {
+  overflow-x: auto;
+}
