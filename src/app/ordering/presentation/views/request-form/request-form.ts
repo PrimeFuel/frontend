@@ -97,10 +97,10 @@ export class RequestForm {
     } else {
       this.store.addRequest(request);
     }
-    this.router.navigate(['/ordering/request-list']).then();
+    this.router.navigate(['/ordering/my-requests']).then();
   }
 
   cancel() {
-    this.router.navigate(['/ordering/request-list']).then();
+    this.router.navigate(['/ordering/my-requests']).then();
   }
 }
