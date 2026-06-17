@@ -1,0 +1,116 @@
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.equipment.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.equipment.subtitle' | translate }}</p>
+    </div>
+    <button class="ft-btn accent" (click)="addEquipment()">
+      <mat-icon>add</mat-icon> {{ 'common.actions.add-equipment' | translate }}
+    </button>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="ft-kpi-grid">
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'equipment.kpi-total' | translate }}</span>
+        <span class="ft-kpi-icon blue"><mat-icon>engineering</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ store.equipmentList().length }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'equipment.kpi-refill' | translate }}</span>
+        <span class="ft-kpi-icon red"><mat-icon>warning</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ store.lowFuelEquipment().length }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'equipment.kpi-auto' | translate }}</span>
+        <span class="ft-kpi-icon green"><mat-icon>autorenew</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ store.autoRefillCount() }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'equipment.kpi-avg' | translate }}</span>
+        <span class="ft-kpi-icon amber"><mat-icon>water_drop</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ store.avgFuelLevel() }}%</span>
+    </div>
+  </div>
+
+  @if (store.equipmentList().length === 0) {
+    <div class="ft-empty">
+      <mat-icon>engineering</mat-icon>
+      <p>{{ 'equipment.empty' | translate }}</p>
+    </div>
+  } @else {
+    <div class="ft-grid">
+      @for (e of store.equipmentList(); track e.id) {
+        <div class="ft-card eq-card">
+          <div class="eq-head">
+            <div>
+              <h3 class="eq-name">{{ e.name }}</h3>
+              <span class="eq-type">{{ 'equipment-type.' + e.type.toLowerCase() | translate }}</span>
+            </div>
+            <span class="ft-badge {{ statusClass(e.status) }}">
+              {{ 'equipment-status.' + statusClass(e.status) | translate }}
+            </span>
+          </div>
+
+          <div class="eq-level">
+            <div class="ft-spread">
+              <span class="eq-level-label">{{ 'equipment.fuel-level' | translate }}</span>
+              <span class="eq-level-pct">{{ e.fillPercentage }}%</span>
+            </div>
+            <div class="ft-progress">
+              <span [class]="levelClass(e)" [style.width.%]="e.fillPercentage"></span>
+            </div>
+            <div class="ft-spread eq-level-meta">
+              <span>{{ num(e.currentLevel) }} / {{ num(e.capacity) }} L</span>
+              <span>{{ 'equipment.free' | translate: { qty: num(e.remainingCapacity) } }}</span>
+            </div>
+          </div>
+
+          <div class="eq-meta">
+            <div><mat-icon>local_gas_station</mat-icon> {{ fuelLabel(e.requiredFuelType) }}</div>
+            <div><mat-icon>place</mat-icon> {{ e.location }}</div>
+            <div><mat-icon>star</mat-icon> {{ providerName(e.favoriteProviderId) }}</div>
+            <div>
+              <mat-icon>autorenew</mat-icon>
+              @if (e.autoRefill) {
+                {{ 'equipment.auto-on' | translate: { pct: e.refillThreshold } }}
+              } @else {
+                {{ 'equipment.auto-off' | translate }}
+              }
+            </div>
+          </div>
+
+          @if (e.isLowFuel) {
+            <div class="eq-alert">
+              <mat-icon>error</mat-icon> {{ 'equipment.low-fuel-alert' | translate }}
+            </div>
+          }
+
+          <div class="eq-actions">
+            <button class="ft-btn accent sm" [disabled]="refilling() === e.id" (click)="requestRefill(e)">
+              <mat-icon>local_shipping</mat-icon> {{ 'common.actions.request-refill' | translate }}
+            </button>
+            <button class="ft-btn outline sm" (click)="editEquipment(e)">
+              <mat-icon>edit</mat-icon> {{ 'common.actions.edit' | translate }}
+            </button>
+            <button
+              class="ft-btn ghost sm"
+              (click)="deleteEquipment(e)"
+              [title]="'common.actions.delete' | translate"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
