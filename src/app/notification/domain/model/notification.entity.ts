@@ -4,9 +4,7 @@ export class Notification implements BaseEntity {
   id: string;
   userId: string;
   orderId: string | null;
-  type: string; // ORDER_CREATED, ORDER_APPROVED, ORDER_REJECTED, ORDER_DISPATCHED,
-                // ORDER_DELIVERED, ORDER_CLOSED, PAYMENT_REGISTERED, PAYMENT_APPROVED,
-                // DELIVERY_ASSIGNED, DELIVERY_IN_TRANSIT
+  type: string;
   message: string;
   isRead: boolean;
   createdAt: string;
@@ -29,23 +27,9 @@ export class Notification implements BaseEntity {
     this.createdAt = params.createdAt;
   }
 
-  markAsRead(): void {
-    this.isRead = true;
-  }
-
-  markAsUnread(): void {
-    this.isRead = false;
-  }
-
-  isOrderEvent(): boolean {
-    return this.type.startsWith('ORDER_');
-  }
-
-  isPaymentEvent(): boolean {
-    return this.type.startsWith('PAYMENT_');
-  }
-
-  isDeliveryEvent(): boolean {
-    return this.type.startsWith('DELIVERY_');
-  }
+  markAsRead(): void { this.isRead = true; }
+  markAsUnread(): void { this.isRead = false; }
+  isOrderEvent(): boolean { return this.type.startsWith('ORDER_'); }
+  isPaymentEvent(): boolean { return this.type.startsWith('PAYMENT_'); }
+  isDeliveryEvent(): boolean { return this.type.startsWith('DELIVERY_'); }
 }

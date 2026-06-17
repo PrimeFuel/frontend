@@ -6,7 +6,7 @@
       "orderId": "ord-1",
       "type": "ORDER_CREATED",
       "message": "Tu solicitud fue aprobada y se generó la orden ord-1 por 3000 L de Diesel B5.",
-      "isRead": true,
+      "isRead": false,
       "createdAt": "2026-05-13T09:05:00.000Z"
     },
     {
@@ -15,7 +15,7 @@
       "orderId": "ord-2",
       "type": "ORDER_DISPATCHED",
       "message": "La orden ord-2 fue despachada. El transporte está en camino a la dirección de entrega.",
-      "isRead": true,
+      "isRead": false,
       "createdAt": "2026-05-13T07:30:00.000Z"
     },
     {
@@ -24,7 +24,7 @@
       "orderId": "ord-3",
       "type": "ORDER_DELIVERED",
       "message": "La orden ord-3 fue entregada correctamente en Terminal Logístico Sur, Pisco.",
-      "isRead": true,
+      "isRead": false,
       "createdAt": "2026-05-12T14:30:00.000Z"
     },
     {
@@ -33,7 +33,7 @@
       "orderId": "ord-1",
       "type": "PAYMENT_REGISTERED",
       "message": "Se registró un comprobante de pago por S/ 42,600.00 vinculado a la orden ord-1.",
-      "isRead": true,
+      "isRead": false,
       "createdAt": "2026-05-13T10:15:00.000Z"
     },
     {
