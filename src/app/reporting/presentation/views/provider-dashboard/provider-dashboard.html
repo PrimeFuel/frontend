@@ -1,0 +1,101 @@
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.provider-dashboard.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.provider-dashboard.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="ft-kpi-grid">
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'dashboard-ui.fuel-active' | translate }}</span>
+        <button class="unit-toggle" (click)="toggleUnit()">
+          {{ fuelUnit() === 'LITERS' ? 'L' : 'gal' }} <mat-icon>swap_horiz</mat-icon>
+        </button>
+      </div>
+      <span class="ft-kpi-value">{{ fuelInActiveDisplay() }}</span>
+    </div>
+
+    <div class="ft-kpi clickable" (click)="go('/ordering/orders')">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'dashboard-ui.active-orders' | translate }}</span>
+        <span class="ft-kpi-icon blue"><mat-icon>local_shipping</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ activeOrders().length }}</span>
+    </div>
+
+    <div class="ft-kpi clickable" (click)="go('/ordering/pending')">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'dashboard-ui.pending-requests' | translate }}</span>
+        <span class="ft-kpi-icon amber"><mat-icon>inbox</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ pendingRequests().length }}</span>
+    </div>
+
+    <div class="ft-kpi clickable" (click)="go('/ordering/collections')">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'dashboard-ui.to-collect' | translate }}</span>
+        <span class="ft-kpi-icon green"><mat-icon>account_balance_wallet</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ money(toCollect()) }}</span>
+    </div>
+  </div>
+
+  <div class="ft-card">
+    <div class="ft-spread">
+      <h2 class="ft-card-title">{{ 'dashboard-ui.sales-trend' | translate }}</h2>
+      <div class="ft-seg">
+        <button [class.active]="salesPeriod() === 'daily'" (click)="salesPeriod.set('daily')">
+          {{ 'dashboard-ui.daily' | translate }}
+        </button>
+        <button [class.active]="salesPeriod() === 'weekly'" (click)="salesPeriod.set('weekly')">
+          {{ 'dashboard-ui.weekly' | translate }}
+        </button>
+        <button [class.active]="salesPeriod() === 'monthly'" (click)="salesPeriod.set('monthly')">
+          {{ 'dashboard-ui.monthly-btn' | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="ft-chart" style="height: 260px"><app-chart [config]="salesTrend()"></app-chart></div>
+  </div>
+
+  <div class="ft-card active-card">
+    <div class="ft-spread">
+      <h2 class="ft-card-title">{{ 'dashboard-ui.active-orders-title' | translate }}</h2>
+      <button class="ft-btn ghost sm" (click)="go('/ordering/orders')">
+        {{ 'common.actions.view-all' | translate }}
+      </button>
+    </div>
+    @if (topActiveOrders().length === 0) {
+      <div class="ft-empty"><mat-icon>inbox</mat-icon><p>{{ 'dashboard-ui.no-active-orders' | translate }}</p></div>
+    } @else {
+      <table class="ft-table">
+        <thead>
+          <tr>
+            <th>{{ 'order-list.id' | translate }}</th>
+            <th>{{ 'common.labels.destination' | translate }}</th>
+            <th class="num">{{ 'common.labels.volume' | translate }}</th>
+            <th>{{ 'common.labels.eta' | translate }}</th>
+            <th>{{ 'common.labels.status' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of topActiveOrders(); track order.id) {
+            <tr (click)="openOrder(order)" class="clickable-row">
+              <td><strong>{{ order.id }}</strong></td>
+              <td>{{ order.deliveryAddress }}</td>
+              <td class="num">{{ num(order.quantity) }} {{ order.unit === 'GALLONS' ? 'gal' : 'L' }}</td>
+              <td>{{ eta(order) }}</td>
+              <td>
+                <span class="ft-badge {{ statusClass(order.status) }}">
+                  {{ 'order-status.' + statusClass(order.status) | translate }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
