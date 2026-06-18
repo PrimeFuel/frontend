@@ -1,77 +1,71 @@
-import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
+import { Driver } from '../../../domain/model/driver.entity';
+import { IamStore } from '../../../../iam/application/iam.store';
 
-/**
- * @summary Vista de lista de conductores.
- * @remarks Muestra conductores autorizados del proveedor con filtros por estado.
- * @author FullTank Platform
- */
 @Component({
   selector: 'app-driver-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    RouterModule,
-    TranslatePipe,
-  ],
+  imports: [CommonModule, MatIconModule, MatSnackBarModule, TranslatePipe],
   templateUrl: './driver-list.html',
   styleUrl: './driver-list.css',
 })
 export class DriverList implements OnInit {
   protected readonly store = inject(FulfillmentStore);
+  private readonly iam = inject(IamStore);
+  private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
-  // TODO: Reemplazar con providerId real de IAM cuando se implemente
-  private readonly TEMP_PROVIDER_ID = '1';
+  readonly availableOnly = signal(false);
 
-  protected readonly displayedColumns: string[] = [
-    'fullName',
-    'licenseNumber',
-    'phoneNumber',
-    'email',
-    'status',
-    'actions',
-  ];
+  private get providerId(): string {
+    return String(this.iam.currentProviderId() ?? 1);
+  }
+
+  readonly filteredDrivers = computed(() => {
+    const list = this.store.driverList();
+    return this.availableOnly() ? list.filter((d) => d.status === 'AVAILABLE') : list;
+  });
+
+  fullName(d: Driver): string {
+    return `${d.firstName} ${d.lastName}`;
+  }
 
   ngOnInit(): void {
-    this.store.loadDriversByProvider(this.TEMP_PROVIDER_ID);
+    this.store.loadDriversByProvider(this.providerId);
   }
 
-  protected onRefresh(): void {
-    this.store.loadDriversByProvider(this.TEMP_PROVIDER_ID);
+  refresh(): void {
+    this.store.loadDriversByProvider(this.providerId);
   }
 
-  protected onShowAvailable(): void {
-    this.store.loadAvailableDrivers(this.TEMP_PROVIDER_ID);
+  add(): void {
+    this.router.navigate(['/fulfillment/drivers/new']);
   }
 
-  protected onShowAll(): void {
-    this.store.loadDriversByProvider(this.TEMP_PROVIDER_ID);
+  edit(d: Driver): void {
+    this.router.navigate(['/fulfillment/drivers', d.id, 'edit']);
   }
 
-  protected onDelete(driverId: string): void {
-    this.store.deleteDriver(driverId);
+  remove(d: Driver): void {
+    if (confirm(this.translate.instant('messages.delete-driver', { name: this.fullName(d) }))) {
+      this.store.deleteDriver(d.id);
+      this.snackBar.open(
+        this.translate.instant('messages.driver-removed'),
+        this.translate.instant('messages.ok'),
+        { duration: 2500 },
+      );
+    }
   }
 
-  protected getStatusClass(status: string): string {
-    return status.toLowerCase().replace(/_/g, '-');
-  }
-
-  protected getFullName(firstName: string, lastName: string): string {
-    return `${firstName} ${lastName}`;
+  statusClass(status: string): string {
+    return (status || '').toLowerCase();
   }
 }
+

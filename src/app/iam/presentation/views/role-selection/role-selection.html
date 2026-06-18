@@ -1,0 +1,75 @@
+<div class="iam-screen">
+  <section class="iam-card">
+    <div class="iam-brand">
+      <img src="/fulltank-logo.png" alt="FullTank" class="iam-logo" />
+      <div>
+        <h1 class="iam-title">FullTank</h1>
+        <p class="iam-subtitle">Acceso para empresas compradoras y proveedoras</p>
+      </div>
+    </div>
+
+    <div class="mode-tabs" role="tablist">
+      <button type="button" [class.active]="mode() === 'login'" (click)="setMode('login')">
+        Iniciar sesion
+      </button>
+      <button type="button" [class.active]="mode() === 'register'" (click)="setMode('register')">
+        Registrarse
+      </button>
+    </div>
+
+    @if (mode() === 'register') {
+      <div class="segments">
+        <button type="button" class="segment" [class.active]="selectedRole() === 'BUYER'" (click)="pickRole('BUYER')">
+          <mat-icon>apartment</mat-icon>
+          <span>Comprador</span>
+        </button>
+        <button type="button" class="segment" [class.active]="selectedRole() === 'PROVIDER'" (click)="pickRole('PROVIDER')">
+          <mat-icon>local_shipping</mat-icon>
+          <span>Proveedor</span>
+        </button>
+      </div>
+
+      <label>
+        Nombre de la empresa
+        <input class="ft-input" name="companyName" [(ngModel)]="form.companyName" autocomplete="organization" />
+      </label>
+      <label>
+        RUC
+        <input class="ft-input" name="ruc" [(ngModel)]="form.ruc" inputmode="numeric" autocomplete="off" />
+      </label>
+      <label>
+        Telefono
+        <input class="ft-input" name="phone" [(ngModel)]="form.phone" inputmode="tel" autocomplete="tel" />
+      </label>
+
+      @if (isProvider()) {
+        <label>
+          Ubicacion de la empresa
+          <input class="ft-input" name="address" [(ngModel)]="form.address" autocomplete="street-address" placeholder="Ej. Av. Industrial 123, Lima" />
+        </label>
+        <label>
+          Descripcion de la empresa
+          <textarea class="ft-input ft-textarea" name="description" [(ngModel)]="form.description" rows="3" placeholder="Cuentanos sobre tu empresa; se mostrara en tu ficha del catalogo."></textarea>
+        </label>
+      }
+    }
+
+    <label>
+      Correo
+      <input class="ft-input" name="email" [(ngModel)]="form.email" type="email" autocomplete="email" />
+    </label>
+    <label>
+      Contrasena
+      <input class="ft-input" name="password" [(ngModel)]="form.password" type="password" autocomplete="current-password" />
+    </label>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <button class="ft-btn primary block iam-continue" [disabled]="!canSubmit() || loading()" (click)="submit()">
+      {{ loading() ? 'Procesando...' : mode() === 'login' ? 'Entrar' : 'Crear cuenta' }}
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </section>
+</div>

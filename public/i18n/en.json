@@ -4,7 +4,6 @@
     "inventory": "Inventory",
     "ordering": "Orders",
     "fulfillment": "Fulfillment",
-    "payment": "Payment",
     "notifications": "Notifications",
     "reports": "Reports"
   },
@@ -24,17 +23,15 @@
     "drivers": "Drivers",
     "dispatch": "Dispatch"
   },
-  "payment": {
-    "transactions": "Transactions",
-    "process": "Process Payment"
-  },
   "reporting": {
     "supplier-dashboard": "General Report",
     "client-portfolio": "Your Clients Reports"
   },
   "home": {
     "title": "FullTank Platform",
-    "content": "Fuel ordering and logistics management system for businesses"
+    "content": "Fuel ordering and logistics management system for businesses",
+    "buyers-btn": "I'm a Buyer",
+    "suppliers-btn": "I'm a Supplier"
   },
   "about": {
     "title": "About FullTank",
@@ -269,5 +266,118 @@
     "in_transit": "In Transit",
     "delivered": "Delivered",
     "cancelled": "Cancelled"
+  },
+  "request-list": {
+    "title": "Fuel Requests",
+    "id": "ID",
+    "product": "Product",
+    "quantity": "Quantity",
+    "delivery-date": "Desired Delivery",
+    "status": "Status",
+    "actions": "Actions",
+    "approve": "Approve",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "new": "New Request",
+    "reject-title": "Reject Request",
+    "reject-reason": "Rejection Reason",
+    "reject-placeholder": "Explain why this request is being rejected",
+    "reject-cancel": "Cancel",
+    "reject-confirm": "Confirm Reject"
+  },
+  "request-form": {
+    "create-title": "New Fuel Request",
+    "edit-title": "Edit Fuel Request",
+    "client-id": "Client ID",
+    "provider-id": "Provider ID",
+    "product-id": "Product ID",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "delivery-date": "Desired Delivery Date",
+    "delivery-address": "Delivery Address",
+    "create": "Create Request",
+    "update": "Update Request",
+    "cancel": "Cancel",
+    "required": "This field is required"
+  },
+  "order-list": {
+    "title": "Orders",
+    "id": "ID",
+    "request": "Request",
+    "quantity": "Quantity",
+    "total": "Total",
+    "status": "Status",
+    "actions": "Actions",
+    "view": "View Details",
+    "delete": "Delete"
+  },
+  "order-detail": {
+    "title": "Order Detail",
+    "back": "Back to Orders",
+    "request-id": "Request ID",
+    "client": "Client",
+    "provider": "Provider",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total Amount",
+    "address": "Delivery Address",
+    "created-at": "Created",
+    "dispatched-at": "Dispatched",
+    "delivered-at": "Delivered",
+    "closed-at": "Closed",
+    "dispatch": "Dispatch Order",
+    "confirm-delivery": "Confirm Delivery",
+    "close": "Close Order",
+    "not-found": "Order not found"
+  },
+  "request-status": {
+    "pending_approval": "Pending Approval",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "cancelled": "Cancelled"
+  },
+  "order-status": {
+    "created": "Created",
+    "dispatched": "Dispatched",
+    "delivered": "Delivered",
+    "closed": "Closed",
+    "cancelled": "Cancelled"
+  },
+  "notification": {
+    "title": "Notifications",
+    "panel": "Notifications panel",
+    "unread-count": "Unread"
+  },
+  "notification-list": {
+    "title": "Notifications",
+    "subtitle": "Stay on top of relevant events for your orders, payments and deliveries",
+    "show-all": "Show All",
+    "show-unread": "Unread Only",
+    "mark-all-read": "Mark All as Read",
+    "mark-read-tooltip": "Mark as Read",
+    "mark-unread-tooltip": "Mark as Unread",
+    "delete-tooltip": "Delete Notification",
+    "empty": "You have no notifications",
+    "fields": {
+      "order": "Order",
+      "type": "Type",
+      "message": "Message",
+      "status": "Status",
+      "created-at": "Date"
+    }
+  },
+  "notification-type": {
+    "order_created": "Order Created",
+    "order_approved": "Order Approved",
+    "order_rejected": "Order Rejected",
+    "order_dispatched": "Order Dispatched",
+    "order_delivered": "Order Delivered",
+    "order_closed": "Order Closed",
+    "payment_registered": "Payment Registered",
+    "payment_approved": "Payment Approved",
+    "delivery_assigned": "Delivery Assigned",
+    "delivery_in_transit": "Delivery in Transit"
   }
+
 }
