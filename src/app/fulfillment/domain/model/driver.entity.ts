@@ -39,3 +39,4 @@ export class Driver implements BaseEntity {
     this.createdAt = params.createdAt;
   }
 }
+

@@ -1,0 +1,58 @@
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.request-list.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.request-list.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'ordering-ui.loading-requests' | translate }}</p></div>
+  } @else if (pendingRequests().length === 0) {
+    <div class="ft-empty"><mat-icon>inbox</mat-icon><p>{{ 'ordering-ui.no-pending-requests' | translate }}</p></div>
+  } @else {
+    <div class="req-list">
+      @for (r of pendingRequests(); track r.id) {
+        <div class="ft-card req-card">
+          <div class="req-num">#{{ r.id }}</div>
+          <div class="req-info">
+            <div class="req-buyer">{{ buyerName(r) }}</div>
+            <div class="req-fuel">{{ fuelLabel(r.fuelType) }}</div>
+            <div class="req-grid">
+              <div>
+                <span>{{ 'common.labels.quantity' | translate }}</span>
+                <strong>{{ num(r.quantity) }} {{ r.unit === 'GALLONS' ? 'gal' : 'L' }}</strong>
+              </div>
+              <div>
+                <span>{{ 'common.labels.delivery-address' | translate }}</span>
+                <strong>{{ r.deliveryAddress }}</strong>
+              </div>
+              <div>
+                <span>{{ 'common.labels.delivery-date' | translate }}</span>
+                <strong>{{ formatDate(r.desiredDeliveryDate) }}</strong>
+              </div>
+              <div>
+                <span>{{ 'common.labels.source' | translate }}</span>
+                <strong>{{ r.source || 'Manual' }}</strong>
+              </div>
+              @if (r.unitPrice) {
+                <div>
+                  <span>{{ 'ordering-ui.est-total' | translate }}</span>
+                  <strong>{{ money(r.quantity * r.unitPrice) }}</strong>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="req-actions">
+            <button class="ft-btn success" [disabled]="busy() === r.id" (click)="accept(r)">
+              <mat-icon>check</mat-icon> {{ 'common.actions.accept' | translate }}
+            </button>
+            <button class="ft-btn danger" [disabled]="busy() === r.id" (click)="reject(r)">
+              <mat-icon>close</mat-icon> {{ 'common.actions.reject' | translate }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

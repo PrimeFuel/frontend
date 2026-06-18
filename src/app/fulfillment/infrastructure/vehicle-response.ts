@@ -8,13 +8,15 @@ import { BaseResource, BaseResponse } from '../../shared/infrastructure/base-res
 export interface VehicleResource extends BaseResource {
   id: string;
   providerId: string;
-  licensePlate: string;
+  // Backend uses `plate`; licensePlate is the frontend alias.
+  plate?: string;
+  licensePlate?: string;
   model: string;
   brand: string;
   capacity: number;
   unit: string;
   status: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface VehiclesResponse extends BaseResponse {

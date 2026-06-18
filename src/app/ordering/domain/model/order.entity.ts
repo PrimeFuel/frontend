@@ -1,0 +1,81 @@
+import { BaseEntity } from '../../../shared/domain/model/base-entity';
+
+export class Order implements BaseEntity {
+  id: string;
+  requestId: string;
+  clientId: string;
+  companyId: number | null;
+  providerId: string;
+  productId: string;
+  fuelType: string;
+  productName: string;
+  quantity: number;
+  unit: string;
+  unitPrice: number;
+  totalAmount: number;
+  equipmentId: number | string | null;
+  driverId: string | null;
+  vehicleId: string | null;
+  deliveryAddress: string;
+  estimatedDeliveryDate: string | null;
+  status: string;
+  paymentStatus: string | null;
+  dispatchedAt: string | null;
+  deliveredAt: string | null;
+  closedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+
+  constructor(props: {
+    id?: string | number | null;
+    requestId?: string | number | null;
+    clientId?: string | number | null;
+    companyId?: number | null;
+    providerId?: string | number | null;
+    productId?: string | number | null;
+    fuelType?: string | null;
+    productName?: string | null;
+    quantity?: number | null;
+    unit?: string | null;
+    unitPrice?: number | null;
+    totalAmount?: number | null;
+    equipmentId?: number | string | null;
+    driverId?: string | number | null;
+    vehicleId?: string | number | null;
+    deliveryAddress?: string | null;
+    estimatedDeliveryDate?: string | null;
+    status?: string | null;
+    paymentStatus?: string | null;
+    dispatchedAt?: string | null;
+    deliveredAt?: string | null;
+    closedAt?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+  } = {}) {
+    const now = new Date().toISOString();
+    this.id = props.id == null ? '' : String(props.id);
+    this.requestId = props.requestId == null ? this.id : String(props.requestId);
+    this.companyId = props.companyId ?? (props.clientId == null ? null : Number(props.clientId));
+    this.clientId = props.clientId == null ? (this.companyId == null ? '' : String(this.companyId)) : String(props.clientId);
+    this.providerId = props.providerId == null ? '' : String(props.providerId);
+    this.productId = props.productId == null ? '' : String(props.productId);
+    this.fuelType = props.fuelType ?? '';
+    this.productName = props.productName ?? '';
+    this.quantity = Number(props.quantity ?? 0);
+    this.unit = props.unit ?? 'LITERS';
+    this.unitPrice = Number(props.unitPrice ?? 0);
+    this.totalAmount = Number(props.totalAmount ?? (this.quantity * this.unitPrice));
+    this.equipmentId = props.equipmentId ?? null;
+    this.driverId = props.driverId == null ? null : String(props.driverId);
+    this.vehicleId = props.vehicleId == null ? null : String(props.vehicleId);
+    this.deliveryAddress = props.deliveryAddress ?? '';
+    this.estimatedDeliveryDate = props.estimatedDeliveryDate ?? null;
+    this.status = props.status ?? 'CREATED';
+    this.paymentStatus = props.paymentStatus ?? null;
+    this.dispatchedAt = props.dispatchedAt ?? null;
+    this.deliveredAt = props.deliveredAt ?? null;
+    this.closedAt = props.closedAt ?? null;
+    this.createdAt = props.createdAt ?? now;
+    this.updatedAt = props.updatedAt ?? this.createdAt;
+  }
+}

@@ -1,0 +1,39 @@
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.notifications.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.notifications.subtitle' | translate }}</p>
+    </div>
+    <div class="ft-row">
+      <div class="ft-seg">
+        <button [class.active]="filterMode === 'all'" (click)="setFilter('all')">{{ 'notification-ui.all' | translate }}</button>
+        <button [class.active]="filterMode === 'unread'" (click)="setFilter('unread')">{{ 'notification-ui.unread' | translate }}</button>
+      </div>
+      <button class="ft-btn outline sm" (click)="markAllRead()">
+        <mat-icon>done_all</mat-icon> {{ 'common.actions.mark-all-read' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (visible.length === 0) {
+    <div class="ft-empty"><mat-icon>notifications_none</mat-icon><p>{{ 'notification-ui.empty' | translate }}</p></div>
+  } @else {
+    <div class="notif-list">
+      @for (n of visible; track n.id) {
+        <div class="notif" [class.unread]="!n.isRead" (click)="open(n)">
+          <span class="notif-icon {{ categoryClass(n) }}"><mat-icon>{{ iconFor(n) }}</mat-icon></span>
+          <div class="notif-body">
+            <div class="notif-top">
+              <span class="notif-title">{{ title(n) }}</span>
+              <span class="notif-time">{{ timeAgo(n.createdAt) }}</span>
+            </div>
+            <p class="notif-msg">{{ n.message }}</p>
+          </div>
+          @if (!n.isRead) {
+            <span class="unread-dot"></span>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

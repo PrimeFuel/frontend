@@ -1,117 +1,68 @@
-<div class="driver-form-container">
-  <header class="page-header">
-    <div class="header-content">
-      <h1>{{ 'driver-form.title' | translate }}</h1>
-      <p>{{ 'driver-form.subtitle' | translate }}</p>
+<div class="ft-page narrow">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'driver-form.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'driver-form.subtitle' | translate }}</p>
     </div>
-  </header>
+  </div>
 
-  @if (store.error()) {
-    <div class="error-container">
-      <mat-icon>error_outline</mat-icon>
-      <p>{{ store.error() }}</p>
+  <form class="ft-card" [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <div class="ft-field">
+        <label class="ft-label">{{ 'driver-form.fields.first-name' | translate }}</label>
+        <input class="ft-input" formControlName="firstName" [placeholder]="'driver-form.placeholders.first-name' | translate" />
+        @if (driverForm.get('firstName')?.touched && driverForm.get('firstName')?.invalid) {
+          <span class="ft-error">{{ getErrorMessage('firstName') }}</span>
+        }
+      </div>
+      <div class="ft-field">
+        <label class="ft-label">{{ 'driver-form.fields.last-name' | translate }}</label>
+        <input class="ft-input" formControlName="lastName" [placeholder]="'driver-form.placeholders.last-name' | translate" />
+        @if (driverForm.get('lastName')?.touched && driverForm.get('lastName')?.invalid) {
+          <span class="ft-error">{{ getErrorMessage('lastName') }}</span>
+        }
+      </div>
     </div>
-  }
 
-  @if (store.successMsg()) {
-    <div class="success-container">
-      <mat-icon>check_circle</mat-icon>
-      <p>{{ store.successMsg() }}</p>
+    <div class="ft-field">
+      <label class="ft-label">{{ 'driver-form.fields.license-number' | translate }}</label>
+      <input class="ft-input" formControlName="licenseNumber" [placeholder]="'driver-form.placeholders.license-number' | translate" />
+      @if (driverForm.get('licenseNumber')?.touched && driverForm.get('licenseNumber')?.invalid) {
+        <span class="ft-error">{{ getErrorMessage('licenseNumber') }}</span>
+      }
     </div>
-  }
 
-  <mat-card class="form-card">
-    <mat-card-content>
-      <form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
-        <!-- First Name and Last Name Row -->
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'driver-form.fields.first-name' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="firstName"
-              [placeholder]="'driver-form.placeholders.first-name' | translate"
-            />
-            <mat-icon matPrefix>person</mat-icon>
-            @if (driverForm.get('firstName')?.invalid && driverForm.get('firstName')?.touched) {
-              <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'driver-form.fields.last-name' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="lastName"
-              [placeholder]="'driver-form.placeholders.last-name' | translate"
-            />
-            <mat-icon matPrefix>person</mat-icon>
-            @if (driverForm.get('lastName')?.invalid && driverForm.get('lastName')?.touched) {
-              <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <!-- License Number Field -->
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'driver-form.fields.license-number' | translate }}</mat-label>
-          <input
-            matInput
-            formControlName="licenseNumber"
-            [placeholder]="'driver-form.placeholders.license-number' | translate"
-          />
-          <mat-icon matPrefix>badge</mat-icon>
-          @if (driverForm.get('licenseNumber')?.invalid && driverForm.get('licenseNumber')?.touched) {
-            <mat-error>{{ getErrorMessage('licenseNumber') }}</mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Phone and Email Row -->
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'driver-form.fields.phone' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="phoneNumber"
-              [placeholder]="'driver-form.placeholders.phone' | translate"
-            />
-            <mat-icon matPrefix>phone</mat-icon>
-            @if (driverForm.get('phoneNumber')?.invalid && driverForm.get('phoneNumber')?.touched) {
-              <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'driver-form.fields.email' | translate }}</mat-label>
-            <input
-              matInput
-              type="email"
-              formControlName="email"
-              [placeholder]="'driver-form.placeholders.email' | translate"
-            />
-            <mat-icon matPrefix>email</mat-icon>
-            @if (driverForm.get('email')?.invalid && driverForm.get('email')?.touched) {
-              <mat-error>{{ getErrorMessage('email') }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <!-- Form Actions -->
-        <div class="form-actions">
-          <button mat-button type="button" (click)="onCancel()" [disabled]="store.isLoading()">
-            <mat-icon>cancel</mat-icon>
-            {{ 'driver-form.cancel' | translate }}
-          </button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="store.isLoading()">
-            @if (store.isLoading()) {
-              <mat-spinner diameter="20"></mat-spinner>
-            } @else {
-              <mat-icon>save</mat-icon>
-            }
-            {{ 'driver-form.register' | translate }}
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+    <div class="form-grid">
+      <div class="ft-field">
+        <label class="ft-label">{{ 'driver-form.fields.phone' | translate }}</label>
+        <input class="ft-input" formControlName="phoneNumber" [placeholder]="'driver-form.placeholders.phone' | translate" />
+        @if (driverForm.get('phoneNumber')?.touched && driverForm.get('phoneNumber')?.invalid) {
+          <span class="ft-error">{{ getErrorMessage('phoneNumber') }}</span>
+        }
+      </div>
+      <div class="ft-field">
+        <label class="ft-label">{{ 'driver-form.fields.email' | translate }}</label>
+        <input class="ft-input" type="email" formControlName="email" [placeholder]="'driver-form.placeholders.email' | translate" />
+        @if (driverForm.get('email')?.touched && driverForm.get('email')?.invalid) {
+          <span class="ft-error">{{ getErrorMessage('email') }}</span>
+        }
+      </div>
+    </div>
+    <div class="ft-field">
+      <label class="ft-label">{{ 'driver-list.fields.status' | translate }}</label>
+      <select class="ft-select" formControlName="status">
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ 'driver-status.' + s.toLowerCase() | translate }}</option>
+        }
+      </select>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="ft-btn outline" (click)="onCancel()">
+        {{ 'common.actions.cancel' | translate }}
+      </button>
+      <button type="submit" class="ft-btn accent" [disabled]="driverForm.invalid">
+        {{ (isEditMode ? 'common.actions.save' : 'driver-form.register') | translate }}
+      </button>
+    </div>
+  </form>
 </div>

@@ -15,16 +15,19 @@ export class DeliveryAssembler
   }
 
   toEntityFromResource(resource: DeliveryResource): Delivery {
+    const dispatchedAt = resource.dispatchedAt ?? null;
+    const deliveredAt = resource.deliveredAt ?? resource.actualDeliveryDate ?? null;
     return new Delivery({
-      id: resource.id,
-      orderId: resource.orderId,
-      vehicleId: resource.vehicleId,
-      driverId: resource.driverId,
+      id: String(resource.id),
+      orderId: String(resource.orderId),
+      providerId: String(resource.providerId),
+      vehicleId: resource.vehicleId ?? resource.vehiclePlate ?? '',
+      driverId: resource.driverId ?? resource.driverName ?? '',
       status: resource.status,
-      scheduledDate: resource.scheduledDate,
-      actualDeliveryDate: resource.actualDeliveryDate,
+      scheduledDate: resource.scheduledDate ?? '',
+      actualDeliveryDate: deliveredAt,
       notes: resource.notes,
-      createdAt: resource.createdAt,
+      createdAt: resource.createdAt ?? dispatchedAt ?? deliveredAt ?? '',
     });
   }
 
@@ -32,10 +35,12 @@ export class DeliveryAssembler
     return {
       id: entity.id,
       orderId: entity.orderId,
+      providerId: entity.providerId,
       vehicleId: entity.vehicleId,
       driverId: entity.driverId,
       status: entity.status,
       scheduledDate: entity.scheduledDate,
+      deliveredAt: entity.actualDeliveryDate,
       actualDeliveryDate: entity.actualDeliveryDate,
       notes: entity.notes,
       createdAt: entity.createdAt,

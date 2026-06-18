@@ -1,0 +1,62 @@
+.order-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ft-shadow-md);
+}
+.oc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.oc-code {
+  font-weight: 800;
+  color: var(--ft-text);
+  font-size: 1rem;
+}
+.oc-fuel {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ft-primary);
+}
+.oc-provider {
+  font-size: 0.85rem;
+  color: var(--ft-text-muted);
+  margin-top: -0.4rem;
+}
+.oc-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--ft-border-soft);
+  border-bottom: 1px solid var(--ft-border-soft);
+}
+.oc-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.oc-meta span {
+  font-size: 0.7rem;
+  color: var(--ft-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.oc-meta strong {
+  font-size: 0.92rem;
+  color: var(--ft-text);
+}
+.pay-pending {
+  color: var(--ft-warn);
+}
+.pay-paid {
+  color: var(--ft-success);
+}
