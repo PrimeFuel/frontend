@@ -16,22 +16,24 @@ export class VehicleAssembler
 
   toEntityFromResource(resource: VehicleResource): Vehicle {
     return new Vehicle({
-      id: resource.id,
-      providerId: resource.providerId,
-      licensePlate: resource.licensePlate,
+      id: String(resource.id),
+      providerId: String(resource.providerId),
+      licensePlate: resource.plate ?? resource.licensePlate ?? '',
       model: resource.model,
       brand: resource.brand,
       capacity: resource.capacity,
       unit: resource.unit,
       status: resource.status,
-      createdAt: resource.createdAt,
+      createdAt: resource.createdAt ?? '',
     });
   }
 
   toResourceFromEntity(entity: Vehicle): VehicleResource {
+    // Emit the backend shape (`plate`) for POST/PUT.
     return {
       id: entity.id,
       providerId: entity.providerId,
+      plate: entity.licensePlate,
       licensePlate: entity.licensePlate,
       model: entity.model,
       brand: entity.brand,

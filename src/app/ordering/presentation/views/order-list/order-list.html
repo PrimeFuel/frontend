@@ -1,61 +1,118 @@
-<h1 class="title">{{ 'order-list.title' | translate }}</h1>
-
-@if (store.loading()) {
-  <mat-spinner diameter="40"></mat-spinner>
-}
-@if (store.error()) {
-  <mat-error>{{ store.error() }}</mat-error>
-}
-
-<table mat-table [dataSource]="dataSource()" class="mat-elevation-z8" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'order-list.id' | translate }}</th>
-    <td mat-cell *matCellDef="let order" class="mono">{{ shortId(order.id) }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="requestId">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'order-list.request' | translate }}</th>
-    <td mat-cell *matCellDef="let order" class="mono">{{ shortId(order.requestId) }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="quantity">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'order-list.quantity' | translate }}</th>
-    <td mat-cell *matCellDef="let order">{{ order.quantity }} {{ order.unit }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="totalAmount">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'order-list.total' | translate }}</th>
-    <td mat-cell *matCellDef="let order">S/ {{ order.totalAmount | number:'1.2-2' }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'order-list.status' | translate }}</th>
-    <td mat-cell *matCellDef="let order">
-      <mat-chip-set>
-        <mat-chip [class]="statusClass(order.status)">
-          {{ 'order-status.' + order.status.toLowerCase() | translate }}
-        </mat-chip>
-      </mat-chip-set>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>{{ 'order-list.actions' | translate }}</th>
-    <td mat-cell *matCellDef="let order">
-      <button mat-icon-button color="primary"
-              [matTooltip]="'order-list.view' | translate"
-              (click)="viewOrder(order.id)">
-        <mat-icon>visibility</mat-icon>
+<div class="ft-page orders-page">
+  <div class="ft-page-header orders-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.order-list.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.order-list.subtitle' | translate }}</p>
+    </div>
+    <div class="orders-toolbar">
+      <div class="ft-seg compact-seg">
+        <button [class.active]="filter() === 'ALL'" (click)="filter.set('ALL')">{{ 'common.labels.all' | translate }}</button>
+        <button [class.active]="filter() === 'ACTIVE'" (click)="filter.set('ACTIVE')">{{ 'common.labels.active' | translate }}</button>
+        <button [class.active]="filter() === 'PAID'" (click)="filter.set('PAID')">{{ 'common.labels.paid' | translate }}</button>
+      </div>
+      <button class="refresh-btn" (click)="reload()" aria-label="Refresh orders">
+        <mat-icon>refresh</mat-icon>
       </button>
-      <button mat-icon-button
-              [matTooltip]="'order-list.delete' | translate"
-              (click)="deleteOrder(order.id)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+    </div>
+  </div>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-<mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+  @if (loading()) {
+    <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'ordering-ui.loading-orders' | translate }}</p></div>
+  } @else if (visibleOrders().length === 0) {
+    <div class="ft-empty"><mat-icon>receipt_long</mat-icon><p>{{ 'ordering-ui.no-orders-show' | translate }}</p></div>
+  } @else {
+    <div class="ord-list">
+      @for (o of visibleOrders(); track o.id) {
+        <article class="ord-card">
+          <div class="ord-main">
+            <div class="ord-identity">
+              <div class="ord-num">#{{ o.id }}</div>
+              <div class="ord-buyer">{{ buyerName(o) }}</div>
+              <div class="ord-fuel">{{ fuelLabel(o.fuelType) }}</div>
+            </div>
+
+            <div class="ord-metrics">
+              <div class="ord-metric">
+                <span>{{ 'common.labels.quantity' | translate }}</span>
+                <strong>{{ num(o.quantity) }} {{ o.unit === 'GALLONS' ? 'gal' : 'L' }}</strong>
+              </div>
+              <div class="ord-metric">
+                <span>{{ 'common.labels.total' | translate }}</span>
+                <strong>{{ money(o.totalAmount) }}</strong>
+              </div>
+              <div class="ord-metric address">
+                <span>{{ 'common.labels.delivery-address' | translate }}</span>
+                <strong>{{ o.deliveryAddress }}</strong>
+              </div>
+              <div class="ord-metric status">
+                <span>{{ 'common.labels.status' | translate }}</span>
+                <strong class="status-pill {{ statusClass(o.status) }}">
+                  {{ 'order-status.' + statusClass(o.status) | translate }}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="ord-actions">
+
+            <button class="action-btn detail" (click)="view(o)">
+              {{ 'common.actions.view-details' | translate }}
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>
+
+<!-- Dispatch assignment modal -->
+@if (dispatchOrderRow(); as o) {
+  <div class="ft-overlay" (click)="closeDispatch()">
+    <div class="dispatch-modal" (click)="$event.stopPropagation()">
+      <div class="pm-head">
+        <h2>{{ 'ordering-ui.dispatch-title' | translate: { id: o.id } }}</h2>
+        <button class="icon-x" (click)="closeDispatch()"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <p class="ft-muted disp-sub">
+        {{ num(o.quantity) }} {{ o.unit === 'GALLONS' ? 'gal' : 'L' }} Ã‚Â· {{ fuelLabel(o.fuelType) }}
+      </p>
+
+      <div class="ft-field">
+        <label class="ft-label">{{ 'ordering-ui.dispatch-driver' | translate }}</label>
+        @if (availableDrivers().length === 0) {
+          <div class="ft-error"><mat-icon>error</mat-icon> {{ 'ordering-ui.no-drivers' | translate }}</div>
+        } @else {
+          <select class="ft-select" [(ngModel)]="selectedDriverId">
+            @for (d of availableDrivers(); track d.id) {
+              <option [ngValue]="d.id">{{ d.firstName }} {{ d.lastName }} Ã‚Â· {{ d.licenseNumber }}</option>
+            }
+          </select>
+        }
+      </div>
+
+      <div class="ft-field">
+        <label class="ft-label">{{ 'ordering-ui.dispatch-vehicle' | translate }}</label>
+        @if (eligibleVehicles().length === 0) {
+          <div class="ft-error"><mat-icon>error</mat-icon> {{ 'ordering-ui.no-vehicles' | translate }}</div>
+        } @else {
+          <select class="ft-select" [(ngModel)]="selectedVehicleId">
+            @for (v of eligibleVehicles(); track v.id) {
+              <option [ngValue]="v.id">
+                {{ v.brand }} {{ v.model }} Ã‚Â· {{ v.licensePlate }} ({{ num(v.capacity) }} L)
+              </option>
+            }
+          </select>
+        }
+      </div>
+
+      <div class="pm-foot">
+        <button class="ft-btn outline" (click)="closeDispatch()">{{ 'common.actions.cancel' | translate }}</button>
+        <button class="ft-btn accent" [disabled]="!canConfirmDispatch" (click)="confirmDispatch()">
+          <mat-icon>local_shipping</mat-icon> {{ 'common.actions.confirm-dispatch' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,23 +1,33 @@
 import { BaseResource, BaseResponse } from '../../shared/infrastructure/base-response';
 
-/**
- * @summary Resource DTO para solicitudes de combustible.
- * @remarks Define la estructura de respuesta del backend para Requests.
- * @author FullTank Platform
- */
 export interface RequestResource extends BaseResource {
   id: string;
-  clientId: string;
-  providerId: string;
-  productId: string;
-  quantity: number;
-  unit: string;
-  desiredDeliveryDate: string;
-  deliveryAddress: string;
-  status: string;
-  rejectionReason: string | null;
-  createdAt: string;
-  updatedAt: string;
+  clientId?: string | number;
+  clientid?: string | number;
+  companyId?: number;
+  buyerCompanyId?: number;
+  providerId?: string | number;
+  providerid?: string | number;
+  productId?: string | number;
+  productid?: string | number;
+  fuelProductId?: string | number;
+  fuelProductid?: string | number;
+  equipmentId?: number | string | null;
+  fuelType?: string;
+  productName?: string;
+  quantity?: number;
+  unit?: string;
+  unitPrice?: number;
+  desiredDeliveryDate?: string;
+  deliveryDate?: string;
+  deliveryAddress?: string;
+  status?: string;
+  source?: string;
+  rejectionReason?: string | null;
+  rejectionReasonCode?: string | null;
+  rejectionReasonNote?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface RequestsResponse extends BaseResponse {

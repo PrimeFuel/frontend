@@ -1,0 +1,69 @@
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.collections.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.collections.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="ft-kpi-grid two">
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'ordering-ui.collections-to-collect' | translate }}</span>
+        <span class="ft-kpi-icon amber"><mat-icon>hourglass_bottom</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ money(toCollectTotal()) }}</span>
+      <span class="ft-kpi-sub">{{ 'ordering-ui.collections-pending-sub' | translate: { n: pendingCollection().length } }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head">
+        <span class="ft-kpi-label">{{ 'ordering-ui.collections-collected' | translate }}</span>
+        <span class="ft-kpi-icon green"><mat-icon>account_balance</mat-icon></span>
+      </div>
+      <span class="ft-kpi-value">{{ money(collectedTotal()) }}</span>
+      <span class="ft-kpi-sub">{{ 'ordering-ui.collections-revenue-sub' | translate }}</span>
+    </div>
+  </div>
+
+  <div class="ft-seg tabs">
+    <button [class.active]="tab() === 'pending'" (click)="tab.set('pending')">{{ 'ordering-ui.tab-to-collect' | translate }}</button>
+    <button [class.active]="tab() === 'collected'" (click)="tab.set('collected')">{{ 'ordering-ui.tab-collected' | translate }}</button>
+  </div>
+
+  @if (loading()) {
+    <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'common.labels.loading' | translate }}</p></div>
+  } @else if (rows().length === 0) {
+    <div class="ft-empty"><mat-icon>payments</mat-icon><p>{{ 'ordering-ui.collections-empty' | translate }}</p></div>
+  } @else {
+    <div class="ft-table-wrap">
+      <table class="ft-table">
+        <thead>
+        <tr>
+          <th>{{ 'order-list.title' | translate }}</th>
+          <th>{{ 'common.labels.buyer' | translate }}</th>
+          <th>{{ 'common.labels.fuel-type' | translate }}</th>
+          <th class="num">{{ 'common.labels.amount' | translate }}</th>
+          <th>{{ 'common.labels.status' | translate }}</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (o of rows(); track o.id) {
+            <tr>
+              <td><strong>{{ o.id }}</strong></td>
+              <td>{{ buyerName(o) }}</td>
+              <td>{{ fuelLabel(o.fuelType) }}</td>
+              <td class="num">{{ money(o.totalAmount) }}</td>
+              <td>
+                <span class="ft-badge {{ statusClass(o.status) }}">
+                  {{ 'order-status.' + statusClass(o.status) | translate }}
+                </span>
+              </td>
+              <td><button class="ft-btn ghost sm" (click)="view(o)">{{ 'common.actions.details' | translate }}</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
