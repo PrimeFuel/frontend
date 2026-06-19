@@ -1,110 +1,99 @@
-<div class="shell">
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="icon-btn" (click)="toggleSidebar()" aria-label="Toggle menu">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <img src="/fulltank-logo.png" alt="FullTank" class="brand-logo" />
-      <span class="brand-name">FullTank</span>
-      <span class="ft-pill" [class.buyer]="isBuyer()" [class.provider]="isProvider()">
-        {{ (isProvider() ? 'iam.provider' : 'iam.buyer') | translate }}
-      </span>
-    </div>
+<!-- TOOLBAR FIJO -->
+<mat-toolbar class="toolbar">
+  <button mat-icon-button
+          aria-label="Toggle navigation menu"
+          (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <img src="/fulltank-logo.png" alt="FullTank logo"/>
+  <span class="toolbar-title">FullTank</span>
+  <span class="spacer"></span>
+  <app-language-switcher/>
+  <button mat-icon-button
+          aria-label="Notifications"
+          routerLink="/notification/notification-list"
+          matTooltip="Notifications"
+          class="notif-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24"
+         fill="black"
+         stroke="black"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
 
-    <div class="topbar-right">
-      <app-language-switcher />
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </svg>
+  </button>
+</mat-toolbar>
 
-      <button class="icon-btn bell" (click)="goNotifications()" aria-label="Notifications">
-        <mat-icon>notifications</mat-icon>
-        @if (unreadCount() > 0) {
-          <span class="bell-badge">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
-        }
-      </button>
+<!-- BODY CON SIDENAV -->
+<div class="layout-body">
+  <mat-sidenav-container class="sidenav-container">
 
-      <div class="user-chip">
-        <button class="profile-button" (click)="goProfile()" aria-label="Editar perfil">
-          <div class="user-avatar">{{ initials() }}</div>
-          <div class="user-meta">
-            <span class="user-name">{{ displayName() }}</span>
-            <span class="user-company">{{ companyName() }}</span>
-          </div>
-        </button>
-        <button
-          class="icon-btn"
-          (click)="logout()"
-          [title]="'header.sign-out' | translate"
-          [attr.aria-label]="'header.sign-out' | translate"
-        >
-          <mat-icon>logout</mat-icon>
-        </button>
-      </div>
-    </div>
-  </header>
+    <!-- SIDENAV -->
+    <mat-sidenav
+      #drawer
+      [mode]="sidenavMode"
+      [opened]="sidenavOpened">
 
-  <div class="body">
-    <!-- SIDEBAR -->
-    <aside class="sidebar" [class.collapsed]="collapsed()">
-      <nav class="nav">
-        @for (item of navItems; track item.key) {
-          @if (!item.children) {
-            <a
-              class="nav-item"
-              [class.active]="isActive(item.link!)"
-              (click)="navigateTo(item.link!)"
-            >
-              <mat-icon>{{ item.icon }}</mat-icon>
-              @if (!collapsed()) {
-                <span class="nav-label">{{ item.label | translate }}</span>
-                @if (item.key === 'notification' && unreadCount() > 0) {
-                  <span class="nav-badge">{{ unreadCount() }}</span>
-                }
-              }
-            </a>
-          } @else {
-            <div
-              class="nav-item"
-              [class.active]="isGroupActive(item.key)"
-              (click)="toggleGroup(item.key)"
-            >
-              <mat-icon>{{ item.icon }}</mat-icon>
-              @if (!collapsed()) {
-                <span class="nav-label">{{ item.label | translate }}</span>
-                <mat-icon class="chevron">{{
-                  isGroupOpen(item.key) ? 'expand_less' : 'expand_more'
-                }}</mat-icon>
+      <!-- Navigation Menu -->
+      <nav class="nav-menu" aria-label="Main navigation">
+        @for (option of options; track option.label) {
+
+          @if (!option.children) {
+            <!-- OPCIÓN SIMPLE (Sin sub-menú) -->
+            <div class="nav-item"
+                 [class.active]="isActive(option.link)"
+                 [matTooltip]="option.label | translate"
+                 matTooltipPosition="right"
+                 (click)="navigateTo(option.link)">
+              <div class="nav-icon-wrapper">
+                <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+              </div>
+              <span class="nav-label">{{ option.label | translate }}</span>
+              @if (isActive(option.link)) {
+                <div class="active-indicator"></div>
               }
             </div>
-            @if (isGroupOpen(item.key) && !collapsed()) {
-              <div class="sub-nav">
-                @for (child of item.children; track child.link) {
-                  <a
-                    class="sub-item"
-                    [class.active]="isActive(child.link)"
-                    (click)="navigateTo(child.link)"
-                  >
-                    {{ child.label | translate }}
-                  </a>
+          } @else {
+            <!-- OPCIÓN CON SUB-MENÚ (Acordeón) -->
+            <mat-expansion-panel
+              [expanded]="isActive(option.link)"
+              class="mat-elevation-z0 nav-expansion-panel">
+
+              <mat-expansion-panel-header class="nav-item-header">
+                <mat-panel-title class="nav-item-title">
+                  <div class="nav-icon-wrapper">
+                    <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+                  </div>
+                  <span class="nav-label">{{ option.label | translate }}</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <!-- Lista de Sub-elementos sin iconos -->
+              <div class="sub-menu-container">
+                @for (child of option.children; track child.link) {
+                  <div class="sub-nav-item"
+                       [class.sub-active]="isActive(child.link)"
+                       (click)="navigateTo(child.link)">
+                    <span class="sub-nav-label">{{ child.label | translate }}</span>
+                  </div>
                 }
               </div>
-            }
+            </mat-expansion-panel>
           }
         }
       </nav>
 
-      @if (!collapsed()) {
-        <div class="sidebar-footer">
-          <button class="switch-btn" (click)="logout()">
-            <mat-icon>sync</mat-icon> {{ 'header.switch-segment' | translate }}
-          </button>
-          <p class="footer-year">&copy; {{ getCurrentYear() }} FullTank &middot; PrimeFuel</p>
-        </div>
-      }
-    </aside>
+    </mat-sidenav>
 
-    <!-- CONTENT -->
-    <main class="main">
-      <router-outlet />
-    </main>
-  </div>
+    <!-- CONTENIDO PRINCIPAL -->
+    <mat-sidenav-content>
+      <div class="content-wrapper">
+        <router-outlet/>
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
 </div>

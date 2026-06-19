@@ -1,151 +1,104 @@
-<div class="ft-page order-detail-page">
-  <div class="detail-topbar">
-    <button class="back-link" (click)="back()">
-      <mat-icon>arrow_back</mat-icon> Volver
-    </button>
-    <h1 class="detail-title">Detalle de Orden</h1>
-  </div>
+<div class="header">
+  <button mat-icon-button (click)="back()" [matTooltip]="'order-detail.back' | translate">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h1 class="title">{{ 'order-detail.title' | translate }}</h1>
+</div>
 
-  @if (loading()) {
-    <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'ordering-ui.loading-order' | translate }}</p></div>
-  } @else if (!order()) {
-    <div class="ft-empty"><mat-icon>error_outline</mat-icon><p>{{ 'ordering-ui.order-not-found' | translate }}</p></div>
-  } @else if (order(); as o) {
-    <div class="detail-layout">
-      <section class="order-panel">
-        <div class="order-panel-head">
-          <strong>#{{ o.id }}</strong>
-          <span class="status-pill {{ statusClass(o.status) }}">
-            {{ 'order-status.' + statusClass(o.status) | translate }}
-          </span>
+@if (store.loading()) {
+  <mat-spinner diameter="40"></mat-spinner>
+}
+@if (store.error()) {
+  <mat-error>{{ store.error() }}</mat-error>
+}
+
+@if (order(); as o) {
+  <mat-card class="detail-card">
+    <mat-card-content>
+      <div class="status-row">
+        <h2 class="mono">{{ o.id }}</h2>
+        <mat-chip-set>
+          <mat-chip [class]="statusClass(o.status)">
+            {{ 'order-status.' + o.status.toLowerCase() | translate }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <div class="grid">
+        <div class="item">
+          <label>{{ 'order-detail.request-id' | translate }}</label>
+          <span>{{ o.requestId }}</span>
         </div>
-
-        <div class="detail-divider"></div>
-
-        <div class="info-grid">
-          <div class="info-item">
-            <span>Cliente</span>
-            <strong>{{ buyerName(o) }}</strong>
-          </div>
-          <div class="info-item">
-            <span>Ref. solicitud</span>
-            <strong>#{{ o.requestId || '-' }}</strong>
-          </div>
-          <div class="info-item">
-            <span>Producto</span>
-            <strong>{{ o.productName || fuelLabel(o.fuelType) }}</strong>
-          </div>
-          <div class="info-item accent-value">
-            <span>Cantidad</span>
-            <strong>{{ num(o.quantity) }} {{ o.unit === 'GALLONS' ? 'gal' : 'L' }}</strong>
-          </div>
-          <div class="info-item accent-value">
-            <span>Monto total</span>
-            <strong>{{ money(o.totalAmount) }}</strong>
-          </div>
-          <div class="info-item">
-            <span>Conductor</span>
-            <strong>{{ driverName(driverIdFor(o)) }}</strong>
-          </div>
-          <div class="info-item">
-            <span>Vehiculo</span>
-            <strong>{{ vehicleLabel(vehicleIdFor(o)) }}</strong>
-          </div>
-          <div class="info-item">
-            <span>Creada</span>
-            <strong>{{ formatDate(o.createdAt) }}</strong>
-          </div>
-          <div class="info-item">
-            <span>Fecha de entrega</span>
-            <strong>{{ formatDate(o.estimatedDeliveryDate || o.createdAt) }}</strong>
-          </div>
-          <div class="info-item wide">
-            <span>Direccion de entrega</span>
-            <strong>{{ o.deliveryAddress }}</strong>
-          </div>
+        <div class="item">
+          <label>{{ 'order-detail.client' | translate }}</label>
+          <span>{{ o.clientId }}</span>
         </div>
-
-        @if (canCancel(o) || canDispatch(o)) {
-          <div class="detail-actions">
-            @if (canCancel(o)) {
-              <button class="detail-action danger" [disabled]="canceling()" (click)="cancelOrder()">
-                <mat-icon>close</mat-icon>
-                Cancelar orden
-              </button>
-            }
-            @if (canDispatch(o)) {
-              <button class="detail-action assign" (click)="openDispatch()">
-                <mat-icon>send</mat-icon>
-                Asignar conductor y vehiculo
-              </button>
-            }
+        <div class="item">
+          <label>{{ 'order-detail.provider' | translate }}</label>
+          <span>{{ o.providerId }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.product' | translate }}</label>
+          <span>{{ o.productId }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.quantity' | translate }}</label>
+          <span class="strong">{{ o.quantity }} {{ o.unit }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.total' | translate }}</label>
+          <span class="strong">S/ {{ o.totalAmount | number:'1.2-2' }}</span>
+        </div>
+        <div class="item full">
+          <label>{{ 'order-detail.address' | translate }}</label>
+          <span>{{ o.deliveryAddress }}</span>
+        </div>
+        <div class="item">
+          <label>{{ 'order-detail.created-at' | translate }}</label>
+          <span>{{ o.createdAt | date:'medium' }}</span>
+        </div>
+        @if (o.dispatchedAt) {
+          <div class="item">
+            <label>{{ 'order-detail.dispatched-at' | translate }}</label>
+            <span>{{ o.dispatchedAt | date:'medium' }}</span>
           </div>
         }
-      </section>
-
-      <section class="location-panel">
-        <div class="location-title">
-          <mat-icon>place</mat-icon>
-          <strong>Ubicacion de entrega</strong>
-        </div>
-        <p class="location-address">{{ o.deliveryAddress }}</p>
-        <div class="map-wrap">
-          <a class="maps-link" [href]="mapsLink(o.deliveryAddress)" target="_blank" rel="noopener">
-            Abrir en Maps <mat-icon>open_in_new</mat-icon>
-          </a>
-          <iframe
-            class="map-frame"
-            [src]="mapUrl(o.deliveryAddress)"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-        <p class="map-note">Vista previa de ubicacion simulada</p>
-      </section>
-    </div>
-
-    @if (showDispatch()) {
-      <div class="ft-overlay" (click)="closeDispatch()">
-        <div class="dispatch-modal" (click)="$event.stopPropagation()">
-          <div class="pm-head">
-            <h2>{{ 'ordering-ui.dispatch-title' | translate: { id: o.id } }}</h2>
-            <button class="icon-x" (click)="closeDispatch()"><mat-icon>close</mat-icon></button>
+        @if (o.deliveredAt) {
+          <div class="item">
+            <label>{{ 'order-detail.delivered-at' | translate }}</label>
+            <span>{{ o.deliveredAt | date:'medium' }}</span>
           </div>
-          <p class="ft-muted disp-sub">
-            {{ num(o.quantity) }} {{ o.unit === 'GALLONS' ? 'gal' : 'L' }} - {{ fuelLabel(o.fuelType) }}
-          </p>
-          <div class="ft-field">
-            <label class="ft-label">{{ 'ordering-ui.dispatch-driver' | translate }}</label>
-            @if (availableDrivers().length === 0) {
-              <div class="ft-error"><mat-icon>error</mat-icon> {{ 'ordering-ui.no-drivers' | translate }}</div>
-            } @else {
-              <select class="ft-select" [(ngModel)]="selectedDriverId">
-                @for (d of availableDrivers(); track d.id) {
-                  <option [ngValue]="d.id">{{ d.firstName }} {{ d.lastName }}</option>
-                }
-              </select>
-            }
+        }
+        @if (o.closedAt) {
+          <div class="item">
+            <label>{{ 'order-detail.closed-at' | translate }}</label>
+            <span>{{ o.closedAt | date:'medium' }}</span>
           </div>
-          <div class="ft-field">
-            <label class="ft-label">{{ 'ordering-ui.dispatch-vehicle' | translate }}</label>
-            @if (eligibleVehicles().length === 0) {
-              <div class="ft-error"><mat-icon>error</mat-icon> {{ 'ordering-ui.no-vehicles' | translate }}</div>
-            } @else {
-              <select class="ft-select" [(ngModel)]="selectedVehicleId">
-                @for (v of eligibleVehicles(); track v.id) {
-                  <option [ngValue]="v.id">{{ v.brand }} {{ v.model }} - {{ num(v.capacity) }} L</option>
-                }
-              </select>
-            }
-          </div>
-          <div class="pm-foot">
-            <button class="ft-btn outline" (click)="closeDispatch()">{{ 'common.actions.cancel' | translate }}</button>
-            <button class="ft-btn accent" [disabled]="!canConfirmDispatch" (click)="confirmDispatch()">
-              {{ 'common.actions.confirm-dispatch' | translate }}
-            </button>
-          </div>
-        </div>
+        }
       </div>
-    }
-  }
-</div>
+
+      <div class="actions">
+        @if (o.status === 'CREATED') {
+          <button mat-raised-button color="primary" (click)="dispatch(o)">
+            <mat-icon>local_shipping</mat-icon>
+            {{ 'order-detail.dispatch' | translate }}
+          </button>
+        }
+        @if (o.status === 'DISPATCHED') {
+          <button mat-raised-button color="primary" (click)="confirmDelivery(o)">
+            <mat-icon>done_all</mat-icon>
+            {{ 'order-detail.confirm-delivery' | translate }}
+          </button>
+        }
+        @if (o.status === 'DELIVERED') {
+          <button mat-raised-button color="accent" (click)="closeOrder(o)">
+            <mat-icon>archive</mat-icon>
+            {{ 'order-detail.close' | translate }}
+          </button>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @else if (!store.loading()) {
+  <p class="empty">{{ 'order-detail.not-found' | translate }}</p>
+}

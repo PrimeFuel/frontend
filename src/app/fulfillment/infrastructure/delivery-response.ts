@@ -8,18 +8,13 @@ import { BaseResource, BaseResponse } from '../../shared/infrastructure/base-res
 export interface DeliveryResource extends BaseResource {
   id: string;
   orderId: string;
-  providerId: string;
-  vehicleId?: string;
-  driverId?: string;
-  vehiclePlate?: string;
-  driverName?: string;
+  vehicleId: string;
+  driverId: string;
   status: string;
-  scheduledDate?: string;
-  dispatchedAt?: string | null;
-  deliveredAt?: string | null;
-  actualDeliveryDate?: string | null;
+  scheduledDate: string;
+  actualDeliveryDate: string | null;
   notes: string;
-  createdAt?: string;
+  createdAt: string;
 }
 
 export interface DeliveriesResponse extends BaseResponse {

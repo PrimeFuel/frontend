@@ -3,12 +3,9 @@ export const environment = {
   // Base API URL
   serverBasePath: 'http://localhost:3000',
   // IAM (Identity and Access Management)
-  iamSignInEndpointPath: '/authentication/sign-in',
-  iamSignUpEndpointPath: '/authentication/sign-up',
+  iamSignInEndpointPath: '/auth/sign-in',
+  iamSignUpEndpointPath: '/auth/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
-  iamUsersEndpointPath: '/users',
-  iamBuyerCompaniesEndpointPath: '/buyer-companies',
-  iamProviderCompaniesEndpointPath: '/provider-companies',
   // Inventory (Productos e Inventario)
   inventoryEndpointPath: '/inventory',
   inventoryProductsEndpointPath: '/inventory',
@@ -20,28 +17,16 @@ export const environment = {
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
   fulfillmentDeliveriesEndpointPath: '/deliveries',
-
-  // Catalog
-  catalogProvidersEndpointPath: '/provider-companies',
-  catalogProductsEndpointPath: '/fuel-products',
-
-  // Equipment
-  equipmentEndpointPath: '/equipment',
-  favoriteProvidersEndpointPath: '/favorite-providers',
-  refillHistoryEndpointPath: '/refill-history',
-
-  // Payment
-  paymentPaymentsEndpointPath: '/payments',
-  paymentInvoicesEndpointPath: '/invoices',
-
-  // Notification
+  // Payment (Transacciones y Pagos)
+  paymentTransactionsEndpointPath: '/payment/transactions',
+  paymentPaymentsEndpointPath: '/payment/payments',
+  // Notification (Notificaciones)
   notificationEndpointPath: '/notifications',
   // Reporting (Reportes y Analytics)
   reportingReportsEndpointPath: '/reporting/reports',
   reportingKpisEndpointPath: '/reporting/kpis',
   reportingSalesEndpointPath: '/reporting/sales',
   reportingConsumptionEndpointPath: '/reporting/consumption',
-  analyticsEndpointPath: '/analytics',
   reportingMonthlyRevenueEndpointPath: '/monthly-revenue',  // ← agregar esto
 
 };

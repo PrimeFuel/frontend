@@ -2,20 +2,12 @@ import { BaseResource, BaseResponse } from '../../shared/infrastructure/base-res
 
 export interface NotificationResource extends BaseResource {
   id: string;
-  userId?: string;
-  orderId?: string | null;
+  userId: string;
+  orderId: string | null;
   type: string;
-  title?: string;
   message: string;
-  isRead?: boolean;
-  read?: boolean;
-  createdAt?: string;
-  referenceId?: string | number | null;
-  // Vue-format fields
-  recipientType?: string;
-  companyId?: number | null;
-  providerId?: number | null;
-  relatedId?: string | number | null;
+  isRead: boolean;
+  createdAt: string;
 }
 
 export interface NotificationsResponse extends BaseResponse {

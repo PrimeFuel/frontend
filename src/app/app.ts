@@ -15,8 +15,6 @@ export class App {
 
   constructor() {
     this.translate.addLangs(['en', 'es']);
-    const saved = localStorage.getItem('fulltank.lang');
-    const lang = saved === 'es' || saved === 'en' ? saved : 'en';
-    this.translate.use(lang);
+    this.translate.use('en');
   }
 }

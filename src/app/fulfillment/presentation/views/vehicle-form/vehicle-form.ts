@@ -2,15 +2,31 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
 import { Vehicle } from '../../../domain/model/vehicle.entity';
-import { IamStore } from '../../../../iam/application/iam.store';
 @Component({
   selector: 'app-vehicle-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule, TranslatePipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatIconModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    TranslatePipe,
+  ],
   templateUrl: './vehicle-form.html',
   styleUrl: './vehicle-form.css',
 })
@@ -19,22 +35,17 @@ export class VehicleForm implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly iam = inject(IamStore);
+
+  private readonly TEMP_PROVIDER_ID = '1';
 
   protected vehicleForm: FormGroup;
   protected isEditMode = false;
   protected vehicleId: string | null = null;
 
-  private get providerId(): string {
-    return String(this.iam.currentProviderId() ?? 1);
-  }
-
   protected readonly units = [
     { value: 'LITERS', label: 'unit.liters' },
     { value: 'GALLONS', label: 'unit.gallons' },
   ];
-
-  protected readonly statuses = ['AVAILABLE', 'IN_ROUTE', 'MAINTENANCE'];
 
   constructor() {
     this.vehicleForm = this.fb.group({
@@ -83,16 +94,16 @@ export class VehicleForm implements OnInit {
 
   private registerVehicleData(): void {
     const request: Omit<Vehicle, 'id' | 'createdAt'> = {
-      providerId: this.providerId,
+      providerId: this.TEMP_PROVIDER_ID,
       licensePlate: this.vehicleForm.value.licensePlate,
       brand: this.vehicleForm.value.brand,
       model: this.vehicleForm.value.model,
       capacity: this.vehicleForm.value.capacity,
       unit: this.vehicleForm.value.unit,
-      status: this.vehicleForm.value.status || 'AVAILABLE',
+      status: 'AVAILABLE',
     };
     this.store.registerVehicle(request, () => {
-      this.router.navigate(['/fulfillment/vehicles']);
+      this.router.navigate(['/fulfillment/vehicle-list']);
     });
   }
 
@@ -106,12 +117,12 @@ export class VehicleForm implements OnInit {
       status: this.vehicleForm.value.status,
     };
     this.store.updateVehicle(this.vehicleId!, request, () => {
-      this.router.navigate(['/fulfillment/vehicles']);
+      this.router.navigate(['/fulfillment/vehicle-list']);
     });
   }
 
   protected onCancel(): void {
-    this.router.navigate(['/fulfillment/vehicles']);
+    this.router.navigate(['/fulfillment/vehicle-list']);
   }
 
   protected getErrorMessage(field: string): string {
@@ -123,4 +134,3 @@ export class VehicleForm implements OnInit {
     return '';
   }
 }
-

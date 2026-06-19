@@ -1,178 +1,111 @@
-﻿import { Component, inject, signal, computed, effect } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { LanguageSwitcher } from '../language-switcher/language-switcher';
-import { IamStore } from '../../../../iam/application/iam.store';
-import { NotificationStore } from '../../../../notification/application/notification.store';
-
-interface NavChild {
-  label: string;
-  link: string;
-}
-interface NavItem {
-  key: string;
-  label: string;
-  icon: string;
-  link?: string;
-  children?: NavChild[];
-}
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterOutlet, LanguageSwitcher, TranslatePipe],
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    TranslatePipe,
+    RouterOutlet,
+    RouterLink,
+    LanguageSwitcher,
+  ],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
 export class Layout {
-  private readonly iamStore = inject(IamStore);
-  private readonly notificationStore = inject(NotificationStore);
-  private readonly router = inject(Router);
+  @ViewChild(MatSidenav) drawer!: MatSidenav;
 
-  readonly collapsed = signal(false);
-  readonly expanded = signal<Record<string, boolean>>({});
+  sidenavMode: 'side' | 'over' = 'side';
+  sidenavOpened = true;
 
-  readonly role = this.iamStore.role;
-  readonly isBuyer = this.iamStore.isBuyer;
-  readonly isProvider = this.iamStore.isProvider;
-  readonly displayName = this.iamStore.displayName;
-  readonly companyName = this.iamStore.companyName;
-  readonly unreadCount = this.notificationStore.unreadCount;
-
-  readonly initials = computed(() => {
-    const name = this.displayName() || 'FT';
-    return name
-      .split(' ')
-      .map((w) => w[0])
-      .filter(Boolean)
-      .slice(0, 2)
-      .join('')
-      .toUpperCase();
-  });
-
-  readonly roleLabel = computed(() =>
-    this.isProvider() ? 'Provider / Distributor' : 'Buyer / Applicant',
-  );
-
-  private readonly buyerNav: NavItem[] = [
-    { key: 'reporting', label: 'nav.dashboard', icon: 'dashboard', link: '/reporting/buyer-dashboard' },
-    { key: 'catalog', label: 'nav.catalog', icon: 'storefront', link: '/catalog' },
-    { key: 'equipment', label: 'nav.equipment', icon: 'engineering', link: '/equipment' },
+  options = [
+    { label: 'nav.dashboard', icon: 'dashboard', link: '/dashboard' },
     {
-      key: 'ordering',
+      label: 'nav.inventory',
+      icon: 'inventory_2',
+      link: '/inventory',
+      children: [
+        { label: 'inventory.product-inventory', link: '/inventory/product-inventory' },
+        { label: 'inventory.add-product', link: '/inventory/product-form' },
+      ]
+    },
+    {
       label: 'nav.ordering',
       icon: 'shopping_cart',
+      link: '/ordering',
       children: [
-        { label: 'ordering.my-requests', link: '/ordering/my-requests' },
-        { label: 'ordering.my-orders', link: '/ordering/my-orders' },
-      ],
-    },
-    { key: 'payment', label: 'nav.payment', icon: 'credit_card', link: '/payment' },
-    {
-      key: 'notification',
-      label: 'nav.notifications',
-      icon: 'notifications',
-      link: '/notification',
-    },
-    { key: 'reporting-reports', label: 'nav.reports', icon: 'analytics', link: '/reporting/buyer' },
-  ];
-
-  private readonly providerNav: NavItem[] = [
-    { key: 'reporting', label: 'nav.dashboard', icon: 'dashboard', link: '/reporting/provider-dashboard' },
-    { key: 'inventory', label: 'nav.inventory', icon: 'inventory_2', link: '/inventory/products' },
-    {
-      key: 'ordering',
-      label: 'nav.ordering',
-      icon: 'shopping_cart',
-      children: [
-        { label: 'ordering.pending-requests', link: '/ordering/pending' },
-        { label: 'ordering.orders', link: '/ordering/orders' },
-        { label: 'ordering.collections', link: '/ordering/collections' },
+        { label: 'ordering.requests', link: '/ordering/request-list' },
+        { label: 'ordering.create-request', link: '/ordering/request-form' },
+        { label: 'ordering.orders', link: '/ordering/order-list' },
       ],
     },
     {
-      key: 'fulfillment',
       label: 'nav.fulfillment',
       icon: 'local_shipping',
+      link: '/fulfillment',
       children: [
-        { label: 'fulfillment.vehicles', link: '/fulfillment/vehicles' },
-        { label: 'fulfillment.drivers', link: '/fulfillment/drivers' },
+        { label: 'fulfillment.vehicles', link: '/fulfillment/vehicle-list' },
+        { label: 'fulfillment.drivers', link: '/fulfillment/driver-list' },
+        { label: 'fulfillment.dispatch', link: '/fulfillment/dispatch-dashboard' },
       ],
     },
     {
-      key: 'notification',
-      label: 'nav.notifications',
-      icon: 'notifications',
-      link: '/notification',
+      label: 'nav.reports',
+      icon: 'analytics',
+      link: '/reporting',
+      children: [
+        { label: 'reporting.supplier-dashboard', link: '/reporting/report-main' },
+        { label: 'reporting.client-portfolio', link: '/reporting/client-reports' },
+      ],
     },
-    { key: 'reporting-reports', label: 'nav.reports', icon: 'analytics', link: '/reporting/provider' },
   ];
 
-  get navItems(): NavItem[] {
-    return this.isProvider() ? this.providerNav : this.buyerNav;
-  }
-
-  constructor() {
-    effect(() => {
-      if (this.iamStore.isProvider()) {
-        const providerId = this.iamStore.currentProviderId();
-        if (providerId) this.notificationStore.loadForProvider(providerId);
-        return;
+  constructor(
+    private router: Router,
+    private observer: BreakpointObserver,
+  ) {
+    this.observer.observe(['(max-width: 768px)']).subscribe((result) => {
+      if (result.matches) {
+        this.sidenavMode = 'over';
+        this.sidenavOpened = false;
+      } else {
+        this.sidenavMode = 'side';
+        this.sidenavOpened = true;
       }
-
-      const companyId = this.iamStore.currentCompanyId();
-      if (companyId) this.notificationStore.loadForBuyer(companyId);
     });
   }
 
-  toggleSidebar(): void {
-    this.collapsed.update((c) => !c);
-  }
-
-  toggleGroup(key: string): void {
-    this.expanded.update((e) => ({ ...e, [key]: !e[key] }));
-  }
-
-  isGroupOpen(key: string): boolean {
-    const e = this.expanded();
-    if (e[key] !== undefined) return e[key];
-    return this.router.url.startsWith('/' + key);
-  }
-
   navigateTo(link: string): void {
-    this.router.navigate([link]);
+    this.router.navigate([link]).then();
+    if (this.sidenavMode === 'over') {
+      this.drawer.toggle().then();
+    }
   }
 
   isActive(link: string): boolean {
-    // Match on full path segments so e.g. `/reporting/buyer` (Reports) does not
-    // also light up while on `/reporting/buyer-dashboard` (Dashboard).
-    const url = this.router.url.split(/[?#]/)[0];
-    return url === link || url.startsWith(link + '/');
-  }
-
-  isGroupActive(key: string): boolean {
-    return this.router.url.startsWith('/' + key);
-  }
-
-  goNotifications(): void {
-    this.router.navigate(['/notification']);
-  }
-
-  goProfile(): void {
-    this.router.navigate(['/iam/profile']);
-  }
-
-  logout(): void {
-    this.iamStore.logout();
-    this.router.navigate(['/iam']);
+    return this.router.url.startsWith(link);
   }
 
   getCurrentYear(): number {
     return new Date().getFullYear();
   }
 }
-
-
-

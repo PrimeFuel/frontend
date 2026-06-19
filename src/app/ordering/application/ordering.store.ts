@@ -19,17 +19,18 @@ export class OrderingStore {
   readonly loading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
 
+  // Computed selectors by status
   readonly pendingRequests = computed(() =>
-    this.requests().filter((request) => ['PENDING', 'PENDING_APPROVAL'].includes(request.status)),
+    this.requests().filter(r => r.status === 'PENDING_APPROVAL')
   );
   readonly approvedRequests = computed(() =>
-    this.requests().filter((request) => ['ACCEPTED', 'APPROVED'].includes(request.status)),
+    this.requests().filter(r => r.status === 'APPROVED')
   );
   readonly activeOrders = computed(() =>
-    this.orders().filter((order) => ['CREATED', 'ACCEPTED', 'DISPATCHED', 'PENDING_PAYMENT'].includes(order.status)),
+    this.orders().filter(o => o.status === 'CREATED' || o.status === 'DISPATCHED')
   );
   readonly closedOrders = computed(() =>
-    this.orders().filter((order) => ['CLOSED', 'PAID'].includes(order.status)),
+    this.orders().filter(o => o.status === 'CLOSED')
   );
 
   constructor(private orderingApi: OrderingApi) {
@@ -37,81 +38,92 @@ export class OrderingStore {
     this.loadOrders();
   }
 
-  refresh(): void {
-    this.loadRequests();
-    this.loadOrders();
-  }
-
-  private loadRequests(): void {
+  private loadRequests() {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     this.orderingApi.getRequests().pipe(takeUntilDestroyed()).subscribe({
-      next: (requests) => {
+      next: requests => {
         this.requestsSignal.set(requests);
         this.loadingSignal.set(false);
         this.errorSignal.set(null);
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to load requests'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
-  private loadOrders(): void {
+  private loadOrders() {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     this.orderingApi.getOrders().pipe(takeUntilDestroyed()).subscribe({
-      next: (orders) => {
+      next: orders => {
         this.ordersSignal.set(orders);
         this.loadingSignal.set(false);
         this.errorSignal.set(null);
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to load orders'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
   getRequestById(id: string): Signal<Request | undefined> {
-    return computed(() => (id ? this.requests().find((request) => request.id === id) : undefined));
+    return computed(() => id ? this.requests().find(r => r.id === id) : undefined);
   }
 
   getOrderById(id: string): Signal<Order | undefined> {
-    return computed(() => (id ? this.orders().find((order) => order.id === id) : undefined));
+    return computed(() => id ? this.orders().find(o => o.id === id) : undefined);
   }
+
 
   acceptRequest(request: Request): void {
+    const now = new Date().toISOString();
+
+    const order = new Order({
+      id: `ord-${Date.now()}`,
+      requestId: request.id,
+      clientId: request.clientId,
+      providerId: request.providerId,
+      productId: request.productId,
+      quantity: request.quantity,
+      unit: request.unit,
+      totalAmount: 0,
+      deliveryAddress: request.deliveryAddress,
+      status: 'CREATED',
+      dispatchedAt: null,
+      deliveredAt: null,
+      closedAt: null,
+      createdAt: now,
+      updatedAt: now,
+    });
+
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
-    this.orderingApi.acceptRequest(request.id).subscribe({
-      next: (createdOrder) => {
-        this.ordersSignal.update((orders) => [...orders.filter((order) => order.id !== createdOrder.id), createdOrder]);
-        this.requestsSignal.update((requests) => requests.filter((item) => item.id !== request.id));
-        this.loadingSignal.set(false);
+
+    this.orderingApi.createOrder(order).subscribe({
+      next: createdOrder => {
+        this.ordersSignal.update(orders => [...orders, createdOrder]);
+
+        this.orderingApi.deleteRequest(request.id).subscribe({
+          next: () => {
+            this.requestsSignal.update(requests =>
+              requests.filter(r => r.id !== request.id)
+            );
+            this.loadingSignal.set(false);
+          },
+          error: error => {
+            this.errorSignal.set(this.formatError(error, 'Failed to delete accepted request'));
+            this.loadingSignal.set(false);
+          }
+        });
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to accept request'));
         this.loadingSignal.set(false);
-      },
-    });
-  }
-
-  rejectRequest(request: Request, reason: string): void {
-    this.loadingSignal.set(true);
-    this.errorSignal.set(null);
-    this.orderingApi.rejectRequest(request.id, reason).subscribe({
-      next: (rejectedRequest) => {
-        this.requestsSignal.update((requests) =>
-          requests.map((item) => (item.id === rejectedRequest.id ? rejectedRequest : item)),
-        );
-        this.loadingSignal.set(false);
-      },
-      error: (error) => {
-        this.errorSignal.set(this.formatError(error, 'Failed to reject request'));
-        this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
@@ -119,14 +131,14 @@ export class OrderingStore {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     this.orderingApi.createRequest(request).pipe(retry(2)).subscribe({
-      next: (createdRequest) => {
-        this.requestsSignal.update((requests) => [...requests, createdRequest]);
+      next: createdRequest => {
+        this.requestsSignal.update(requests => [...requests, createdRequest]);
         this.loadingSignal.set(false);
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to create request'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
@@ -134,14 +146,14 @@ export class OrderingStore {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     this.orderingApi.createOrder(order).pipe(retry(2)).subscribe({
-      next: (createdOrder) => {
-        this.ordersSignal.update((orders) => [...orders, createdOrder]);
+      next: createdOrder => {
+        this.ordersSignal.update(orders => [...orders, createdOrder]);
         this.loadingSignal.set(false);
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to create order'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
@@ -149,14 +161,16 @@ export class OrderingStore {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     this.orderingApi.updateRequest(updateRequest).pipe(retry(2)).subscribe({
-      next: (request) => {
-        this.requestsSignal.update((requests) => requests.map((item) => (item.id === request.id ? request : item)));
+      next: request => {
+        this.requestsSignal.update(requests =>
+          requests.map(r => r.id === request.id ? request : r)
+        );
         this.loadingSignal.set(false);
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to update request'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
@@ -164,19 +178,34 @@ export class OrderingStore {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
     this.orderingApi.updateOrder(updateOrder).pipe(retry(2)).subscribe({
-      next: (order) => {
-        this.ordersSignal.update((orders) => orders.map((item) => (item.id === order.id ? order : item)));
+      next: order => {
+        this.ordersSignal.update(orders =>
+          orders.map(o => o.id === order.id ? order : o)
+        );
         this.loadingSignal.set(false);
       },
-      error: (error) => {
+      error: error => {
         this.errorSignal.set(this.formatError(error, 'Failed to update order'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
   deleteRequest(id: string): void {
-    this.requestsSignal.update((requests) => requests.filter((request) => request.id !== id));
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    this.orderingApi.deleteRequest(id).pipe(retry(2)).subscribe({
+      next: () => {
+        this.requestsSignal.update(requests =>
+          requests.filter(r => r.id !== id)
+        );
+        this.loadingSignal.set(false);
+      },
+      error: error => {
+        this.errorSignal.set(this.formatError(error, 'Failed to delete request'));
+        this.loadingSignal.set(false);
+      }
+    });
   }
 
   deleteOrder(id: string): void {
@@ -184,17 +213,19 @@ export class OrderingStore {
     this.errorSignal.set(null);
     this.orderingApi.deleteOrder(id).pipe(retry(2)).subscribe({
       next: () => {
-        this.ordersSignal.update((orders) => orders.filter((order) => order.id !== id));
+        this.ordersSignal.update(orders =>
+          orders.filter(o => o.id !== id)
+        );
         this.loadingSignal.set(false);
       },
-      error: (error) => {
-        this.errorSignal.set(this.formatError(error, 'Failed to cancel order'));
+      error: error => {
+        this.errorSignal.set(this.formatError(error, 'Failed to delete order'));
         this.loadingSignal.set(false);
-      },
+      }
     });
   }
 
-  private formatError(error: unknown, fallback: string): string {
+  private formatError(error: any, fallback: string): string {
     if (error instanceof Error) {
       return error.message.includes('Resource not found') ? `${fallback}: Not found` : error.message;
     }

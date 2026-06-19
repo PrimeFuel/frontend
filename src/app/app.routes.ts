@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { Home } from './shared/presentation/views/home/home';
-import { authGuard, buyerGuard, dashboardRedirectGuard, providerGuard } from './iam/infrastructure/auth.guard';
 
 const about = () => import('./shared/presentation/views/about/about').then((m) => m.About);
+
 const pageNotFound = () =>
   import('./shared/presentation/views/page-not-found/page-not-found').then((m) => m.PageNotFound);
 
@@ -18,6 +18,9 @@ const reportingRoutes = () =>
 const orderingRoutes = () =>
   import('./ordering/presentation/ordering-routes').then((m) => m.orderingRoutes);
 
+const dashboardRoutes = () =>
+  import('./dashboard/presentation/dashboard.routes').then((m) => m.dashboardRoutes);
+
 const notificationRoutes = () =>
   import('./notification/presentation/notification-routes').then((m) => m.notificationRoutes);
 
@@ -28,7 +31,7 @@ export const routes: Routes = [
   { path: 'about', loadComponent: about, title: `About - ${baseTitle}` },
   { path: 'inventory', loadChildren: inventoryRoutes },
   { path: 'fulfillment', loadChildren: fulfillmentRoutes },
-  { path: 'dashboard', canActivate: [authGuard, dashboardRedirectGuard], children: [] },
+  { path: 'dashboard', loadChildren: dashboardRoutes },
   { path: 'ordering', loadChildren: orderingRoutes },
   { path: 'reporting', loadChildren: reportingRoutes },
   { path: 'notification', loadChildren: notificationRoutes },

@@ -9,10 +9,9 @@ import { BaseEntity } from '../../../shared/domain/model/base-entity';
 export class Delivery implements BaseEntity {
   id: string;
   orderId: string;
-  providerId: string;
   vehicleId: string;
   driverId: string;
-  status: string; // SCHEDULED, DISPATCHED, DELIVERED, FAILED
+  status: string; // ASSIGNED, IN_TRANSIT, DELIVERED, CANCELLED
   scheduledDate: string;
   actualDeliveryDate: string | null;
   notes: string;
@@ -21,7 +20,6 @@ export class Delivery implements BaseEntity {
   constructor(params: {
     id: string;
     orderId: string;
-    providerId?: string;
     vehicleId: string;
     driverId: string;
     status: string;
@@ -32,7 +30,6 @@ export class Delivery implements BaseEntity {
   }) {
     this.id = params.id;
     this.orderId = params.orderId;
-    this.providerId = params.providerId ?? '';
     this.vehicleId = params.vehicleId;
     this.driverId = params.driverId;
     this.status = params.status;

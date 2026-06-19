@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
 import { Notification } from '../domain/model/notification.entity';
@@ -9,79 +9,48 @@ import { NotificationAssembler } from './notification-assembler';
 const notificationsEndpointUrl = `${environment.serverBasePath}${environment.notificationEndpointPath}`;
 
 export class NotificationApiEndpoint extends BaseApiEndpoint<
-  Notification,
+Notification,
   NotificationResource,
   NotificationsResponse,
-  NotificationAssembler
+NotificationAssembler
 > {
   constructor(http: HttpClient) {
     super(http, notificationsEndpointUrl, new NotificationAssembler());
   }
 
-  getNotificationsByUser(_userId: string): Observable<Notification[]> {
+  getNotificationsByUser(userId: string): Observable<Notification[]> {
     return this.http
-      .get<NotificationResource[]>(`${this.endpointUrl}/user/${_userId}`)
+      .get<NotificationResource[]>(`${this.endpointUrl}?userId=${userId}&_sort=createdAt&_order=desc`)
       .pipe(
         map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
-        catchError(this.handleError(`Failed to fetch notifications`)),
+        catchError(this.handleError(`Failed to fetch notifications for user ${userId}`)),
       );
   }
 
-  getByBuyer(buyerCompanyId: number | string): Observable<Notification[]> {
+  getUnreadNotificationsByUser(userId: string): Observable<Notification[]> {
     return this.http
-      .get<NotificationResource[]>(`${this.endpointUrl}/buyer/${buyerCompanyId}`)
+      .get<NotificationResource[]>(
+        `${this.endpointUrl}?userId=${userId}&isRead=false&_sort=createdAt&_order=desc`,
+      )
       .pipe(
         map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
-        catchError(this.handleError(`Failed to fetch buyer notifications`)),
-      );
-  }
-
-  getByProvider(providerId: number | string): Observable<Notification[]> {
-    return this.http
-      .get<NotificationResource[]>(`${this.endpointUrl}/provider/${providerId}`)
-      .pipe(
-        map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
-        catchError(this.handleError(`Failed to fetch provider notifications`)),
-      );
-  }
-
-  /** No backend bulk-read endpoint; callers update local state after this no-op. */
-  markAllReadBuyer(buyerCompanyId: number | string): Observable<unknown> {
-    return of({ buyerCompanyId });
-  }
-
-  /** No backend bulk-read endpoint; callers update local state after this no-op. */
-  markAllReadProvider(providerId: number | string): Observable<unknown> {
-    return of({ providerId });
-  }
-
-  getUnreadNotificationsByUser(_userId: string): Observable<Notification[]> {
-    return this.http
-      .get<NotificationResource[]>(`${this.endpointUrl}/user/${_userId}/unread`)
-      .pipe(
-        map((response) => response
-          .map((r) => this.assembler.toEntityFromResource(r))
-          .filter((n) => !n.isRead)
-        ),
-        catchError(this.handleError(`Failed to fetch unread notifications`)),
+        catchError(this.handleError(`Failed to fetch unread notifications for user ${userId}`)),
       );
   }
 
   getNotificationsByOrder(orderId: string): Observable<Notification[]> {
-    // The current backend cannot query by order/reference id directly.
-    return of([] as Notification[]);
+    return this.http
+      .get<NotificationResource[]>(`${this.endpointUrl}?orderId=${orderId}&_sort=createdAt&_order=desc`)
+      .pipe(
+        map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
+        catchError(this.handleError(`Failed to fetch notifications for order ${orderId}`)),
+      );
   }
 
   createNotification(
     request: Pick<Notification, 'userId' | 'orderId' | 'type' | 'message'>,
   ): Observable<Notification> {
-    const payload = {
-      userId: Number(request.userId),
-      type: request.type,
-      title: request.type,
-      message: request.message,
-      referenceId: request.orderId != null ? Number(request.orderId) : null,
-    };
+    const payload = { ...request, isRead: false, createdAt: new Date().toISOString() };
     return this.http.post<NotificationResource>(this.endpointUrl, payload).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError('Failed to create notification')),
@@ -92,20 +61,11 @@ export class NotificationApiEndpoint extends BaseApiEndpoint<
     notificationId: string,
     request: Pick<Notification, 'isRead'>,
   ): Observable<Notification> {
-    // The backend only supports marking a notification as read.
-    // there is no "mark unread" endpoint.
-    if (!request.isRead) {
-      return this.getById(notificationId).pipe(catchError(() => of(null as unknown as Notification)));
-    }
     return this.http
-      .post<NotificationResource>(`${this.endpointUrl}/${notificationId}/mark-as-read`, {})
+      .patch<NotificationResource>(`${this.endpointUrl}/${notificationId}`, request)
       .pipe(
         map((resource) => this.assembler.toEntityFromResource(resource)),
-        catchError(this.handleError(`Failed to mark notification ${notificationId} as read`)),
+        catchError(this.handleError(`Failed to update read state for notification ${notificationId}`)),
       );
-  }
-
-  override delete(notificationId: string): Observable<void> {
-    return of(undefined);
   }
 }
