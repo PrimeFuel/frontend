@@ -1,0 +1,12 @@
+.addr {
+  max-width: 220px;
+  color: var(--ft-text-muted);
+}
+.reason {
+  min-width: 220px;
+  color: var(--ft-danger, #b91c1c);
+  white-space: normal;
+}
+.ft-table-wrap {
+  overflow-x: auto;
+}

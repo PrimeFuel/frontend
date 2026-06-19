@@ -1,1 +1,454 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================================
+   FullTank — Global design system
+   Translated from the Vue reference (PrimeFuel / FullTank) to give the Angular
+   app the same clean, white-card visual language. Component stylesheets should
+   lean on these utility classes to stay within Angular's per-component budget.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand */
+  --ft-primary: #1e3a8a;
+  --ft-primary-600: #2563eb;
+  --ft-primary-50: #eff6ff;
+  --ft-buyer: #2563eb;
+  --ft-buyer-bg: #e8f0fd;
+  --ft-provider: #059669;
+  --ft-provider-bg: #e6f7f1;
+  --ft-accent: #f59e0b;
+  --ft-accent-bg: #fef3c7;
+
+  /* Surfaces */
+  --ft-bg: #f5f6f8;
+  --ft-surface: #ffffff;
+  --ft-border: #e5e7eb;
+  --ft-border-soft: #eef2f7;
+
+  /* Text */
+  --ft-text: #1a2744;
+  --ft-text-muted: #64748b;
+  --ft-text-faint: #94a3b8;
+
+  /* Status */
+  --ft-success: #059669;
+  --ft-success-bg: #e6f7f1;
+  --ft-warn: #d97706;
+  --ft-warn-bg: #fef3c7;
+  --ft-info: #2563eb;
+  --ft-info-bg: #e8f0fd;
+  --ft-danger: #dc2626;
+  --ft-danger-bg: #fee2e2;
+  --ft-neutral: #475569;
+  --ft-neutral-bg: #f1f5f9;
+
+  /* Effects */
+  --ft-radius: 14px;
+  --ft-radius-sm: 10px;
+  --ft-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --ft-shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
+  --ft-shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.18);
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--ft-bg);
+  color: var(--ft-text);
+  font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ── Page scaffold ───────────────────────────────────────────────────────── */
+.ft-page {
+  padding: 1.5rem 1.75rem 2.5rem;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.ft-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.ft-page-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--ft-text);
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+
+.ft-page-subtitle {
+  font-size: 0.92rem;
+  color: var(--ft-text-muted);
+  margin: 0.25rem 0 0;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.ft-card {
+  background: var(--ft-surface);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius);
+  box-shadow: var(--ft-shadow);
+  padding: 1.25rem 1.35rem;
+}
+
+.ft-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ft-text);
+  margin: 0 0 1rem;
+}
+
+/* ── KPI cards ───────────────────────────────────────────────────────────── */
+.ft-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ft-kpi {
+  background: var(--ft-surface);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius);
+  box-shadow: var(--ft-shadow);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ft-kpi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ft-kpi-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ft-text-faint);
+}
+
+.ft-kpi-value {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--ft-text);
+  line-height: 1.1;
+}
+
+.ft-kpi-sub {
+  font-size: 0.8rem;
+  color: var(--ft-text-muted);
+}
+
+.ft-kpi-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ft-primary-50);
+  color: var(--ft-primary-600);
+  flex-shrink: 0;
+}
+
+.ft-kpi-icon mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.ft-kpi-icon.green { background: var(--ft-success-bg); color: var(--ft-success); }
+.ft-kpi-icon.amber { background: var(--ft-warn-bg); color: var(--ft-warn); }
+.ft-kpi-icon.red { background: var(--ft-danger-bg); color: var(--ft-danger); }
+.ft-kpi-icon.blue { background: var(--ft-info-bg); color: var(--ft-info); }
+
+/* ── Responsive grids ────────────────────────────────────────────────────── */
+.ft-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.ft-grid-2 {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+
+/* ── Badges / status pills ───────────────────────────────────────────────── */
+.ft-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: var(--ft-neutral-bg);
+  color: var(--ft-neutral);
+  white-space: nowrap;
+}
+
+.ft-badge.success, .ft-badge.paid, .ft-badge.operational,
+.ft-badge.available, .ft-badge.approved, .ft-badge.completed,
+.ft-badge.active { background: var(--ft-success-bg); color: var(--ft-success); }
+.ft-badge.warn, .ft-badge.dispatched, .ft-badge.pending,
+.ft-badge.pending_payment, .ft-badge.assigned,
+.ft-badge.in_route, .ft-badge.in_transit { background: var(--ft-warn-bg); color: var(--ft-warn); }
+.ft-badge.info, .ft-badge.accepted, .ft-badge.created { background: var(--ft-info-bg); color: var(--ft-info); }
+.ft-badge.danger, .ft-badge.rejected, .ft-badge.cancelled,
+.ft-badge.disabled, .ft-badge.inactive, .ft-badge.maintenance { background: var(--ft-danger-bg); color: var(--ft-danger); }
+.ft-badge.neutral, .ft-badge.closed, .ft-badge.resting { background: var(--ft-neutral-bg); color: var(--ft-neutral); }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.ft-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--ft-radius-sm);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.ft-btn mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.ft-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ft-btn.primary { background: var(--ft-primary); color: #fff; }
+.ft-btn.primary:hover:not(:disabled) { background: #1b337a; }
+.ft-btn.accent { background: var(--ft-primary-600); color: #fff; }
+.ft-btn.accent:hover:not(:disabled) { background: #1d4fd0; }
+.ft-btn.success { background: var(--ft-success); color: #fff; }
+.ft-btn.success:hover:not(:disabled) { background: #047a55; }
+.ft-btn.danger { background: var(--ft-danger); color: #fff; }
+.ft-btn.danger:hover:not(:disabled) { background: #c01c1c; }
+.ft-btn.outline { background: #fff; border-color: var(--ft-border); color: var(--ft-neutral); }
+.ft-btn.outline:hover:not(:disabled) { background: #f8fafc; color: var(--ft-primary); border-color: #cbd5e1; }
+.ft-btn.ghost { background: transparent; color: var(--ft-text-muted); }
+.ft-btn.ghost:hover:not(:disabled) { background: #f3f4f6; }
+.ft-btn.block { width: 100%; }
+.ft-btn.sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+
+/* ── Filter / toolbar row ────────────────────────────────────────────────── */
+.ft-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.ft-seg {
+  display: inline-flex;
+  background: #eff2f7;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.ft-seg button {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--ft-text-muted);
+  font-family: inherit;
+}
+
+.ft-seg button.active {
+  background: #fff;
+  color: var(--ft-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────────── */
+.ft-table-wrap {
+  background: var(--ft-surface);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius);
+  box-shadow: var(--ft-shadow);
+  overflow: hidden;
+}
+
+.ft-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.ft-table thead th {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+  color: var(--ft-text-faint);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--ft-border);
+  white-space: nowrap;
+}
+
+.ft-table tbody td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--ft-border-soft);
+  color: var(--ft-text);
+}
+
+.ft-table tbody tr:last-child td { border-bottom: none; }
+.ft-table tbody tr:hover { background: #fafbfd; }
+.ft-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.ft-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--ft-text-faint);
+  background: var(--ft-surface);
+  border: 1px dashed var(--ft-border);
+  border-radius: var(--ft-radius);
+}
+
+.ft-empty mat-icon {
+  font-size: 42px;
+  width: 42px;
+  height: 42px;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Chart container ─────────────────────────────────────────────────────── */
+.ft-chart {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+}
+
+.ft-chart canvas { max-width: 100%; }
+
+/* ── Segment / role pill ─────────────────────────────────────────────────── */
+.ft-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.ft-pill.buyer { background: var(--ft-buyer-bg); color: var(--ft-buyer); }
+.ft-pill.provider { background: var(--ft-provider-bg); color: var(--ft-provider); }
+
+/* ── Forms ───────────────────────────────────────────────────────────────── */
+.ft-field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+.ft-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ft-neutral);
+}
+.ft-input,
+.ft-select,
+.ft-textarea {
+  width: 100%;
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius-sm);
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--ft-text);
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.ft-input:focus,
+.ft-select:focus,
+.ft-textarea:focus {
+  outline: none;
+  border-color: var(--ft-primary-600);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+.ft-hint { font-size: 0.76rem; color: var(--ft-text-faint); }
+.ft-error { font-size: 0.78rem; color: var(--ft-danger); font-weight: 500; }
+
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
+.ft-muted { color: var(--ft-text-muted); }
+.ft-row { display: flex; align-items: center; gap: 0.5rem; }
+.ft-spread { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.ft-stack { display: flex; flex-direction: column; gap: 0.25rem; }
+.ft-mono { font-variant-numeric: tabular-nums; }
+
+/* ── Progress bar (fuel level) ───────────────────────────────────────────── */
+.ft-progress { height: 8px; border-radius: 999px; background: #eef2f7; overflow: hidden; }
+.ft-progress > span { display: block; height: 100%; border-radius: 999px; background: var(--ft-primary-600); transition: width 0.3s; }
+.ft-progress > span.green { background: var(--ft-success); }
+.ft-progress > span.amber { background: var(--ft-accent); }
+.ft-progress > span.red { background: var(--ft-danger); }
+
+/* ── Material tweaks for a cleaner, Vue-like look ────────────────────────── */
+.mat-mdc-snack-bar-container { --mdc-snackbar-container-color: #1a2744; }
+.mdc-dialog__surface { border-radius: 16px !important; }
+
+/* ── Full-app dimming overlay (payment, dialogs) ─────────────────────────── */
+.ft-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.62);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* Shared modal helpers (reused by payment, catalog, inventory dialogs) */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.icon-x { border: none; background: transparent; cursor: pointer; color: var(--ft-text-faint); }
+.pm-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.pm-head h2 { margin: 0; font-size: 1.15rem; }
+.pm-foot { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
+@media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
+
+/* ── Print: only the invoice shows when printing ─────────────────────────── */
+@media print {
+  body * { visibility: hidden !important; }
+  .print-area, .print-area * { visibility: visible !important; }
+  .print-area {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .no-print { display: none !important; }
+}

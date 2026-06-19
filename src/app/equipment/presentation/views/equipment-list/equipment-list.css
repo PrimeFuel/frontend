@@ -1,0 +1,92 @@
+.eq-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.eq-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.eq-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ft-text);
+}
+.eq-type {
+  font-size: 0.8rem;
+  color: var(--ft-text-muted);
+}
+
+.eq-level {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.eq-level-label {
+  font-size: 0.78rem;
+  color: var(--ft-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+}
+.eq-level-pct {
+  font-weight: 700;
+  color: var(--ft-text);
+}
+.eq-level-meta {
+  font-size: 0.78rem;
+  color: var(--ft-text-muted);
+}
+
+.eq-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--ft-text-muted);
+}
+.eq-meta > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.eq-meta mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+  color: var(--ft-text-faint);
+  flex-shrink: 0;
+}
+
+.eq-alert {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ft-danger);
+  background: var(--ft-danger-bg);
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+}
+.eq-alert mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.eq-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+.eq-actions .ft-btn {
+  flex: 0 0 auto;
+}
+.eq-actions .ft-btn.accent {
+  flex: 1;
+}

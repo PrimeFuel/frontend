@@ -1,105 +1,132 @@
-import { AfterViewChecked, Component, computed, inject, ViewChild } from '@angular/core';
-import { OrderingStore } from '../../../application/ordering.store';
-import { Router } from '@angular/router';
-import { Request } from '../../../domain/model/request.entity';
-import { FormsModule } from '@angular/forms';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
+import { IamStore } from '../../../../iam/application/iam.store';
+import { NotificationsFacade } from '../../../../shared/application/notifications.facade';
 import {
-  MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow,
-  MatHeaderRowDef, MatRow, MatRowDef, MatTable, MatTableDataSource
-} from '@angular/material/table';
-import { TranslatePipe } from '@ngx-translate/core';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatChip, MatChipSet } from '@angular/material/chips';
-import { MatTooltip } from '@angular/material/tooltip';
-import { DatePipe } from '@angular/common';
+  PlatformApi,
+  RequestRow,
+  BuyerCompanyRow,
+} from '../../../../shared/infrastructure/platform-api';
+import { num, fuelLabel, formatDate, money } from '../../../../shared/domain/model/view-helpers';
 
 @Component({
   selector: 'app-request-list',
-  imports: [
-    DatePipe,
-    FormsModule,
-    TranslatePipe,
-    MatProgressSpinner,
-    MatError,
-    MatTable,
-    MatSort,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderCellDef,
-    MatSortHeader,
-    MatCellDef,
-    MatIconButton,
-    MatIcon,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatPaginator,
-    MatButton,
-    MatChip,
-    MatChipSet,
-    MatTooltip,
-  ],
+  standalone: true,
+  imports: [CommonModule, MatIconModule, MatSnackBarModule, TranslatePipe],
   templateUrl: './request-list.html',
   styleUrl: './request-list.css',
 })
-export class RequestList implements AfterViewChecked {
+export class RequestList implements OnInit {
+  private readonly api = inject(PlatformApi);
+  private readonly iam = inject(IamStore);
+  private readonly notify = inject(NotificationsFacade);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
-  ngAfterViewChecked(): void {
-    if (this.dataSource().paginator !== this.paginator) {
-      this.dataSource().paginator = this.paginator;
-    }
-    if (this.dataSource().sort !== this.sort) {
-      this.dataSource().sort = this.sort;
-    }
+  readonly num = num;
+  readonly money = money;
+  readonly fuelLabel = fuelLabel;
+  readonly formatDate = formatDate;
+
+  readonly requests = signal<RequestRow[]>([]);
+  readonly buyers = signal<BuyerCompanyRow[]>([]);
+  readonly loading = signal(true);
+  readonly busy = signal<string | null>(null);
+
+  private get providerId(): number {
+    return this.iam.currentProviderId() ?? 1;
   }
 
-  readonly store = inject(OrderingStore);
-  protected router = inject(Router);
+  readonly pendingRequests = computed(() =>
+    this.requests()
+      .filter((r) => String(r.providerId) === String(this.providerId))
+      .filter((r) => r.status === 'PENDING' || r.status === 'PENDING_APPROVAL'),
+  );
 
-  displayedColumns: string[] = ['id', 'productId', 'quantity', 'desiredDeliveryDate', 'status', 'actions'];
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  dataSource = computed(() => {
-    const source = new MatTableDataSource(this.store.pendingRequests());
-    source.sort = this.sort;
-    source.paginator = this.paginator;
-    return source;
-  });
-
-  rejectingRequestId: string | null = null;
-  rejectionReason = '';
-
-  navigateToNew() {
-    this.router.navigate(['/ordering/request-form']).then();
+  ngOnInit(): void {
+    this.api.getBuyerCompanies().subscribe((b) => this.buyers.set(b));
+    this.reload();
   }
 
-  acceptRequest(request: Request) {
-    this.store.acceptRequest(request);
+  private reload(): void {
+    this.api.getRequests().subscribe({
+      next: (r) => {
+        this.requests.set(r);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
-  denyRequest(request: Request) {
-    this.store.deleteRequest(request.id);
+  buyerName(r: RequestRow): string {
+    const b = this.buyers().find((x) => x.id === (r.companyId ?? -1));
+    return b?.name ?? 'Buyer';
   }
 
-  deleteRequest(id: string) {
-    this.store.deleteRequest(id);
+  accept(r: RequestRow): void {
+    this.busy.set(r.id);
+    this.api
+      .acceptFuelRequest(r.id)
+      .pipe(finalize(() => this.busy.set(null)))
+      .subscribe({
+        next: (order) => {
+          this.notify.notifyBuyer(
+            r.companyId,
+            'ORDER_ACCEPTED',
+            'Request accepted',
+            `Your fuel request for ${this.fuelLabel(r.fuelType ?? '')} was accepted and an order was created.`,
+            order.id,
+          );
+          this.snackBar.open(
+            this.translate.instant('messages.request-accepted'),
+            this.translate.instant('messages.ok'),
+            { duration: 3000 },
+          );
+          this.reload();
+        },
+        error: () => {
+          this.snackBar.open(
+            this.translate.instant('messages.request-failed'),
+            this.translate.instant('messages.ok'),
+            { duration: 3000 },
+          );
+        },
+      });
   }
 
-  shortId(id: string): string {
-    return id.length > 8 ? `${id.substring(0, 8)}…` : id;
+  reject(r: RequestRow): void {
+    const reason = prompt(this.translate.instant('messages.reject-reason'), '') ?? '';
+    this.busy.set(r.id);
+    this.api
+      .rejectFuelRequest(r.id, reason)
+      .pipe(finalize(() => this.busy.set(null)))
+      .subscribe({
+        next: () => {
+          this.notify.notifyBuyer(
+            r.companyId,
+            'ORDER_REJECTED',
+            'Request rejected',
+            `Your fuel request for ${this.fuelLabel(r.fuelType ?? '')} was rejected.${reason ? ' Reason: ' + reason : ''}`,
+            r.id,
+          );
+          this.snackBar.open(
+            this.translate.instant('messages.request-rejected'),
+            this.translate.instant('messages.ok'),
+            { duration: 2500 },
+          );
+          this.reload();
+        },
+        error: () => {
+          this.snackBar.open(
+            this.translate.instant('messages.request-failed'),
+            this.translate.instant('messages.ok'),
+            { duration: 3000 },
+          );
+        },
+      });
   }
-
-  statusClass(status: string): string {
-    return status.toLowerCase().replace('_', '-');
-  }
-
 }
