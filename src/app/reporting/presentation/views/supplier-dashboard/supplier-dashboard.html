@@ -1,140 +1,88 @@
-<div class="dashboard-container">
-  <header class="page-header">
-    <div class="header-content">
-      <h1>{{ 'supplier-dashboard.title' | translate }}</h1>
-      <p>{{ 'supplier-dashboard.subtitle' | translate }}</p>
-    </div>
-
-    <div class="header-actions">
-      <button mat-icon-button (click)="onRefresh()" [disabled]="store.isLoading()">
-        <mat-icon>refresh</mat-icon>
-      </button>
-      <button mat-raised-button color="primary">
-        <mat-icon>picture_as_pdf</mat-icon>
-        {{ 'supplier-dashboard.export-pdf' | translate }}
-      </button>
-    </div>
-  </header>
-
-  @if (store.isLoading()) {
-    <div class="loading-shade">
-      <mat-spinner diameter="50"></mat-spinner>
-    </div>
-  }
-
-  @if (store.error()) {
-    <div class="error-container">
-      <mat-icon>error_outline</mat-icon>
-      <p>{{ store.error() }}</p>
-    </div>
-  }
-
-  <!-- KPI Cards: revenue ocupa 2/3, las otras dos comparten 1/3 apiladas -->
-  <div class="kpi-cards">
-
-    <!-- Total Sales Revenue (2/3) -->
-    <mat-card class="kpi-card kpi-revenue">
-      <mat-card-content>
-        <div class="kpi-icon">
-          <mat-icon>show_chart</mat-icon>
-        </div>
-        <div class="kpi-content">
-          <h3>{{ 'supplier-dashboard.total-sales-revenue' | translate }}</h3>
-          <p class="kpi-value">S/ {{ store.totalRevenue() | number:'1.2-2' }}</p>
-          <span class="kpi-trend positive">
-            <mat-icon>trending_up</mat-icon>
-            +12.4% {{ 'supplier-dashboard.vs-last-period' | translate }}
-          </span>
-        </div>
-      </mat-card-content>
-      <div class="chart-wrapper">
-        <app-sales-bar-chart></app-sales-bar-chart>
-      </div>
-    </mat-card>
-
-    <!-- Columna derecha: Fulfillment + Lead Time apilados (1/3) -->
-    <div class="kpi-right-column">
-
-      <mat-card class="kpi-card">
-        <mat-card-content>
-          <div class="kpi-icon fulfillment">
-            <mat-icon>verified</mat-icon>
-          </div>
-          <div class="kpi-content">
-            <h3>{{ 'supplier-dashboard.avg-fulfillment-rate' | translate }}</h3>
-            <p class="kpi-value">{{ store.avgFulfillmentRate() | number:'1.1-1' }}%</p>
-            <span class="kpi-subtitle">{{ 'supplier-dashboard.target' | translate }}: 95.0%</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="kpi-card">
-        <mat-card-content>
-          <div class="kpi-icon lead-time">
-            <mat-icon>schedule</mat-icon>
-          </div>
-          <div class="kpi-content">
-            <h3>{{ 'supplier-dashboard.avg-lead-time' | translate }}</h3>
-            @if (store.fulfillmentMetrics()) {
-              <p class="kpi-value">{{ store.fulfillmentMetrics()!.avgLeadTime }} {{ 'supplier-dashboard.days' | translate }}</p>
-              <span class="kpi-subtitle">{{ 'supplier-dashboard.target' | translate }}: 5.0 {{ 'supplier-dashboard.days' | translate }}</span>
-            } @else {
-              <p class="kpi-value">--</p>
-            }
-          </div>
-        </mat-card-content>
-      </mat-card>
-
+<div class="ft-page">
+  <div class="ft-page-header">
+    <div>
+      <h1 class="ft-page-title">{{ 'pages.provider-report.title' | translate }}</h1>
+      <p class="ft-page-subtitle">{{ 'pages.provider-report.subtitle' | translate }}</p>
     </div>
   </div>
 
-  <!-- Client Sales Performance -->
-  <mat-card class="table-card">
-    <mat-card-header>
-      <mat-card-title>{{ 'supplier-dashboard.client-sales-performance' | translate }}</mat-card-title>
-      <button mat-button color="primary" routerLink="../client-reports">
-        {{ 'supplier-dashboard.view-all-clients' | translate }}
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="table-container">
-        <table mat-table [dataSource]="store.clientList().slice(0, 4)">
+  <!-- Metrics -->
+  <div class="ft-kpi-grid five">
+    <div class="ft-kpi">
+      <div class="ft-kpi-head"><span class="ft-kpi-label">{{ 'report-ui.total-revenue' | translate }}</span>
+        <span class="ft-kpi-icon green"><mat-icon>payments</mat-icon></span></div>
+      <span class="ft-kpi-value">{{ money(totalRevenue()) }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head"><span class="ft-kpi-label">{{ 'report-ui.total-orders' | translate }}</span>
+        <span class="ft-kpi-icon blue"><mat-icon>receipt_long</mat-icon></span></div>
+      <span class="ft-kpi-value">{{ totalOrders() }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head"><span class="ft-kpi-label">{{ 'report-ui.paid-orders' | translate }}</span>
+        <span class="ft-kpi-icon green"><mat-icon>check_circle</mat-icon></span></div>
+      <span class="ft-kpi-value">{{ paidOrders().length }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head"><span class="ft-kpi-label">{{ 'report-ui.rejected-requests' | translate }}</span>
+        <span class="ft-kpi-icon red"><mat-icon>cancel</mat-icon></span></div>
+      <span class="ft-kpi-value">{{ rejectedRequests() }}</span>
+    </div>
+    <div class="ft-kpi">
+      <div class="ft-kpi-head"><span class="ft-kpi-label">{{ 'report-ui.customers' | translate }}</span>
+        <span class="ft-kpi-icon amber"><mat-icon>groups</mat-icon></span></div>
+      <span class="ft-kpi-value">{{ customerCount() }}</span>
+    </div>
+  </div>
 
-          <!-- Company Name Column -->
-          <ng-container matColumnDef="companyName">
-            <th mat-header-cell *matHeaderCellDef>{{ 'supplier-dashboard.fields.company' | translate }}</th>
-            <td mat-cell *matCellDef="let element" class="bold-text">{{ element.companyName }}</td>
-          </ng-container>
+  <!-- Charts -->
+  <div class="charts">
+    <div class="ft-card span-2">
+      <h2 class="ft-card-title">{{ 'report-ui.revenue-time' | translate }}</h2>
+      <div class="ft-chart" style="height: 240px"><app-chart [config]="revenueChart()"></app-chart></div>
+    </div>
+    <div class="ft-card">
+      <h2 class="ft-card-title">{{ 'report-ui.orders-status' | translate }}</h2>
+      <div class="ft-chart" style="height: 240px"><app-chart [config]="statusChart()"></app-chart></div>
+    </div>
+    <div class="ft-card">
+      <h2 class="ft-card-title">{{ 'report-ui.revenue-fuel' | translate }}</h2>
+      <div class="ft-chart" style="height: 240px"><app-chart [config]="fuelChart()"></app-chart></div>
+    </div>
+    <div class="ft-card">
+      <h2 class="ft-card-title">{{ 'report-ui.customers-sector' | translate }}</h2>
+      <div class="ft-chart" style="height: 240px"><app-chart [config]="sectorChart()"></app-chart></div>
+    </div>
+  </div>
 
-          <!-- Total Volume Column -->
-          <ng-container matColumnDef="totalVolume">
-            <th mat-header-cell *matHeaderCellDef>{{ 'supplier-dashboard.fields.total-volume' | translate }}</th>
-            <td mat-cell *matCellDef="let element">
-              <span class="volume-text">{{ element.totalVolume | number:'1.1-1' }} MT</span>
-            </td>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>{{ 'supplier-dashboard.fields.status' | translate }}</th>
-            <td mat-cell *matCellDef="let element">
-              <span [class]="'status-badge ' + getStatusClass(element.status)">
-                {{ element.status }}
-              </span>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="3" style="text-align: center; padding: 2rem;">
-              {{ 'supplier-dashboard.empty' | translate }}
-            </td>
+  <!-- Top customers -->
+  <div class="ft-card table-card">
+    <h2 class="ft-card-title">{{ 'report-ui.top-customers' | translate }}</h2>
+    @if (customers().length === 0) {
+      <div class="ft-empty"><mat-icon>groups</mat-icon><p>{{ 'report-ui.no-customers' | translate }}</p></div>
+    } @else {
+      <table class="ft-table">
+        <thead>
+          <tr>
+            <th>{{ 'report-ui.customer' | translate }}</th>
+            <th>{{ 'report-ui.sector' | translate }}</th>
+            <th class="num">{{ 'common.labels.volume' | translate }}</th>
+            <th class="num">{{ 'report-ui.revenue' | translate }}</th>
+            <th>{{ 'common.labels.status' | translate }}</th>
           </tr>
-        </table>
-      </div>
-    </mat-card-content>
-  </mat-card>
+        </thead>
+        <tbody>
+          @for (c of customers(); track c.name) {
+            <tr>
+              <td><strong>{{ c.name }}</strong></td>
+              <td>{{ c.sector }}</td>
+              <td class="num">{{ num(c.volume) }} L</td>
+              <td class="num">{{ money(c.revenue) }}</td>
+              <td><span class="ft-badge {{ statusClass(c.status) }}">{{ 'status.' + statusClass(c.status) | translate }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
 </div>

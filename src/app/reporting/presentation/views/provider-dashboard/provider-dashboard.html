@@ -1,4 +1,4 @@
-<div class="ft-page">
+﻿<div class="ft-page">
   <div class="ft-page-header">
     <div>
       <h1 class="ft-page-title">{{ 'pages.provider-dashboard.title' | translate }}</h1>
@@ -6,6 +6,7 @@
     </div>
   </div>
 
+  <!-- KPI cards -->
   <div class="ft-kpi-grid">
     <div class="ft-kpi">
       <div class="ft-kpi-head">
@@ -42,6 +43,7 @@
     </div>
   </div>
 
+  <!-- Sales trend -->
   <div class="ft-card">
     <div class="ft-spread">
       <h2 class="ft-card-title">{{ 'dashboard-ui.sales-trend' | translate }}</h2>
@@ -60,6 +62,7 @@
     <div class="ft-chart" style="height: 260px"><app-chart [config]="salesTrend()"></app-chart></div>
   </div>
 
+  <!-- Active orders -->
   <div class="ft-card active-card">
     <div class="ft-spread">
       <h2 class="ft-card-title">{{ 'dashboard-ui.active-orders-title' | translate }}</h2>
@@ -81,15 +84,15 @@
           </tr>
         </thead>
         <tbody>
-          @for (order of topActiveOrders(); track order.id) {
-            <tr (click)="openOrder(order)" class="clickable-row">
-              <td><strong>{{ order.id }}</strong></td>
-              <td>{{ order.deliveryAddress }}</td>
-              <td class="num">{{ num(order.quantity) }} {{ order.unit === 'GALLONS' ? 'gal' : 'L' }}</td>
-              <td>{{ eta(order) }}</td>
+          @for (o of topActiveOrders(); track o.id) {
+            <tr (click)="openOrder(o)" class="clickable-row">
+              <td><strong>{{ o.id }}</strong></td>
+              <td>{{ o.deliveryAddress }}</td>
+              <td class="num">{{ num(o.quantity) }} {{ o.unit === 'GALLONS' ? 'gal' : 'L' }}</td>
+              <td>{{ eta(o) }}</td>
               <td>
-                <span class="ft-badge {{ statusClass(order.status) }}">
-                  {{ 'order-status.' + statusClass(order.status) | translate }}
+                <span class="ft-badge {{ statusClass(o.status) }}">
+                  {{ 'order-status.' + statusClass(o.status) | translate }}
                 </span>
               </td>
             </tr>
@@ -99,3 +102,4 @@
     }
   </div>
 </div>
+
