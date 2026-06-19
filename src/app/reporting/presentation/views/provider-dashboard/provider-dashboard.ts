@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+﻿import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,8 +67,8 @@ export class ProviderDashboard implements OnInit {
 
   readonly fuelInActiveDisplay = computed(() => {
     const liters = this.fuelInActiveLiters();
-    const value = this.fuelUnit() === 'GALLONS' ? fromLiters(liters, 'GALLONS') : liters;
-    return `${num(value)} ${this.fuelUnit() === 'GALLONS' ? 'gal' : 'L'}`;
+    const v = this.fuelUnit() === 'GALLONS' ? fromLiters(liters, 'GALLONS') : liters;
+    return `${num(v)} ${this.fuelUnit() === 'GALLONS' ? 'gal' : 'L'}`;
   });
 
   readonly toCollect = computed(() =>
@@ -113,30 +113,30 @@ export class ProviderDashboard implements OnInit {
   });
 
   buyerName(o: OrderRow): string {
-    const buyer = this.buyers().find((x) => x.id === (o.companyId ?? -1));
-    return buyer?.name ?? o.deliveryAddress ?? '-';
+    const b = this.buyers().find((x) => x.id === (o.companyId ?? -1));
+    return b?.name ?? o.deliveryAddress ?? 'â€”';
   }
 
   eta(o: OrderRow): string {
     if (o.deliveredAt) return this.translate.instant('dashboard-ui.eta-delivered');
     if (o.dispatchedAt) {
-      const date = new Date(new Date(o.dispatchedAt).getTime() + 86400000);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const d = new Date(new Date(o.dispatchedAt).getTime() + 86400000);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
     return this.translate.instant('dashboard-ui.eta-scheduling');
   }
 
-  statusClass(status: string): string {
-    return (status || '').toLowerCase();
+  statusClass(s: string): string {
+    return (s || '').toLowerCase();
   }
 
   ngOnInit(): void {
     this.api.getProviderMonthlyRevenue().subscribe((rows) => this.revenueRows.set(rows));
     this.api.loadProviderBundle().subscribe({
-      next: (bundle) => {
-        this.orders.set(bundle.orders);
-        this.requests.set(bundle.requests);
-        this.buyers.set(bundle.buyers);
+      next: (b) => {
+        this.orders.set(b.orders);
+        this.requests.set(b.requests);
+        this.buyers.set(b.buyers);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),
@@ -155,3 +155,4 @@ export class ProviderDashboard implements OnInit {
     this.router.navigate(['/ordering/orders', o.id]);
   }
 }
+
