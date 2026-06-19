@@ -1,39 +1,136 @@
-<div class="ft-page">
-  <div class="ft-page-header">
-    <div>
-      <h1 class="ft-page-title">{{ 'pages.notifications.title' | translate }}</h1>
-      <p class="ft-page-subtitle">{{ 'pages.notifications.subtitle' | translate }}</p>
+<div class="notification-list-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>
+        {{ 'notification-list.title' | translate }}
+        @if (store.unreadCount() > 0) {
+          <span class="unread-badge">{{ store.unreadCount() }}</span>
+        }
+      </h1>
+      <p>{{ 'notification-list.subtitle' | translate }}</p>
     </div>
-    <div class="ft-row">
-      <div class="ft-seg">
-        <button [class.active]="filterMode === 'all'" (click)="setFilter('all')">{{ 'notification-ui.all' | translate }}</button>
-        <button [class.active]="filterMode === 'unread'" (click)="setFilter('unread')">{{ 'notification-ui.unread' | translate }}</button>
-      </div>
-      <button class="ft-btn outline sm" (click)="markAllRead()">
-        <mat-icon>done_all</mat-icon> {{ 'common.actions.mark-all-read' | translate }}
+
+    <div class="header-actions">
+      <button
+        mat-button
+        (click)="onShowAll()"
+        [disabled]="store.isLoading()"
+        [class.active-filter]="filterMode === 'all'"
+      >
+        <mat-icon>list</mat-icon>
+        {{ 'notification-list.show-all' | translate }}
+      </button>
+      <button
+        mat-button
+        (click)="onShowUnread()"
+        [disabled]="store.isLoading()"
+        [class.active-filter]="filterMode === 'unread'"
+      >
+        <mat-icon>mark_email_unread</mat-icon>
+        {{ 'notification-list.show-unread' | translate }}
+      </button>
+      <button mat-icon-button (click)="onRefresh()" [disabled]="store.isLoading()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onMarkAllAsRead()"
+        [disabled]="store.isLoading() || store.unreadCount() === 0"
+      >
+        <mat-icon>done_all</mat-icon>
+        {{ 'notification-list.mark-all-read' | translate }}
       </button>
     </div>
-  </div>
+  </header>
 
-  @if (visible.length === 0) {
-    <div class="ft-empty"><mat-icon>notifications_none</mat-icon><p>{{ 'notification-ui.empty' | translate }}</p></div>
-  } @else {
-    <div class="notif-list">
-      @for (n of visible; track n.id) {
-        <div class="notif" [class.unread]="!n.isRead" (click)="open(n)">
-          <span class="notif-icon {{ categoryClass(n) }}"><mat-icon>{{ iconFor(n) }}</mat-icon></span>
-          <div class="notif-body">
-            <div class="notif-top">
-              <span class="notif-title">{{ title(n) }}</span>
-              <span class="notif-time">{{ timeAgo(n.createdAt) }}</span>
-            </div>
-            <p class="notif-msg">{{ n.message }}</p>
-          </div>
-          @if (!n.isRead) {
-            <span class="unread-dot"></span>
-          }
-        </div>
-      }
+  @if (store.isLoading()) {
+    <div class="loading-shade">
+      <mat-spinner diameter="50"></mat-spinner>
     </div>
   }
+
+  @if (store.error()) {
+    <div class="error-container">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ store.error() }}</p>
+    </div>
+  }
+
+  @if (store.successMsg()) {
+    <div class="success-container">
+      <mat-icon>check_circle</mat-icon>
+      <p>{{ store.successMsg() }}</p>
+    </div>
+  }
+
+  <div class="notifications-panel">
+    @if (store.notificationList().length === 0 && !store.isLoading()) {
+      <div class="empty-state">
+        <mat-icon>notifications_off</mat-icon>
+        <p>{{ 'notification-list.empty' | translate }}</p>
+      </div>
+    } @else {
+      @for (notification of store.notificationList(); track trackById($index, notification)) {
+        <mat-card
+          class="notification-card"
+          [class.unread]="!notification.isRead"
+          [class]="getCategoryClass(notification)"
+        >
+          <div class="notification-icon">
+            <mat-icon>{{ getIconFor(notification) }}</mat-icon>
+            @if (!notification.isRead) {
+              <span class="unread-dot"></span>
+            }
+          </div>
+
+          <div class="notification-body">
+            <div class="notification-header">
+              <mat-chip-set>
+                <mat-chip [class]="getTypeClass(notification.type)">
+                  {{ 'notification-type.' + notification.type.toLowerCase() | translate }}
+                </mat-chip>
+              </mat-chip-set>
+              <span class="notification-time">{{ timeAgo(notification.createdAt) }}</span>
+            </div>
+
+            <p class="notification-message">{{ notification.message }}</p>
+
+            @if (notification.orderId) {
+              <p class="notification-meta">
+                <mat-icon>tag</mat-icon>
+                {{ 'notification-list.fields.order' | translate }}:
+                <code>{{ notification.orderId }}</code>
+              </p>
+            }
+          </div>
+
+          <div class="notification-actions">
+            <button
+              mat-icon-button
+              (click)="onToggleRead(notification)"
+              [matTooltip]="
+                (notification.isRead
+                  ? 'notification-list.mark-unread-tooltip'
+                  : 'notification-list.mark-read-tooltip'
+                ) | translate
+              "
+            >
+              <mat-icon>
+                {{ notification.isRead ? 'mark_email_unread' : 'mark_email_read' }}
+              </mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="onDelete(notification.id)"
+              [matTooltip]="'notification-list.delete-tooltip' | translate"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      }
+    }
+  </div>
 </div>

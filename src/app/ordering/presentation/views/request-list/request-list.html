@@ -1,58 +1,66 @@
-<div class="ft-page">
-  <div class="ft-page-header">
-    <div>
-      <h1 class="ft-page-title">{{ 'pages.request-list.title' | translate }}</h1>
-      <p class="ft-page-subtitle">{{ 'pages.request-list.subtitle' | translate }}</p>
-    </div>
-  </div>
+<h1 class="title">{{ 'request-list.title' | translate }}</h1>
 
-  @if (loading()) {
-    <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'ordering-ui.loading-requests' | translate }}</p></div>
-  } @else if (pendingRequests().length === 0) {
-    <div class="ft-empty"><mat-icon>inbox</mat-icon><p>{{ 'ordering-ui.no-pending-requests' | translate }}</p></div>
-  } @else {
-    <div class="req-list">
-      @for (r of pendingRequests(); track r.id) {
-        <div class="ft-card req-card">
-          <div class="req-num">#{{ r.id }}</div>
-          <div class="req-info">
-            <div class="req-buyer">{{ buyerName(r) }}</div>
-            <div class="req-fuel">{{ fuelLabel(r.fuelType) }}</div>
-            <div class="req-grid">
-              <div>
-                <span>{{ 'common.labels.quantity' | translate }}</span>
-                <strong>{{ num(r.quantity) }} {{ r.unit === 'GALLONS' ? 'gal' : 'L' }}</strong>
-              </div>
-              <div>
-                <span>{{ 'common.labels.delivery-address' | translate }}</span>
-                <strong>{{ r.deliveryAddress }}</strong>
-              </div>
-              <div>
-                <span>{{ 'common.labels.delivery-date' | translate }}</span>
-                <strong>{{ formatDate(r.desiredDeliveryDate) }}</strong>
-              </div>
-              <div>
-                <span>{{ 'common.labels.source' | translate }}</span>
-                <strong>{{ r.source || 'Manual' }}</strong>
-              </div>
-              @if (r.unitPrice) {
-                <div>
-                  <span>{{ 'ordering-ui.est-total' | translate }}</span>
-                  <strong>{{ money(r.quantity * r.unitPrice) }}</strong>
-                </div>
-              }
-            </div>
-          </div>
-          <div class="req-actions">
-            <button class="ft-btn success" [disabled]="busy() === r.id" (click)="accept(r)">
-              <mat-icon>check</mat-icon> {{ 'common.actions.accept' | translate }}
-            </button>
-            <button class="ft-btn danger" [disabled]="busy() === r.id" (click)="reject(r)">
-              <mat-icon>close</mat-icon> {{ 'common.actions.reject' | translate }}
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-  }
-</div>
+@if (store.loading()) {
+  <mat-spinner diameter="40"></mat-spinner>
+}
+@if (store.error()) {
+  <mat-error>{{ store.error() }}</mat-error>
+}
+
+
+
+<table mat-table [dataSource]="dataSource()" class="mat-elevation-z8" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.id' | translate }}</th>
+    <td mat-cell *matCellDef="let request" class="mono">{{ shortId(request.id) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="productId">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.product' | translate }}</th>
+    <td mat-cell *matCellDef="let request">{{ shortId(request.productId) }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.quantity' | translate }}</th>
+    <td mat-cell *matCellDef="let request">{{ request.quantity }} {{ request.unit }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="desiredDeliveryDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.delivery-date' | translate }}</th>
+    <td mat-cell *matCellDef="let request">{{ request.desiredDeliveryDate | date:'mediumDate' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'request-list.status' | translate }}</th>
+    <td mat-cell *matCellDef="let request">
+      <mat-chip-set>
+        <mat-chip [class]="statusClass(request.status)">
+          {{ 'request-status.' + request.status.toLowerCase() | translate }}
+        </mat-chip>
+      </mat-chip-set>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>{{ 'request-list.actions' | translate }}</th>
+    <td mat-cell *matCellDef="let request">
+      <button mat-icon-button color="primary"
+              matTooltip="Aceptar"
+              (click)="acceptRequest(request)">
+        <mat-icon>check_circle</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn"
+              matTooltip="Denegar"
+              (click)="denyRequest(request)">
+        <mat-icon>block</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+
+<button mat-raised-button color="primary" (click)="navigateToNew()">{{ 'request-list.new' | translate }}</button>

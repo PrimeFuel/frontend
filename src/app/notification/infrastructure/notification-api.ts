@@ -18,22 +18,6 @@ export class NotificationApi extends BaseApi {
     return this._notificationEndpoint.getNotificationsByUser(userId);
   }
 
-  getBuyerNotifications(buyerCompanyId: number | string): Observable<Notification[]> {
-    return this._notificationEndpoint.getByBuyer(buyerCompanyId);
-  }
-
-  getProviderNotifications(providerId: number | string): Observable<Notification[]> {
-    return this._notificationEndpoint.getByProvider(providerId);
-  }
-
-  markAllReadForBuyer(buyerCompanyId: number | string): Observable<unknown> {
-    return this._notificationEndpoint.markAllReadBuyer(buyerCompanyId);
-  }
-
-  markAllReadForProvider(providerId: number | string): Observable<unknown> {
-    return this._notificationEndpoint.markAllReadProvider(providerId);
-  }
-
   getUnreadNotificationsByUser(userId: string): Observable<Notification[]> {
     return this._notificationEndpoint.getUnreadNotificationsByUser(userId);
   }

@@ -1,18 +1,12 @@
 export const environment = {
   production: true,
 
-  // ── Spring Boot REST API base ──────────────────────────────────────────────
-  // The frontend now consumes the real Spring Boot backend instead of json-server.
-  // Override this value with the deployed backend URL when publishing to prod.
-  serverBasePath: 'http://localhost:8080/api/v1',
-
+  // Base API URL
+  serverBasePath: 'https://json-server-y51j.onrender.com',
   // IAM (Identity and Access Management)
-  iamSignInEndpointPath: '/authentication/sign-in',
-  iamSignUpEndpointPath: '/authentication/sign-up',
+  iamSignInEndpointPath: '/auth/sign-in',
+  iamSignUpEndpointPath: '/auth/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
-  iamUsersEndpointPath: '/users',
-  iamBuyerCompaniesEndpointPath: '/buyer-companies',
-  iamProviderCompaniesEndpointPath: '/provider-companies',
   // Inventory (Productos e Inventario)
   inventoryEndpointPath: '/inventory',
   inventoryProductsEndpointPath: '/inventory',
@@ -24,28 +18,16 @@ export const environment = {
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
   fulfillmentDeliveriesEndpointPath: '/deliveries',
-
-  // Catalog
-  catalogProvidersEndpointPath: '/provider-companies',
-  catalogProductsEndpointPath: '/fuel-products',
-
-  // Equipment
-  equipmentEndpointPath: '/equipment',
-  favoriteProvidersEndpointPath: '/favorite-providers',
-  refillHistoryEndpointPath: '/refill-history',
-
-  // Payment
-  paymentPaymentsEndpointPath: '/payments',
-  paymentInvoicesEndpointPath: '/invoices',
-
-  // Notification
+  // Payment (Transacciones y Pagos)
+  paymentTransactionsEndpointPath: '/payment/transactions',
+  paymentPaymentsEndpointPath: '/payment/payments',
+  // Notification (Notificaciones)
   notificationEndpointPath: '/notifications',
   // Reporting (Reportes y Analytics)
   reportingReportsEndpointPath: '/reporting/reports',
   reportingKpisEndpointPath: '/reporting/kpis',
   reportingSalesEndpointPath: '/reporting/sales',
   reportingConsumptionEndpointPath: '/reporting/consumption',
-  analyticsEndpointPath: '/analytics',
   reportingMonthlyRevenueEndpointPath: '/monthly-revenue',  // ← agregar esto
 
 };

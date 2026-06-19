@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, switchMap } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
 import { Driver } from '../domain/model/driver.entity';
@@ -18,25 +18,20 @@ export class DriverApiEndpoint extends BaseApiEndpoint<
     super(http, driversEndpointUrl, new DriverAssembler());
   }
 
-  override getAll(): Observable<Driver[]> {
-    return super.getAll();
-  }
-
-  override getById(id: string): Observable<Driver> {
-    return super.getById(id);
-  }
-
   getDriversByProvider(providerId: string): Observable<Driver[]> {
-    return this.http.get<DriverResource[]>(this.endpointUrl, { params: { providerId } }).pipe(
-      map((rows) => rows.map((row) => this.assembler.toEntityFromResource(row))),
+    return this.http.get<DriverResource[]>(`${this.endpointUrl}?providerId=${providerId}`).pipe(
+      map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
       catchError(this.handleError(`Failed to fetch drivers for provider ${providerId}`)),
     );
   }
 
   getAvailableDrivers(providerId: string): Observable<Driver[]> {
-    return this.getDriversByProvider(providerId).pipe(
-      map((drivers) => drivers.filter((driver) => driver.status === 'AVAILABLE')),
-    );
+    return this.http
+      .get<DriverResource[]>(`${this.endpointUrl}?providerId=${providerId}&status=AVAILABLE`)
+      .pipe(
+        map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
+        catchError(this.handleError('Failed to fetch available drivers')),
+      );
   }
 
   registerDriver(request: Omit<Driver, 'id' | 'createdAt'>): Observable<Driver> {
@@ -47,19 +42,16 @@ export class DriverApiEndpoint extends BaseApiEndpoint<
   }
 
   updateDriverStatus(driverId: string, request: Pick<Driver, 'status'>): Observable<Driver> {
-    return this.getById(driverId).pipe(
-      map((driver) => new Driver({ ...driver, status: request.status })),
-      switchMap((driver) => this.update(driver, driverId)),
+    return this.http.patch<DriverResource>(`${this.endpointUrl}/${driverId}`, request).pipe(
+      map((resource) => this.assembler.toEntityFromResource(resource)),
+      catchError(this.handleError(`Failed to update driver status ${driverId}`)),
     );
   }
 
-  updateDriver(
-    driverId: string,
-    request: Partial<Omit<Driver, 'id' | 'providerId' | 'createdAt'>>,
-  ): Observable<Driver> {
-    return this.getById(driverId).pipe(
-      map((driver) => new Driver({ ...driver, ...request })),
-      switchMap((driver) => this.update(driver, driverId)),
+  updateDriver(driverId: string, request: Partial<Omit<Driver, 'id' | 'providerId' | 'createdAt'>>): Observable<Driver> {
+    return this.http.patch<DriverResource>(`${this.endpointUrl}/${driverId}`, request).pipe(
+      map((resource) => this.assembler.toEntityFromResource(resource)),
+      catchError(this.handleError(`Failed to update driver ${driverId}`)),
     );
   }
 }

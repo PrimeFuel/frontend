@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, switchMap } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
 import { Vehicle } from '../domain/model/vehicle.entity';
@@ -18,25 +18,20 @@ export class VehicleApiEndpoint extends BaseApiEndpoint<
     super(http, vehiclesEndpointUrl, new VehicleAssembler());
   }
 
-  override getAll(): Observable<Vehicle[]> {
-    return super.getAll();
-  }
-
-  override getById(id: string): Observable<Vehicle> {
-    return super.getById(id);
-  }
-
   getVehiclesByProvider(providerId: string): Observable<Vehicle[]> {
-    return this.http.get<VehicleResource[]>(this.endpointUrl, { params: { providerId } }).pipe(
-      map((rows) => rows.map((row) => this.assembler.toEntityFromResource(row))),
+    return this.http.get<VehicleResource[]>(`${this.endpointUrl}?providerId=${providerId}`).pipe(
+      map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
       catchError(this.handleError(`Failed to fetch vehicles for provider ${providerId}`)),
     );
   }
 
   getAvailableVehicles(providerId: string): Observable<Vehicle[]> {
-    return this.getVehiclesByProvider(providerId).pipe(
-      map((vehicles) => vehicles.filter((vehicle) => vehicle.status === 'AVAILABLE')),
-    );
+    return this.http
+      .get<VehicleResource[]>(`${this.endpointUrl}?providerId=${providerId}&status=AVAILABLE`)
+      .pipe(
+        map((response) => response.map((r) => this.assembler.toEntityFromResource(r))),
+        catchError(this.handleError('Failed to fetch available vehicles')),
+      );
   }
 
   registerVehicle(request: Omit<Vehicle, 'id' | 'createdAt'>): Observable<Vehicle> {
@@ -47,19 +42,16 @@ export class VehicleApiEndpoint extends BaseApiEndpoint<
   }
 
   updateVehicleStatus(vehicleId: string, request: Pick<Vehicle, 'status'>): Observable<Vehicle> {
-    return this.getById(vehicleId).pipe(
-      map((vehicle) => new Vehicle({ ...vehicle, status: request.status })),
-      switchMap((vehicle) => this.update(vehicle, vehicleId)),
+    return this.http.patch<VehicleResource>(`${this.endpointUrl}/${vehicleId}`, request).pipe(
+      map((resource) => this.assembler.toEntityFromResource(resource)),
+      catchError(this.handleError(`Failed to update vehicle status ${vehicleId}`)),
     );
   }
 
-  updateVehicle(
-    vehicleId: string,
-    request: Partial<Omit<Vehicle, 'id' | 'providerId' | 'createdAt'>>,
-  ): Observable<Vehicle> {
-    return this.getById(vehicleId).pipe(
-      map((vehicle) => new Vehicle({ ...vehicle, ...request })),
-      switchMap((vehicle) => this.update(vehicle, vehicleId)),
+  updateVehicle(vehicleId: string, request: Partial<Omit<Vehicle, 'id' | 'providerId' | 'createdAt'>>): Observable<Vehicle> {
+    return this.http.patch<VehicleResource>(`${this.endpointUrl}/${vehicleId}`, request).pipe(
+      map((resource) => this.assembler.toEntityFromResource(resource)),
+      catchError(this.handleError(`Failed to update vehicle ${vehicleId}`)),
     );
   }
 }

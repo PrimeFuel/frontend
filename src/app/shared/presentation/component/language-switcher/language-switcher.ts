@@ -22,12 +22,11 @@ export class LanguageSwitcher {
 
   constructor() {
     this.translate = inject(TranslateService);
-    this.currentLang = this.translate.getCurrentLang() || 'en';
+    this.currentLang = this.translate.getCurrentLang();
   }
 
   useLanguage(language: string): void {
     this.translate.use(language);
     this.currentLang = language;
-    localStorage.setItem('fulltank.lang', language);
   }
 }

@@ -9,7 +9,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FulfillmentStore } from '../../../application/fulfillment.store';
-import { IamStore } from '../../../../iam/application/iam.store';
 
 /**
  * @summary Vista de dashboard de despacho.
@@ -35,11 +34,9 @@ import { IamStore } from '../../../../iam/application/iam.store';
 })
 export class DispatchDashboard implements OnInit {
   protected readonly store = inject(FulfillmentStore);
-  private readonly iam = inject(IamStore);
 
-  private get providerId(): string {
-    return String(this.iam.currentProviderId() ?? 1);
-  }
+  // TODO: Reemplazar con providerId real de IAM cuando se implemente
+  private readonly TEMP_PROVIDER_ID = '1';
 
   protected readonly displayedColumns: string[] = [
     'orderId',
@@ -54,9 +51,9 @@ export class DispatchDashboard implements OnInit {
   }
 
   protected loadDashboardData(): void {
-    this.store.loadVehiclesByProvider(this.providerId);
-    this.store.loadDriversByProvider(this.providerId);
-    this.store.loadDeliveriesByProvider(this.providerId);
+    this.store.loadVehiclesByProvider(this.TEMP_PROVIDER_ID);
+    this.store.loadDriversByProvider(this.TEMP_PROVIDER_ID);
+    this.store.loadDeliveriesByProvider(this.TEMP_PROVIDER_ID);
   }
 
   protected onRefresh(): void {
