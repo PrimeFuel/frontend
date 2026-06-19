@@ -6,6 +6,9 @@ export const environment = {
   iamSignInEndpointPath: '/authentication/sign-in',
   iamSignUpEndpointPath: '/authentication/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
+  iamUsersEndpointPath: '/users',
+  iamBuyerCompaniesEndpointPath: '/buyer-companies',
+  iamProviderCompaniesEndpointPath: '/provider-companies',
   // Inventory (Productos e Inventario)
   inventoryEndpointPath: '/inventory',
   inventoryProductsEndpointPath: '/inventory',
