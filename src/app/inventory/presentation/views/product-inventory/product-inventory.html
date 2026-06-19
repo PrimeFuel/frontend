@@ -1,0 +1,175 @@
+@if (editing() || creating()) {
+  <div class="ft-page product-form-page">
+    <button class="back-link" type="button" (click)="closeEdit()">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'pages.inventory.title' | translate }}
+    </button>
+
+    <section class="product-edit-panel">
+      <header class="edit-header">
+        <h1>{{ (creating() ? 'product-form.create-title' : 'product-form.edit-title') | translate }}</h1>
+        <p>{{ (creating() ? 'product-form.create-subtitle' : 'product-form.edit-subtitle') | translate }}</p>
+      </header>
+
+      <div class="edit-form">
+        <label class="edit-field full">
+          <span>{{ 'product-form.fields.name' | translate }}</span>
+          <input class="edit-control" [(ngModel)]="draft.name" />
+        </label>
+
+        <label class="edit-field">
+          <span>{{ 'product-form.fields.type' | translate }}</span>
+          <select class="edit-control" [(ngModel)]="draft.fuelType">
+            @for (f of fuelOptions; track f.code) {
+              <option [value]="f.code">{{ f.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="edit-field">
+          <span>{{ 'product-form.fields.unit' | translate }}</span>
+          <select class="edit-control" [(ngModel)]="draft.unit">
+            <option value="LITERS">{{ 'unit.liters' | translate }}</option>
+            <option value="GALLONS">{{ 'unit.gallons' | translate }}</option>
+          </select>
+        </label>
+
+        <label class="edit-field">
+          <span>{{ 'product-form.fields.price' | translate }}</span>
+          <input class="edit-control" type="number" step="0.01" [(ngModel)]="draft.pricePerLiter" />
+        </label>
+
+        <label class="edit-field">
+          <span>{{ 'product-inventory.fields.status' | translate }}</span>
+          <select class="edit-control" [(ngModel)]="draft.available">
+            <option [ngValue]="true">{{ 'inventory-ui.active' | translate }}</option>
+            <option [ngValue]="false">{{ 'inventory-ui.inactive' | translate }}</option>
+          </select>
+        </label>
+
+        <label class="edit-field">
+          <span>{{ 'inventory-ui.current-stock-label' | translate }}</span>
+          <input class="edit-control" type="number" [(ngModel)]="draft.stock" />
+        </label>
+
+        <label class="edit-field">
+          <span>{{ 'inventory-ui.tank-capacity' | translate }}</span>
+          <input class="edit-control" type="number" [(ngModel)]="draft.capacity" />
+        </label>
+
+        <label class="edit-field full">
+          <span>{{ 'product-form.fields.description' | translate }}</span>
+          <textarea class="edit-control edit-textarea" rows="3" [(ngModel)]="draft.description"></textarea>
+        </label>
+      </div>
+
+      <footer class="edit-actions">
+        <button class="cancel-link" type="button" (click)="closeEdit()">{{ 'product-form.cancel' | translate }}</button>
+        <button class="update-btn" type="button" (click)="saveProduct()">
+          <mat-icon>check</mat-icon>
+          {{ (creating() ? 'product-form.create' : 'product-form.update') | translate }}
+        </button>
+      </footer>
+    </section>
+  </div>
+} @else {
+  <div class="ft-page">
+    <div class="ft-page-header">
+      <div>
+        <h1 class="ft-page-title">{{ 'pages.inventory.title' | translate }}</h1>
+        <p class="ft-page-subtitle">{{ 'pages.inventory.subtitle' | translate }}</p>
+      </div>
+      <button class="ft-btn accent" (click)="openCreate()">
+        <mat-icon>add</mat-icon> {{ 'common.actions.add-product' | translate }}
+      </button>
+    </div>
+
+    @if (lowStockCount() > 0) {
+      <div class="low-banner">
+        <mat-icon>warning</mat-icon>
+        {{ 'inventory-ui.low-banner' | translate: { n: lowStockCount() } }}
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="ft-empty"><mat-icon>hourglass_empty</mat-icon><p>{{ 'inventory-ui.loading' | translate }}</p></div>
+    } @else if (myProducts().length === 0) {
+      <div class="ft-empty"><mat-icon>inventory_2</mat-icon><p>{{ 'inventory-ui.empty' | translate }}</p></div>
+    } @else {
+      <div class="ft-grid">
+        @for (p of myProducts(); track p.id) {
+          <div class="ft-card prod-card">
+            <div class="prod-head">
+              <div class="prod-icon"><mat-icon>local_gas_station</mat-icon></div>
+              <div class="prod-title">
+                <h3 class="prod-name">{{ p.name }}</h3>
+                <span class="prod-fuel">{{ fuelLabel(p.fuelType) }}</span>
+              </div>
+              <span class="ft-badge" [class.available]="p.available" [class.disabled]="!p.available">
+                {{ (p.available ? 'inventory-ui.available' : 'inventory-ui.inactive') | translate }}
+              </span>
+            </div>
+
+            <div class="prod-stock">
+              <div class="ft-spread">
+                <span class="stock-label">{{ 'inventory-ui.used-capacity' | translate }}</span>
+                <span class="stock-val">{{ num(p.stock) }} / {{ num(p.capacity || 50000) }} L</span>
+              </div>
+              <div class="ft-progress">
+                <span [class]="stockClass(p)" [style.width.%]="stockPct(p)"></span>
+              </div>
+            </div>
+
+            <div class="stock-summary">
+              <div class="stock-box">
+                <span>{{ 'inventory-ui.physical' | translate }}</span>
+                <strong>{{ num(p.stock) }}</strong>
+              </div>
+              <div class="stock-box available-box">
+                <span>{{ 'inventory-ui.available' | translate }}</span>
+                <strong>{{ num(p.stock) }}</strong>
+                <small>({{ availablePct(p) }}%)</small>
+              </div>
+            </div>
+
+            <div class="prod-actions">
+              <strong class="prod-price">{{ money(p.pricePerLiter) }}<span>/L</span></strong>
+              <div class="action-icons">
+                <button class="icon-action" (click)="openEdit(p)" [attr.aria-label]="'common.actions.edit' | translate">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="icon-action refill" (click)="openRefill(p)" [attr.aria-label]="'common.actions.refill' | translate">
+                  <mat-icon>add</mat-icon>
+                </button>
+                <button class="icon-action delete" (click)="deleteProduct(p)" [attr.aria-label]="'common.actions.delete' | translate">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}
+
+<!-- Refill modal -->
+@if (refilling(); as p) {
+  <div class="ft-overlay" (click)="closeRefill()">
+    <div class="edit-modal small" (click)="$event.stopPropagation()">
+      <div class="pm-head">
+        <h2>{{ 'inventory-ui.refill-title' | translate: { name: p.name } }}</h2>
+        <button class="icon-x" (click)="closeRefill()"><mat-icon>close</mat-icon></button>
+      </div>
+      <p class="ft-muted">{{ 'inventory-ui.current-stock' | translate: { qty: num(p.stock) } }}</p>
+      <div class="ft-field">
+        <label class="ft-label">{{ 'inventory-ui.amount-add' | translate }}</label>
+        <input class="ft-input" type="number" [(ngModel)]="refillAmount" />
+      </div>
+      <div class="pm-foot">
+        <button class="ft-btn outline" (click)="closeRefill()">{{ 'common.actions.cancel' | translate }}</button>
+        <button class="ft-btn accent" (click)="confirmRefill()">{{ 'inventory-ui.confirm-refill' | translate }}</button>
+      </div>
+    </div>
+  </div>
+}
