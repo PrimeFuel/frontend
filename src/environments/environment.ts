@@ -10,13 +10,17 @@ export const environment = {
   iamSignInEndpointPath: '/authentication/sign-in',
   iamSignUpEndpointPath: '/authentication/sign-up',
   iamRecoverPasswordEndpointPath: '/auth/recover-password',
+  iamUsersEndpointPath: '/users',
+  iamBuyerCompaniesEndpointPath: '/buyer-companies',
+  iamProviderCompaniesEndpointPath: '/provider-companies',
   // Inventory (Productos e Inventario)
-  inventoryEndpointPath: '/inventory',
-  inventoryProductsEndpointPath: '/inventory',
-  inventoryStockEndpointPath: '/inventory',
+  inventoryEndpointPath: '/fuel-products',
+  inventoryProductsEndpointPath: '/fuel-products',
+  inventoryStockEndpointPath: '/fuel-products',
+  inventoryMovementsEndpointPath: '/inventory-movements',
   // Ordering (Solicitudes y Órdenes)
-  orderingRequestsEndpointPath: '/requests',
-  orderingOrdersEndpointPath: '/orders',
+  orderingRequestsEndpointPath: '/fuel-requests',
+  orderingOrdersEndpointPath: '/fuel-orders',
   // Fulfillment (Logística y Despacho)
   fulfillmentVehiclesEndpointPath: '/vehicles',
   fulfillmentDriversEndpointPath: '/drivers',
