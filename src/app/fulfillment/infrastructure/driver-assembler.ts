@@ -15,23 +15,29 @@ export class DriverAssembler
   }
 
   toEntityFromResource(resource: DriverResource): Driver {
+    // Backend returns a single `name`; split it into first/last for the UI.
+    const fullName = resource.name ?? `${resource.firstName ?? ''} ${resource.lastName ?? ''}`.trim();
+    const [firstName, ...rest] = fullName.split(' ');
     return new Driver({
-      id: resource.id,
-      providerId: resource.providerId,
-      firstName: resource.firstName,
-      lastName: resource.lastName,
+      id: String(resource.id),
+      providerId: String(resource.providerId),
+      firstName: resource.firstName ?? firstName ?? fullName,
+      lastName: resource.lastName ?? rest.join(' '),
       licenseNumber: resource.licenseNumber,
-      phoneNumber: resource.phoneNumber,
+      phoneNumber: resource.phoneNumber ?? resource.phone ?? '',
       email: resource.email,
       status: resource.status,
-      createdAt: resource.createdAt,
+      createdAt: resource.createdAt ?? '',
     });
   }
 
   toResourceFromEntity(entity: Driver): DriverResource {
+    // Emit the backend shape (`name`, `phone`) for POST/PUT.
     return {
       id: entity.id,
       providerId: entity.providerId,
+      name: `${entity.firstName} ${entity.lastName}`.trim(),
+      phone: entity.phoneNumber,
       firstName: entity.firstName,
       lastName: entity.lastName,
       licenseNumber: entity.licenseNumber,

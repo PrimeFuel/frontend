@@ -53,6 +53,59 @@ export class NotificationStore {
     });
   }
 
+  /** Company-scoped notifications are unsupported by the current backend. */
+  loadForBuyer(buyerCompanyId: number | string): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api.getBuyerNotifications(buyerCompanyId).pipe(retry(2)).subscribe({
+      next: (notifications) => {
+        this._notificationList.set(notifications);
+        this._isLoading.set(false);
+      },
+      error: (err) => {
+        this._error.set(err.message || 'Failed to load notifications');
+        this._isLoading.set(false);
+      },
+    });
+  }
+
+  /** Provider-scoped notifications are unsupported by the current backend. */
+  loadForProvider(providerId: number | string): void {
+    this._isLoading.set(true);
+    this._error.set('');
+    this.api.getProviderNotifications(providerId).pipe(retry(2)).subscribe({
+      next: (notifications) => {
+        this._notificationList.set(notifications);
+        this._isLoading.set(false);
+      },
+      error: (err) => {
+        this._error.set(err.message || 'Failed to load notifications');
+        this._isLoading.set(false);
+      },
+    });
+  }
+
+  /** Marks every notification of the current segment as read on the backend, then refreshes. */
+  markAllReadForBuyer(buyerCompanyId: number | string): void {
+    this.api.markAllReadForBuyer(buyerCompanyId).pipe(retry(1)).subscribe({
+      next: () => {
+        this._notificationList.update((list) => list.map((n) => { n.markAsRead(); return n; }));
+        this.loadForBuyer(buyerCompanyId);
+      },
+      error: () => {},
+    });
+  }
+
+  markAllReadForProvider(providerId: number | string): void {
+    this.api.markAllReadForProvider(providerId).pipe(retry(1)).subscribe({
+      next: () => {
+        this._notificationList.update((list) => list.map((n) => { n.markAsRead(); return n; }));
+        this.loadForProvider(providerId);
+      },
+      error: () => {},
+    });
+  }
+
   loadUnreadNotificationsByUser(userId: string): void {
     this._isLoading.set(true);
     this._error.set('');
