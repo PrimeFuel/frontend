@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +18,7 @@ type AuthMode = 'login' | 'register';
 export class RoleSelection {
   private readonly iamStore = inject(IamStore);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly mode = signal<AuthMode>('login');
   readonly selectedRole = signal<UserRole>('BUYER');
@@ -33,6 +34,21 @@ export class RoleSelection {
     description: '',
     address: '',
   };
+
+  constructor() {
+    this.route.queryParamMap.subscribe((params) => {
+      const mode = params.get('mode');
+      const role = params.get('role');
+
+      if (mode === 'login' || mode === 'register') {
+        this.mode.set(mode);
+      }
+
+      if (role === 'BUYER' || role === 'PROVIDER') {
+        this.selectedRole.set(role);
+      }
+    });
+  }
 
   isProvider(): boolean {
     return this.selectedRole() === 'PROVIDER';

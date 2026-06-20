@@ -15,12 +15,16 @@ export const authGuard: CanActivateFn = (): boolean | UrlTree => {
 
 export const buyerGuard: CanActivateFn = (): boolean | UrlTree => {
   const iam = inject(IamStore);
-  return iam.isAuthenticated() && iam.isBuyer() ? true : dashboardUrl(iam);
+  const router = inject(Router);
+  if (!iam.isAuthenticated()) return router.parseUrl('/iam');
+  return iam.isBuyer() ? true : dashboardUrl(iam);
 };
 
 export const providerGuard: CanActivateFn = (): boolean | UrlTree => {
   const iam = inject(IamStore);
-  return iam.isAuthenticated() && iam.isProvider() ? true : dashboardUrl(iam);
+  const router = inject(Router);
+  if (!iam.isAuthenticated()) return router.parseUrl('/iam');
+  return iam.isProvider() ? true : dashboardUrl(iam);
 };
 
 export const dashboardRedirectGuard: CanActivateFn = (): UrlTree => {
