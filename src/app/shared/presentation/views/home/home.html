@@ -8,10 +8,20 @@
       <p class="sub-title">{{ 'home.content' | translate }}</p>
 
       <div class="cta-buttons">
-        <a mat-flat-button routerLink="/reporting/client-reports" class="btn-buyers">
+        <a
+          mat-flat-button
+          routerLink="/iam"
+          [queryParams]="{ mode: 'register', role: 'BUYER' }"
+          class="btn-buyers"
+        >
           {{ 'home.buyers-btn' | translate }}
         </a>
-        <a mat-stroked-button routerLink="/reporting/provider" class="btn-suppliers">
+        <a
+          mat-stroked-button
+          routerLink="/iam"
+          [queryParams]="{ mode: 'register', role: 'PROVIDER' }"
+          class="btn-suppliers"
+        >
           {{ 'home.suppliers-btn' | translate }}
         </a>
       </div>
