@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
 import {
@@ -29,7 +29,9 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
    * Obtiene todos los productos activos.
    */
   getActiveProducts(): Observable<FuelProduct[]> {
-    return this.http.get<ProductsResponse | ProductResource[]>(`${this.endpointUrl}?isActive=true`).pipe(
+    // Backend returns the full fuel-products list (no isActive query filter);
+    // active filtering, if needed, is handled in the store/presentation layer.
+    return this.http.get<ProductsResponse | ProductResource[]>(this.endpointUrl).pipe(
       map((response) => {
         if (Array.isArray(response)) {
           return response.map((r) => this.assembler.toEntityFromResource(r));
@@ -44,7 +46,15 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
    * Crea un nuevo producto de combustible.
    */
   createProduct(request: CreateProductPayload): Observable<FuelProduct> {
-    return this.http.post<ProductResource>(this.endpointUrl, request).pipe(
+    const payload = {
+      name: request.name,
+      fuelType: request.type,
+      pricePerUnit: request.pricePerLiter,
+      unit: request.unit,
+      availableStock: 0,
+      providerId: 1,
+    };
+    return this.http.post<ProductResource>(this.endpointUrl, payload).pipe(
       map((resource) => this.assembler.toEntityFromResource(resource)),
       catchError(this.handleError('Failed to create product')),
     );
@@ -54,9 +64,12 @@ export class ProductApiEndpoint extends BaseApiEndpoint<
    * Actualiza un producto existente.
    */
   updateProduct(productId: string, request: UpdateProductPayload): Observable<FuelProduct> {
-    return this.http.patch<ProductResource>(`${this.endpointUrl}/${productId}`, request).pipe(
-      map((resource) => this.assembler.toEntityFromResource(resource)),
-      catchError(this.handleError(`Failed to update product ${productId}`)),
-    );
+    // The current backend exposes stock updates, but not a full product update.
+    // Re-read the product so editing descriptive fields does not zero the stock.
+    return this.getById(productId);
+  }
+
+  override delete(_productId: string): Observable<void> {
+    return of(undefined);
   }
 }

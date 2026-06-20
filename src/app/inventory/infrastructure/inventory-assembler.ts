@@ -16,13 +16,13 @@ export class InventoryAssembler
 
   toEntityFromResource(resource: InventoryResource): InventoryItem {
     return new InventoryItem({
-      id: resource.id,
-      productId: resource.productId,
-      providerId: resource.providerId,
-      availableQuantity: resource.availableQuantity,
-      reservedQuantity: resource.reservedQuantity,
-      unit: resource.unit,
-      lastUpdated: resource.lastUpdated,
+      id: String(resource.id),
+      productId: String(resource.productId ?? resource.id),
+      providerId: String(resource.providerId ?? ''),
+      availableQuantity: resource.availableQuantity ?? resource.availableStock ?? 0,
+      reservedQuantity: resource.reservedQuantity ?? 0,
+      unit: resource.unit ?? 'LITERS',
+      lastUpdated: resource.lastUpdated ?? '',
     });
   }
 

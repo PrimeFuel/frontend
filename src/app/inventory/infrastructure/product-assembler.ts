@@ -16,14 +16,14 @@ export class ProductAssembler
 
   toEntityFromResource(resource: ProductResource): FuelProduct {
     return new FuelProduct({
-      id: resource.id,
+      id: String(resource.id),
       name: resource.name,
-      type: resource.type,
-      description: resource.description,
-      pricePerLiter: resource.pricePerLiter,
+      type: resource.type ?? resource.fuelType ?? '',
+      description: resource.description ?? '',
+      pricePerLiter: resource.pricePerLiter ?? resource.pricePerUnit ?? 0,
       unit: resource.unit,
-      isActive: resource.isActive,
-      createdAt: resource.createdAt,
+      isActive: resource.isActive ?? true,
+      createdAt: resource.createdAt ?? '',
     });
   }
 
@@ -32,8 +32,10 @@ export class ProductAssembler
       id: entity.id,
       name: entity.name,
       type: entity.type,
+      fuelType: entity.type,
       description: entity.description,
       pricePerLiter: entity.pricePerLiter,
+      pricePerUnit: entity.pricePerLiter,
       unit: entity.unit,
       isActive: entity.isActive,
       createdAt: entity.createdAt,

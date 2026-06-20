@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { environment } from '../../../environments/environment';
 import {
@@ -29,26 +29,24 @@ export class InventoryApiEndpoint extends BaseApiEndpoint<
   }
 
   getInventoryByProvider(providerId: string): Observable<InventoryItem[]> {
-    return this.http.get<any>(this.endpointUrl).pipe(
-      map((response) =>
-        this.extractInventory(response).filter((i) => i.providerId === providerId),
-      ),
+    return this.http.get<InventoryResource[]>(`${this.endpointUrl}/provider/${providerId}`).pipe(
+      map((response) => this.extractInventory(response)),
       catchError(this.handleError(`Failed to fetch inventory for provider ${providerId}`)),
     );
   }
 
   getInventoryByProduct(productId: string): Observable<InventoryItem[]> {
-    return this.http.get<any>(this.endpointUrl).pipe(
-      map((response) =>
-        this.extractInventory(response).filter((i) => i.productId === productId),
-      ),
+    return this.http.get<InventoryResource>(`${this.endpointUrl}/${productId}`).pipe(
+      map((response) => [this.assembler.toEntityFromResource(response)]),
       catchError(this.handleError(`Failed to fetch inventory for product ${productId}`)),
     );
   }
 
   updateStock(inventoryItemId: string, request: UpdateStockPayload): Observable<InventoryItem> {
     return this.http
-      .put<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}`, request)
+      .post<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}/update-stock`, {
+        newStock: request.availableQuantity,
+      })
       .pipe(
         map((resource) => this.assembler.toEntityFromResource(resource)),
         catchError(this.handleError(`Failed to update stock for inventory item ${inventoryItemId}`)),
@@ -56,11 +54,28 @@ export class InventoryApiEndpoint extends BaseApiEndpoint<
   }
 
   reserveStock(inventoryItemId: string, request: ReserveStockPayload): Observable<InventoryItem> {
-    return this.http
-      .post<InventoryResource>(`${this.endpointUrl}/${inventoryItemId}/reserve`, request)
-      .pipe(
-        map((resource) => this.assembler.toEntityFromResource(resource)),
-        catchError(this.handleError(`Failed to reserve stock for inventory item ${inventoryItemId}`)),
-      );
+    return this.getInventoryByProduct(inventoryItemId).pipe(
+      map(([item]) => {
+        if (!item) return this.emptyInventoryItem(inventoryItemId);
+        return new InventoryItem({
+          ...item,
+          availableQuantity: Math.max(0, item.availableQuantity - request.quantityToReserve),
+          reservedQuantity: item.reservedQuantity + request.quantityToReserve,
+        });
+      }),
+      catchError(() => of(this.emptyInventoryItem(inventoryItemId))),
+    );
+  }
+
+  private emptyInventoryItem(id: string): InventoryItem {
+    return new InventoryItem({
+      id,
+      productId: id,
+      providerId: '',
+      availableQuantity: 0,
+      reservedQuantity: 0,
+      unit: 'LITERS',
+      lastUpdated: '',
+    });
   }
 }

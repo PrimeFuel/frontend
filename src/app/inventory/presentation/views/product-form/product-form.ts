@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,8 +19,8 @@ import {
 
 /**
  * @summary Formulario para crear y editar productos de combustible.
- * @remarks Maneja creación y actualización según presencia de productId en ruta.
- * Valida campos obligatorios y formatos numéricos.
+ * @remarks Maneja creaciÃ³n y actualizaciÃ³n segÃºn presencia de productId en ruta.
+ * Valida campos obligatorios y formatos numÃ©ricos.
  * @author FullTank Platform
  */
 @Component({
@@ -128,7 +128,7 @@ export class ProductForm implements OnInit {
     };
 
     this.store.createProduct(payload, () => {
-      this.router.navigate(['../product-inventory'], { relativeTo: this.route });
+      this.router.navigate(['/inventory/products']);
     });
   }
 
@@ -145,13 +145,12 @@ export class ProductForm implements OnInit {
     };
 
     this.store.updateProduct(this.productId, payload, () => {
-      this.router.navigate(['../../product-inventory'], { relativeTo: this.route });
+      this.router.navigate(['/inventory/products']);
     });
   }
 
   protected onCancel(): void {
-    const path = this.isEditMode ? '../../product-inventory' : '../product-inventory';
-    this.router.navigate([path], { relativeTo: this.route });
+    this.router.navigate(['/inventory/products']);
   }
 
   protected getErrorMessage(fieldName: string): string {
@@ -165,3 +164,4 @@ export class ProductForm implements OnInit {
     return '';
   }
 }
+

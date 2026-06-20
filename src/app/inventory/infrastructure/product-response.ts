@@ -8,12 +8,16 @@ import { BaseResource, BaseResponse } from '../../shared/infrastructure/base-res
 export interface ProductResource extends BaseResource {
   id: string;
   name: string;
-  type: string;
-  description: string;
-  pricePerLiter: number;
+  type?: string;
+  fuelType?: string;
+  description?: string;
+  pricePerLiter?: number;
+  pricePerUnit?: number;
   unit: string;
-  isActive: boolean;
-  createdAt: string;
+  isActive?: boolean;
+  createdAt?: string;
+  availableStock?: number;
+  providerId?: number;
 }
 
 export interface ProductsResponse extends BaseResponse {

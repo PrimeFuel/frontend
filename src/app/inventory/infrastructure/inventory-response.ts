@@ -7,12 +7,13 @@ import { BaseResource, BaseResponse } from '../../shared/infrastructure/base-res
  */
 export interface InventoryResource extends BaseResource {
   id: string;
-  productId: string;
-  providerId: string;
-  availableQuantity: number;
-  reservedQuantity: number;
-  unit: string;
-  lastUpdated: string;
+  productId?: string;
+  providerId?: string | number;
+  availableQuantity?: number;
+  availableStock?: number;
+  reservedQuantity?: number;
+  unit?: string;
+  lastUpdated?: string;
 }
 
 export interface InventoriesResponse extends BaseResponse {
