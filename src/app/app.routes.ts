@@ -30,6 +30,6 @@ export const routes: Routes = [
   { path: 'ordering', canActivate: [authGuard], loadChildren: orderingRoutes },
   { path: 'reporting', canActivate: [authGuard], loadChildren: reportingRoutes },
   { path: 'notification', canActivate: [authGuard], loadChildren: notificationRoutes },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/iam', pathMatch: 'full' },
   { path: '**', loadComponent: pageNotFound, title: `Page Not Found - ${baseTitle}` },
 ];
