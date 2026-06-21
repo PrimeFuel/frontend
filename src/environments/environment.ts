@@ -4,7 +4,7 @@ export const environment = {
   // ── Spring Boot REST API base ──────────────────────────────────────────────
   // The frontend now consumes the real Spring Boot backend instead of json-server.
   // Override this value with the deployed backend URL when publishing to prod.
-  serverBasePath: 'http://localhost:8080/api/v1',
+  serverBasePath: 'https://prime-fuel-backend.onrender.com/api/v1',
 
   // IAM (Identity and Access Management)
   iamSignInEndpointPath: '/authentication/sign-in',
