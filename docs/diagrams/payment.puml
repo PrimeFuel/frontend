@@ -1,0 +1,52 @@
+@startuml payment
+title Payment Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as payment_presentation #E8F4FD {
+  class PaymentRoutes
+  class PaymentList
+}
+
+package "Application" as payment_application #E8FDE8 {
+  class PaymentStore
+}
+
+package "Domain" as payment_domain #FDF6E8 {
+  class Payment
+  class Invoice
+}
+
+package "Infrastructure" as payment_infrastructure #FDE8E8 {
+  class PaymentApi
+  class PaymentApiEndpoint
+  class PaymentAssembler
+  class PaymentResponse
+  class InvoiceApiEndpoint
+  class InvoiceAssembler
+}
+
+' --- Application -> Infrastructure / Domain ---
+PaymentStore --> PaymentApi
+PaymentStore --> Payment
+PaymentStore --> Invoice
+
+' --- Infrastructure -> Domain ---
+PaymentApi --> PaymentApiEndpoint
+PaymentApi --> InvoiceApiEndpoint
+PaymentApi --> Payment
+PaymentApi --> Invoice
+PaymentApiEndpoint --> Payment
+PaymentApiEndpoint --> PaymentResponse
+PaymentApiEndpoint --> PaymentAssembler
+PaymentAssembler --> Payment
+PaymentAssembler --> PaymentResponse
+InvoiceApiEndpoint --> Invoice
+InvoiceApiEndpoint --> PaymentResponse
+InvoiceApiEndpoint --> InvoiceAssembler
+InvoiceAssembler --> Invoice
+InvoiceAssembler --> PaymentResponse
+
+@enduml

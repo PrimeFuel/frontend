@@ -1,0 +1,66 @@
+@startuml ordering
+title Ordering Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as ordering_presentation #E8F4FD {
+  class OrderingRoutes
+  class BuyerOrderDetail
+  class Collections
+  class MyOrders
+  class MyRequests
+  class OrderDetail
+  class OrderList
+  class RequestForm
+  class RequestList
+}
+
+package "Application" as ordering_application #E8FDE8 {
+  class OrderingStore
+}
+
+package "Domain" as ordering_domain #FDF6E8 {
+  class Order
+  class Request
+}
+
+package "Infrastructure" as ordering_infrastructure #FDE8E8 {
+  class OrderingApi
+  class OrdersApiEndpoint
+  class OrderAssembler
+  class OrdersResponse
+  class RequestsApiEndpoint
+  class RequestAssembler
+  class RequestsResponse
+}
+
+' --- Presentation -> Application / Domain ---
+RequestForm --> OrderingStore
+RequestForm --> Request
+
+' --- Application -> Infrastructure / Domain ---
+OrderingStore --> OrderingApi
+OrderingStore --> Request
+OrderingStore --> Order
+
+' --- Infrastructure -> Domain ---
+OrderingApi --> RequestsApiEndpoint
+OrderingApi --> OrdersApiEndpoint
+OrderingApi --> Request
+OrderingApi --> Order
+OrdersApiEndpoint --> Order
+OrdersApiEndpoint --> OrdersResponse
+OrdersApiEndpoint --> OrderAssembler
+OrderAssembler --> Order
+OrderAssembler --> OrdersResponse
+RequestsApiEndpoint --> Request
+RequestsApiEndpoint --> RequestsResponse
+RequestsApiEndpoint --> RequestAssembler
+RequestsApiEndpoint --> Order
+RequestsApiEndpoint --> OrderAssembler
+RequestAssembler --> Request
+RequestAssembler --> RequestsResponse
+
+@enduml

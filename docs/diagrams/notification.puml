@@ -1,0 +1,45 @@
+@startuml notification
+title Notification Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as notification_presentation #E8F4FD {
+  class NotificationRoutes
+  class NotificationList
+}
+
+package "Application" as notification_application #E8FDE8 {
+  class NotificationStore
+}
+
+package "Domain" as notification_domain #FDF6E8 {
+  class Notification
+}
+
+package "Infrastructure" as notification_infrastructure #FDE8E8 {
+  class NotificationApi
+  class NotificationApiEndpoint
+  class NotificationAssembler
+  class NotificationResponse
+}
+
+' --- Presentation -> Application / Domain ---
+NotificationList --> NotificationStore
+NotificationList --> Notification
+
+' --- Application -> Infrastructure / Domain ---
+NotificationStore --> NotificationApi
+NotificationStore --> Notification
+
+' --- Infrastructure -> Domain ---
+NotificationApi --> NotificationApiEndpoint
+NotificationApi --> Notification
+NotificationApiEndpoint --> Notification
+NotificationApiEndpoint --> NotificationResponse
+NotificationApiEndpoint --> NotificationAssembler
+NotificationAssembler --> Notification
+NotificationAssembler --> NotificationResponse
+
+@enduml

@@ -1,0 +1,75 @@
+@startuml reporting
+title Reporting Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as reporting_presentation #E8F4FD {
+  class ReportingRoutes
+  class BuyerDashboard
+  class BuyerReport
+  class ClientPortfolioView
+  class Dashboard
+  class ProviderDashboard
+  class SupplierDashboard
+}
+
+package "Application" as reporting_application #E8FDE8 {
+  class ReportingStore
+  class DashboardStore
+}
+
+package "Domain" as reporting_domain #FDF6E8 {
+  class ClientPortfolio
+  class SalesMetrics
+  class FulfillmentMetrics
+  class SectorDistribution
+  class DashboardSummary
+}
+
+package "Infrastructure" as reporting_infrastructure #FDE8E8 {
+  class ReportingApi
+  class ClientPortfolioApiEndpoint
+  class ClientPortfolioAssembler
+  class ClientPortfolioResponse
+  class MetricsApiEndpoint
+  class MetricsAssembler
+  class MetricsResponse
+  class DashboardApiService
+}
+
+' --- Presentation -> Application / Infrastructure ---
+ClientPortfolioView --> ReportingStore
+Dashboard --> DashboardStore
+Dashboard --> DashboardApiService
+
+' --- Application -> Infrastructure / Domain ---
+ReportingStore --> ReportingApi
+ReportingStore --> ClientPortfolio
+ReportingStore --> FulfillmentMetrics
+ReportingStore --> SectorDistribution
+
+' --- Infrastructure -> Domain ---
+ReportingApi --> ClientPortfolioApiEndpoint
+ReportingApi --> MetricsApiEndpoint
+ReportingApi --> ClientPortfolio
+ReportingApi --> SalesMetrics
+ReportingApi --> FulfillmentMetrics
+ReportingApi --> SectorDistribution
+ClientPortfolioApiEndpoint --> ClientPortfolio
+ClientPortfolioApiEndpoint --> ClientPortfolioResponse
+ClientPortfolioApiEndpoint --> ClientPortfolioAssembler
+ClientPortfolioAssembler --> ClientPortfolio
+ClientPortfolioAssembler --> ClientPortfolioResponse
+MetricsApiEndpoint --> SalesMetrics
+MetricsApiEndpoint --> FulfillmentMetrics
+MetricsApiEndpoint --> SectorDistribution
+MetricsApiEndpoint --> MetricsAssembler
+MetricsApiEndpoint --> MetricsResponse
+MetricsAssembler --> SalesMetrics
+MetricsAssembler --> FulfillmentMetrics
+MetricsAssembler --> SectorDistribution
+MetricsAssembler --> MetricsResponse
+
+@enduml

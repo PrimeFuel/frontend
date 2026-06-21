@@ -1,0 +1,42 @@
+@startuml iam
+title IAM Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as iam_presentation #E8F4FD {
+  class IamRoutes
+  class ProfileEdit
+  class RoleSelection
+}
+
+package "Application" as iam_application #E8FDE8 {
+  class IamStore
+}
+
+package "Domain" as iam_domain #FDF6E8 {
+  class Session
+  class UserRole
+}
+
+package "Infrastructure" as iam_infrastructure #FDE8E8 {
+  class IamApi
+  class AuthGuard
+  class AuthInterceptor
+}
+
+' --- Presentation -> Application / Domain ---
+ProfileEdit --> IamStore
+RoleSelection --> IamStore
+RoleSelection --> UserRole
+
+' --- Application -> Infrastructure / Domain ---
+IamStore --> IamApi
+IamStore --> Session
+
+' --- Infrastructure -> Application / Domain ---
+IamApi --> Session
+AuthGuard --> IamStore
+
+@enduml

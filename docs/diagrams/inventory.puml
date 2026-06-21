@@ -1,0 +1,60 @@
+@startuml inventory
+title Inventory Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as inventory_presentation #E8F4FD {
+  class InventoryRoutes
+  class InventoryList
+  class ProductForm
+  class ProductInventory
+}
+
+package "Application" as inventory_application #E8FDE8 {
+  class InventoryStore
+}
+
+package "Domain" as inventory_domain #FDF6E8 {
+  class FuelProduct
+  class InventoryItem
+}
+
+package "Infrastructure" as inventory_infrastructure #FDE8E8 {
+  class InventoryApi
+  class InventoryApiEndpoint
+  class InventoryAssembler
+  class InventoryResponse
+  class ProductApiEndpoint
+  class ProductAssembler
+  class ProductResponse
+}
+
+' --- Presentation -> Application / Domain ---
+InventoryList --> InventoryStore
+ProductForm --> InventoryStore
+ProductForm --> FuelProduct
+
+' --- Application -> Infrastructure / Domain ---
+InventoryStore --> InventoryApi
+InventoryStore --> FuelProduct
+InventoryStore --> InventoryItem
+
+' --- Infrastructure -> Domain ---
+InventoryApi --> InventoryApiEndpoint
+InventoryApi --> ProductApiEndpoint
+InventoryApi --> FuelProduct
+InventoryApi --> InventoryItem
+InventoryApiEndpoint --> InventoryItem
+InventoryApiEndpoint --> InventoryResponse
+InventoryApiEndpoint --> InventoryAssembler
+InventoryAssembler --> InventoryItem
+InventoryAssembler --> InventoryResponse
+ProductApiEndpoint --> FuelProduct
+ProductApiEndpoint --> ProductResponse
+ProductApiEndpoint --> ProductAssembler
+ProductAssembler --> FuelProduct
+ProductAssembler --> ProductResponse
+
+@enduml

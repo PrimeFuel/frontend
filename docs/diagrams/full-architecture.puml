@@ -1,0 +1,643 @@
+@startuml full-architecture
+title GasNet Frontend - Complete Bounded Context Architecture
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 12
+skinparam ranksep 30
+skinparam classFontSize 11
+
+' =========================================================
+' ======================= SHARED ==========================
+' =========================================================
+package "Shared" as shared #F2F2F2 {
+  package "Presentation" as sh_pre #E8F4FD {
+    class Layout
+    class Toolbar
+    class LanguageSwitcher
+    class ChartComponent
+    class Home
+    class About
+    class PageNotFound
+  }
+  package "Application" as sh_app #E8FDE8 {
+    class CoordinationService
+    class NotificationsFacade
+    class OperationsFacade
+  }
+  package "Domain" as sh_dom #FDF6E8 {
+    class BaseEntity
+    class ViewHelpers
+    class Format
+    class FuelTypes
+    class OrderStatus
+  }
+  package "Infrastructure" as sh_inf #FDE8E8 {
+    class BaseApi
+    class BaseApiEndpoint
+    class BaseAssembler
+    class BaseResponse
+    class ErrorHandlingEnabledBaseType
+    class PlatformApi
+  }
+}
+
+' =========================================================
+' ========================= IAM ===========================
+' =========================================================
+package "IAM" as iam #F2F2F2 {
+  package "Presentation" as iam_pre #E8F4FD {
+    class IamRoutes
+    class ProfileEdit
+    class RoleSelection
+  }
+  package "Application" as iam_app #E8FDE8 {
+    class IamStore
+  }
+  package "Domain" as iam_dom #FDF6E8 {
+    class Session
+    class UserRole
+  }
+  package "Infrastructure" as iam_inf #FDE8E8 {
+    class IamApi
+    class AuthGuard
+    class AuthInterceptor
+  }
+}
+
+' =========================================================
+' ======================= CATALOG =========================
+' =========================================================
+package "Catalog" as catalog #F2F2F2 {
+  package "Presentation" as cat_pre #E8F4FD {
+    class CatalogRoutes
+    class CatalogView
+    class ProviderDetail
+  }
+  package "Application" as cat_app #E8FDE8 {
+    class CatalogStore
+  }
+  package "Domain" as cat_dom #FDF6E8 {
+    class CatalogProduct
+    class Provider
+  }
+  package "Infrastructure" as cat_inf #FDE8E8 {
+    class CatalogApi
+    class CatalogProductApiEndpoint
+    class CatalogProductAssembler
+    class CatalogProductResponse
+    class ProviderApiEndpoint
+    class ProviderAssembler
+    class ProviderResponse
+  }
+}
+
+' =========================================================
+' ====================== EQUIPMENT ========================
+' =========================================================
+package "Equipment" as equipment #F2F2F2 {
+  package "Presentation" as eq_pre #E8F4FD {
+    class EquipmentRoutes
+    class EquipmentForm
+    class EquipmentList
+  }
+  package "Application" as eq_app #E8FDE8 {
+    class EquipmentStore
+  }
+  package "Domain" as eq_dom #FDF6E8 {
+    class Equipment
+  }
+  package "Infrastructure" as eq_inf #FDE8E8 {
+    class EquipmentApi
+    class EquipmentApiEndpoint
+    class EquipmentAssembler
+    class EquipmentResponse
+  }
+}
+
+' =========================================================
+' ===================== FULFILLMENT =======================
+' =========================================================
+package "Fulfillment" as fulfillment #F2F2F2 {
+  package "Presentation" as fu_pre #E8F4FD {
+    class FulfillmentRoutes
+    class DispatchDashboard
+    class DriverForm
+    class DriverList
+    class VehicleForm
+    class VehicleList
+  }
+  package "Application" as fu_app #E8FDE8 {
+    class FulfillmentStore
+  }
+  package "Domain" as fu_dom #FDF6E8 {
+    class Vehicle
+    class Driver
+    class Delivery
+  }
+  package "Infrastructure" as fu_inf #FDE8E8 {
+    class FulfillmentApi
+    class VehicleApiEndpoint
+    class VehicleAssembler
+    class VehicleResponse
+    class DriverApiEndpoint
+    class DriverAssembler
+    class DriverResponse
+    class DeliveryApiEndpoint
+    class DeliveryAssembler
+    class DeliveryResponse
+  }
+}
+
+' =========================================================
+' ====================== INVENTORY ========================
+' =========================================================
+package "Inventory" as inventory #F2F2F2 {
+  package "Presentation" as in_pre #E8F4FD {
+    class InventoryRoutes
+    class InventoryList
+    class ProductForm
+    class ProductInventory
+  }
+  package "Application" as in_app #E8FDE8 {
+    class InventoryStore
+  }
+  package "Domain" as in_dom #FDF6E8 {
+    class FuelProduct
+    class InventoryItem
+  }
+  package "Infrastructure" as in_inf #FDE8E8 {
+    class InventoryApi
+    class InventoryApiEndpoint
+    class InventoryAssembler
+    class InventoryResponse
+    class ProductApiEndpoint
+    class ProductAssembler
+    class ProductResponse
+  }
+}
+
+' =========================================================
+' ===================== NOTIFICATION ======================
+' =========================================================
+package "Notification" as notification #F2F2F2 {
+  package "Presentation" as no_pre #E8F4FD {
+    class NotificationRoutes
+    class NotificationList
+  }
+  package "Application" as no_app #E8FDE8 {
+    class NotificationStore
+  }
+  package "Domain" as no_dom #FDF6E8 {
+    class Notification
+  }
+  package "Infrastructure" as no_inf #FDE8E8 {
+    class NotificationApi
+    class NotificationApiEndpoint
+    class NotificationAssembler
+    class NotificationResponse
+  }
+}
+
+' =========================================================
+' ======================= ORDERING ========================
+' =========================================================
+package "Ordering" as ordering #F2F2F2 {
+  package "Presentation" as or_pre #E8F4FD {
+    class OrderingRoutes
+    class BuyerOrderDetail
+    class Collections
+    class MyOrders
+    class MyRequests
+    class OrderDetail
+    class OrderList
+    class RequestForm
+    class RequestList
+  }
+  package "Application" as or_app #E8FDE8 {
+    class OrderingStore
+  }
+  package "Domain" as or_dom #FDF6E8 {
+    class Order
+    class Request
+  }
+  package "Infrastructure" as or_inf #FDE8E8 {
+    class OrderingApi
+    class OrdersApiEndpoint
+    class OrderAssembler
+    class OrdersResponse
+    class RequestsApiEndpoint
+    class RequestAssembler
+    class RequestsResponse
+  }
+}
+
+' =========================================================
+' ======================== PAYMENT ========================
+' =========================================================
+package "Payment" as payment #F2F2F2 {
+  package "Presentation" as pa_pre #E8F4FD {
+    class PaymentRoutes
+    class PaymentList
+  }
+  package "Application" as pa_app #E8FDE8 {
+    class PaymentStore
+  }
+  package "Domain" as pa_dom #FDF6E8 {
+    class Payment
+    class Invoice
+  }
+  package "Infrastructure" as pa_inf #FDE8E8 {
+    class PaymentApi
+    class PaymentApiEndpoint
+    class PaymentAssembler
+    class PaymentResponse
+    class InvoiceApiEndpoint
+    class InvoiceAssembler
+  }
+}
+
+' =========================================================
+' ======================= REPORTING =======================
+' =========================================================
+package "Reporting" as reporting #F2F2F2 {
+  package "Presentation" as re_pre #E8F4FD {
+    class ReportingRoutes
+    class BuyerDashboard
+    class BuyerReport
+    class ClientPortfolioView
+    class Dashboard
+    class ProviderDashboard
+    class SupplierDashboard
+  }
+  package "Application" as re_app #E8FDE8 {
+    class ReportingStore
+    class DashboardStore
+  }
+  package "Domain" as re_dom #FDF6E8 {
+    class ClientPortfolio
+    class SalesMetrics
+    class FulfillmentMetrics
+    class SectorDistribution
+    class DashboardSummary
+  }
+  package "Infrastructure" as re_inf #FDE8E8 {
+    class ReportingApi
+    class ClientPortfolioApiEndpoint
+    class ClientPortfolioAssembler
+    class ClientPortfolioResponse
+    class MetricsApiEndpoint
+    class MetricsAssembler
+    class MetricsResponse
+    class DashboardApiService
+  }
+}
+
+' #########################################################
+' ##############  INTRA-CONTEXT CONNECTIONS  ##############
+' #########################################################
+
+' ---- Shared ----
+Layout --> LanguageSwitcher
+Toolbar --> LanguageSwitcher
+Home --> Toolbar
+OperationsFacade --> PlatformApi
+NotificationsFacade --> PlatformApi
+OperationsFacade --> ViewHelpers
+BaseApiEndpoint --> BaseEntity
+BaseApiEndpoint --> BaseResponse
+BaseApiEndpoint --> BaseAssembler
+BaseApiEndpoint --> ErrorHandlingEnabledBaseType
+BaseAssembler --> BaseEntity
+BaseAssembler --> BaseResponse
+ViewHelpers --> Format
+ViewHelpers --> FuelTypes
+ViewHelpers --> OrderStatus
+
+' ---- IAM ----
+ProfileEdit --> IamStore
+RoleSelection --> IamStore
+RoleSelection --> UserRole
+IamStore --> IamApi
+IamStore --> Session
+IamApi --> Session
+AuthGuard --> IamStore
+
+' ---- Catalog ----
+CatalogView --> CatalogApi
+ProviderDetail --> CatalogStore
+ProviderDetail --> CatalogProduct
+CatalogStore --> CatalogApi
+CatalogStore --> Provider
+CatalogStore --> CatalogProduct
+CatalogApi --> CatalogProductApiEndpoint
+CatalogApi --> ProviderApiEndpoint
+CatalogApi --> CatalogProduct
+CatalogApi --> Provider
+CatalogProductApiEndpoint --> CatalogProduct
+CatalogProductApiEndpoint --> CatalogProductResponse
+CatalogProductApiEndpoint --> CatalogProductAssembler
+CatalogProductAssembler --> CatalogProduct
+CatalogProductAssembler --> CatalogProductResponse
+ProviderApiEndpoint --> Provider
+ProviderApiEndpoint --> ProviderResponse
+ProviderApiEndpoint --> ProviderAssembler
+ProviderAssembler --> Provider
+ProviderAssembler --> ProviderResponse
+
+' ---- Equipment ----
+EquipmentForm --> EquipmentStore
+EquipmentForm --> Equipment
+EquipmentList --> EquipmentStore
+EquipmentList --> Equipment
+EquipmentStore --> EquipmentApi
+EquipmentStore --> Equipment
+EquipmentApi --> EquipmentApiEndpoint
+EquipmentApi --> Equipment
+EquipmentApi --> EquipmentResponse
+EquipmentApiEndpoint --> Equipment
+EquipmentApiEndpoint --> EquipmentResponse
+EquipmentApiEndpoint --> EquipmentAssembler
+EquipmentAssembler --> Equipment
+EquipmentAssembler --> EquipmentResponse
+
+' ---- Fulfillment ----
+DispatchDashboard --> FulfillmentStore
+DriverForm --> FulfillmentStore
+DriverForm --> Driver
+DriverList --> FulfillmentStore
+DriverList --> Driver
+VehicleForm --> FulfillmentStore
+VehicleForm --> Vehicle
+VehicleList --> FulfillmentStore
+VehicleList --> Vehicle
+FulfillmentStore --> FulfillmentApi
+FulfillmentStore --> Vehicle
+FulfillmentStore --> Driver
+FulfillmentStore --> Delivery
+FulfillmentApi --> VehicleApiEndpoint
+FulfillmentApi --> DriverApiEndpoint
+FulfillmentApi --> DeliveryApiEndpoint
+FulfillmentApi --> Vehicle
+FulfillmentApi --> Driver
+FulfillmentApi --> Delivery
+VehicleApiEndpoint --> Vehicle
+VehicleApiEndpoint --> VehicleResponse
+VehicleApiEndpoint --> VehicleAssembler
+VehicleAssembler --> Vehicle
+VehicleAssembler --> VehicleResponse
+DriverApiEndpoint --> Driver
+DriverApiEndpoint --> DriverResponse
+DriverApiEndpoint --> DriverAssembler
+DriverAssembler --> Driver
+DriverAssembler --> DriverResponse
+DeliveryApiEndpoint --> Delivery
+DeliveryApiEndpoint --> DeliveryResponse
+DeliveryApiEndpoint --> DeliveryAssembler
+DeliveryAssembler --> Delivery
+DeliveryAssembler --> DeliveryResponse
+
+' ---- Inventory ----
+InventoryList --> InventoryStore
+ProductForm --> InventoryStore
+ProductForm --> FuelProduct
+InventoryStore --> InventoryApi
+InventoryStore --> FuelProduct
+InventoryStore --> InventoryItem
+InventoryApi --> InventoryApiEndpoint
+InventoryApi --> ProductApiEndpoint
+InventoryApi --> FuelProduct
+InventoryApi --> InventoryItem
+InventoryApiEndpoint --> InventoryItem
+InventoryApiEndpoint --> InventoryResponse
+InventoryApiEndpoint --> InventoryAssembler
+InventoryAssembler --> InventoryItem
+InventoryAssembler --> InventoryResponse
+ProductApiEndpoint --> FuelProduct
+ProductApiEndpoint --> ProductResponse
+ProductApiEndpoint --> ProductAssembler
+ProductAssembler --> FuelProduct
+ProductAssembler --> ProductResponse
+
+' ---- Notification ----
+NotificationList --> NotificationStore
+NotificationList --> Notification
+NotificationStore --> NotificationApi
+NotificationStore --> Notification
+NotificationApi --> NotificationApiEndpoint
+NotificationApi --> Notification
+NotificationApiEndpoint --> Notification
+NotificationApiEndpoint --> NotificationResponse
+NotificationApiEndpoint --> NotificationAssembler
+NotificationAssembler --> Notification
+NotificationAssembler --> NotificationResponse
+
+' ---- Ordering ----
+RequestForm --> OrderingStore
+RequestForm --> Request
+OrderingStore --> OrderingApi
+OrderingStore --> Request
+OrderingStore --> Order
+OrderingApi --> RequestsApiEndpoint
+OrderingApi --> OrdersApiEndpoint
+OrderingApi --> Request
+OrderingApi --> Order
+OrdersApiEndpoint --> Order
+OrdersApiEndpoint --> OrdersResponse
+OrdersApiEndpoint --> OrderAssembler
+OrderAssembler --> Order
+OrderAssembler --> OrdersResponse
+RequestsApiEndpoint --> Request
+RequestsApiEndpoint --> RequestsResponse
+RequestsApiEndpoint --> RequestAssembler
+RequestsApiEndpoint --> Order
+RequestsApiEndpoint --> OrderAssembler
+RequestAssembler --> Request
+RequestAssembler --> RequestsResponse
+
+' ---- Payment ----
+PaymentStore --> PaymentApi
+PaymentStore --> Payment
+PaymentStore --> Invoice
+PaymentApi --> PaymentApiEndpoint
+PaymentApi --> InvoiceApiEndpoint
+PaymentApi --> Payment
+PaymentApi --> Invoice
+PaymentApiEndpoint --> Payment
+PaymentApiEndpoint --> PaymentResponse
+PaymentApiEndpoint --> PaymentAssembler
+PaymentAssembler --> Payment
+PaymentAssembler --> PaymentResponse
+InvoiceApiEndpoint --> Invoice
+InvoiceApiEndpoint --> PaymentResponse
+InvoiceApiEndpoint --> InvoiceAssembler
+InvoiceAssembler --> Invoice
+InvoiceAssembler --> PaymentResponse
+
+' ---- Reporting ----
+ClientPortfolioView --> ReportingStore
+Dashboard --> DashboardStore
+Dashboard --> DashboardApiService
+ReportingStore --> ReportingApi
+ReportingStore --> ClientPortfolio
+ReportingStore --> FulfillmentMetrics
+ReportingStore --> SectorDistribution
+ReportingApi --> ClientPortfolioApiEndpoint
+ReportingApi --> MetricsApiEndpoint
+ReportingApi --> ClientPortfolio
+ReportingApi --> SalesMetrics
+ReportingApi --> FulfillmentMetrics
+ReportingApi --> SectorDistribution
+ClientPortfolioApiEndpoint --> ClientPortfolio
+ClientPortfolioApiEndpoint --> ClientPortfolioResponse
+ClientPortfolioApiEndpoint --> ClientPortfolioAssembler
+ClientPortfolioAssembler --> ClientPortfolio
+ClientPortfolioAssembler --> ClientPortfolioResponse
+MetricsApiEndpoint --> SalesMetrics
+MetricsApiEndpoint --> FulfillmentMetrics
+MetricsApiEndpoint --> SectorDistribution
+MetricsApiEndpoint --> MetricsAssembler
+MetricsApiEndpoint --> MetricsResponse
+MetricsAssembler --> SalesMetrics
+MetricsAssembler --> FulfillmentMetrics
+MetricsAssembler --> SectorDistribution
+MetricsAssembler --> MetricsResponse
+
+' #########################################################
+' #############  CROSS-CONTEXT CONNECTIONS  ###############
+' #########################################################
+
+' ---- Shared kernel: domain entities extend BaseEntity ----
+CatalogProduct ..|> BaseEntity
+Provider ..|> BaseEntity
+Equipment ..|> BaseEntity
+Vehicle ..|> BaseEntity
+Driver ..|> BaseEntity
+Delivery ..|> BaseEntity
+FuelProduct ..|> BaseEntity
+InventoryItem ..|> BaseEntity
+Notification ..|> BaseEntity
+Order ..|> BaseEntity
+Request ..|> BaseEntity
+ClientPortfolio ..|> BaseEntity
+SalesMetrics ..|> BaseEntity
+FulfillmentMetrics ..|> BaseEntity
+SectorDistribution ..|> BaseEntity
+
+' ---- Shared kernel: facade APIs extend BaseApi ----
+CatalogApi ..|> BaseApi
+EquipmentApi ..|> BaseApi
+FulfillmentApi ..|> BaseApi
+InventoryApi ..|> BaseApi
+NotificationApi ..|> BaseApi
+OrderingApi ..|> BaseApi
+PaymentApi ..|> BaseApi
+ReportingApi ..|> BaseApi
+MetricsApiEndpoint ..|> ErrorHandlingEnabledBaseType
+
+note as N1
+  All *ApiEndpoint extend BaseApiEndpoint,
+  all *Assembler extend BaseAssembler and
+  all *Response extend BaseResponse (Shared).
+  Arrows omitted to keep the diagram readable.
+end note
+
+' ---- Routes use the Shared Layout ----
+CatalogRoutes ..> Layout
+EquipmentRoutes ..> Layout
+FulfillmentRoutes ..> Layout
+IamRoutes ..> Layout
+InventoryRoutes ..> Layout
+NotificationRoutes ..> Layout
+OrderingRoutes ..> Layout
+PaymentRoutes ..> Layout
+ReportingRoutes ..> Layout
+
+' ---- Catalog -> IAM / Shared / Equipment ----
+CatalogView ..> IamStore
+CatalogView ..> NotificationsFacade
+CatalogView ..> PlatformApi
+ProviderDetail ..> CoordinationService
+ProviderDetail ..> IamStore
+ProviderDetail ..> NotificationsFacade
+ProviderDetail ..> EquipmentStore
+ProviderDetail ..> Equipment
+
+' ---- Equipment -> IAM / Shared ----
+EquipmentStore ..> IamStore
+EquipmentForm ..> IamStore
+EquipmentForm ..> PlatformApi
+EquipmentList ..> PlatformApi
+EquipmentList ..> OperationsFacade
+
+' ---- Fulfillment -> IAM ----
+DispatchDashboard ..> IamStore
+DriverForm ..> IamStore
+DriverList ..> IamStore
+VehicleForm ..> IamStore
+VehicleList ..> IamStore
+
+' ---- Inventory -> IAM / Shared ----
+ProductInventory ..> IamStore
+ProductInventory ..> PlatformApi
+
+' ---- Notification -> IAM ----
+NotificationList ..> IamStore
+
+' ---- Ordering -> IAM / Shared ----
+OrderingRoutes ..> AuthGuard
+BuyerOrderDetail ..> OperationsFacade
+BuyerOrderDetail ..> PlatformApi
+Collections ..> IamStore
+Collections ..> PlatformApi
+MyOrders ..> IamStore
+MyOrders ..> OperationsFacade
+MyOrders ..> PlatformApi
+MyRequests ..> IamStore
+MyRequests ..> PlatformApi
+OrderDetail ..> OperationsFacade
+OrderDetail ..> PlatformApi
+OrderList ..> IamStore
+OrderList ..> OperationsFacade
+OrderList ..> PlatformApi
+RequestList ..> IamStore
+RequestList ..> NotificationsFacade
+RequestList ..> PlatformApi
+
+' ---- Payment -> Ordering / IAM / Shared ----
+PaymentStore ..> OrderingApi
+PaymentStore ..> Order
+PaymentList ..> IamStore
+PaymentList ..> NotificationsFacade
+PaymentList ..> PlatformApi
+
+' ---- Reporting -> Ordering / IAM / Shared ----
+ReportingRoutes ..> AuthGuard
+Dashboard ..> OrderingStore
+Dashboard ..> Order
+BuyerDashboard ..> IamStore
+BuyerDashboard ..> ChartComponent
+BuyerDashboard ..> PlatformApi
+BuyerReport ..> IamStore
+BuyerReport ..> ChartComponent
+BuyerReport ..> PlatformApi
+ProviderDashboard ..> IamStore
+ProviderDashboard ..> ChartComponent
+ProviderDashboard ..> PlatformApi
+SupplierDashboard ..> IamStore
+SupplierDashboard ..> ChartComponent
+SupplierDashboard ..> PlatformApi
+
+' ---- Shared application facades -> other contexts ----
+CoordinationService ..> OrderingApi
+CoordinationService ..> Request
+CoordinationService ..> IamStore
+NotificationsFacade ..> NotificationStore
+NotificationsFacade ..> IamStore
+OperationsFacade ..> IamStore
+PlatformApi ..> IamStore
+Layout ..> IamStore
+Layout ..> NotificationStore
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml equipment
+title Equipment Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as equipment_presentation #E8F4FD {
+  class EquipmentRoutes
+  class EquipmentForm
+  class EquipmentList
+}
+
+package "Application" as equipment_application #E8FDE8 {
+  class EquipmentStore
+}
+
+package "Domain" as equipment_domain #FDF6E8 {
+  class Equipment
+}
+
+package "Infrastructure" as equipment_infrastructure #FDE8E8 {
+  class EquipmentApi
+  class EquipmentApiEndpoint
+  class EquipmentAssembler
+  class EquipmentResponse
+}
+
+' --- Presentation -> Application / Domain ---
+EquipmentForm --> EquipmentStore
+EquipmentForm --> Equipment
+EquipmentList --> EquipmentStore
+EquipmentList --> Equipment
+
+' --- Application -> Infrastructure / Domain ---
+EquipmentStore --> EquipmentApi
+EquipmentStore --> Equipment
+
+' --- Infrastructure -> Domain ---
+EquipmentApi --> EquipmentApiEndpoint
+EquipmentApi --> Equipment
+EquipmentApi --> EquipmentResponse
+EquipmentApiEndpoint --> Equipment
+EquipmentApiEndpoint --> EquipmentResponse
+EquipmentApiEndpoint --> EquipmentAssembler
+EquipmentAssembler --> Equipment
+EquipmentAssembler --> EquipmentResponse
+
+@enduml

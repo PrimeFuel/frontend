@@ -1,0 +1,64 @@
+@startuml shared
+title Shared Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as shared_presentation #E8F4FD {
+  class Layout
+  class Toolbar
+  class LanguageSwitcher
+  class ChartComponent
+  class Home
+  class About
+  class PageNotFound
+}
+
+package "Application" as shared_application #E8FDE8 {
+  class CoordinationService
+  class NotificationsFacade
+  class OperationsFacade
+}
+
+package "Domain" as shared_domain #FDF6E8 {
+  class BaseEntity
+  class ViewHelpers
+  class Format
+  class FuelTypes
+  class OrderStatus
+}
+
+package "Infrastructure" as shared_infrastructure #FDE8E8 {
+  class BaseApi
+  class BaseApiEndpoint
+  class BaseAssembler
+  class BaseResponse
+  class ErrorHandlingEnabledBaseType
+  class PlatformApi
+}
+
+' --- Presentation internal ---
+Layout --> LanguageSwitcher
+Toolbar --> LanguageSwitcher
+Home --> Toolbar
+
+' --- Application -> Infrastructure / Domain ---
+NotificationsFacade --> PlatformApi
+OperationsFacade --> PlatformApi
+OperationsFacade --> ViewHelpers
+
+' --- Infrastructure -> Domain ---
+BaseApiEndpoint --> BaseEntity
+BaseApiEndpoint --> BaseResponse
+BaseApiEndpoint --> BaseAssembler
+BaseApiEndpoint --> ErrorHandlingEnabledBaseType
+BaseAssembler --> BaseEntity
+BaseAssembler --> BaseResponse
+
+' --- Domain internal ---
+ViewHelpers --> Format
+ViewHelpers --> FuelTypes
+ViewHelpers --> OrderStatus
+
+@enduml

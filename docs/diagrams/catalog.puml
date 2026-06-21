@@ -1,0 +1,59 @@
+@startuml catalog
+title Catalog Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as catalog_presentation #E8F4FD {
+  class CatalogRoutes
+  class CatalogView
+  class ProviderDetail
+}
+
+package "Application" as catalog_application #E8FDE8 {
+  class CatalogStore
+}
+
+package "Domain" as catalog_domain #FDF6E8 {
+  class CatalogProduct
+  class Provider
+}
+
+package "Infrastructure" as catalog_infrastructure #FDE8E8 {
+  class CatalogApi
+  class CatalogProductApiEndpoint
+  class CatalogProductAssembler
+  class CatalogProductResponse
+  class ProviderApiEndpoint
+  class ProviderAssembler
+  class ProviderResponse
+}
+
+' --- Presentation -> Application / Infrastructure / Domain ---
+CatalogView --> CatalogApi
+ProviderDetail --> CatalogStore
+ProviderDetail --> CatalogProduct
+
+' --- Application -> Infrastructure / Domain ---
+CatalogStore --> CatalogApi
+CatalogStore --> Provider
+CatalogStore --> CatalogProduct
+
+' --- Infrastructure -> Domain ---
+CatalogApi --> CatalogProductApiEndpoint
+CatalogApi --> ProviderApiEndpoint
+CatalogApi --> CatalogProduct
+CatalogApi --> Provider
+CatalogProductApiEndpoint --> CatalogProduct
+CatalogProductApiEndpoint --> CatalogProductResponse
+CatalogProductApiEndpoint --> CatalogProductAssembler
+CatalogProductAssembler --> CatalogProduct
+CatalogProductAssembler --> CatalogProductResponse
+ProviderApiEndpoint --> Provider
+ProviderApiEndpoint --> ProviderResponse
+ProviderApiEndpoint --> ProviderAssembler
+ProviderAssembler --> Provider
+ProviderAssembler --> ProviderResponse
+
+@enduml

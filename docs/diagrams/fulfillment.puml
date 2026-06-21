@@ -1,0 +1,83 @@
+@startuml fulfillment
+title Fulfillment Bounded Context
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+
+package "Presentation (Views)" as fulfillment_presentation #E8F4FD {
+  class FulfillmentRoutes
+  class DispatchDashboard
+  class DriverForm
+  class DriverList
+  class VehicleForm
+  class VehicleList
+}
+
+package "Application" as fulfillment_application #E8FDE8 {
+  class FulfillmentStore
+}
+
+package "Domain" as fulfillment_domain #FDF6E8 {
+  class Vehicle
+  class Driver
+  class Delivery
+}
+
+package "Infrastructure" as fulfillment_infrastructure #FDE8E8 {
+  class FulfillmentApi
+  class VehicleApiEndpoint
+  class VehicleAssembler
+  class VehicleResponse
+  class DriverApiEndpoint
+  class DriverAssembler
+  class DriverResponse
+  class DeliveryApiEndpoint
+  class DeliveryAssembler
+  class DeliveryResponse
+}
+
+' --- Presentation -> Application / Domain ---
+DispatchDashboard --> FulfillmentStore
+DriverForm --> FulfillmentStore
+DriverForm --> Driver
+DriverList --> FulfillmentStore
+DriverList --> Driver
+VehicleForm --> FulfillmentStore
+VehicleForm --> Vehicle
+VehicleList --> FulfillmentStore
+VehicleList --> Vehicle
+
+' --- Application -> Infrastructure / Domain ---
+FulfillmentStore --> FulfillmentApi
+FulfillmentStore --> Vehicle
+FulfillmentStore --> Driver
+FulfillmentStore --> Delivery
+
+' --- Infrastructure -> Domain ---
+FulfillmentApi --> VehicleApiEndpoint
+FulfillmentApi --> DriverApiEndpoint
+FulfillmentApi --> DeliveryApiEndpoint
+FulfillmentApi --> Vehicle
+FulfillmentApi --> Driver
+FulfillmentApi --> Delivery
+
+VehicleApiEndpoint --> Vehicle
+VehicleApiEndpoint --> VehicleResponse
+VehicleApiEndpoint --> VehicleAssembler
+VehicleAssembler --> Vehicle
+VehicleAssembler --> VehicleResponse
+
+DriverApiEndpoint --> Driver
+DriverApiEndpoint --> DriverResponse
+DriverApiEndpoint --> DriverAssembler
+DriverAssembler --> Driver
+DriverAssembler --> DriverResponse
+
+DeliveryApiEndpoint --> Delivery
+DeliveryApiEndpoint --> DeliveryResponse
+DeliveryApiEndpoint --> DeliveryAssembler
+DeliveryAssembler --> Delivery
+DeliveryAssembler --> DeliveryResponse
+
+@enduml
